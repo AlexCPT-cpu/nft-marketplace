@@ -3,7 +3,7 @@ import Image from "next/image";
 import { AiOutlineInstagram } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { FaTwitter, FaLinkedin } from "react-icons/fa";
-import Link from "next/link"
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -37,16 +37,24 @@ const Footer = () => {
 
           <div className="flex flex-row items-center space-x-2">
             <div className="ring-1 rounded-full p-2 hover:text-gray-500 ring-orange-300 dark:ring-orange-400 cursor-pointer">
-              <LinkiOutlineInstagram size={22} />
+              <Link href="/">
+                <AiOutlineInstagram size={22} />
+              </Link>
             </div>
             <div className="ring-1 rounded-full p-2 hover:text-gray-500 ring-orange-300 dark:ring-orange-400 cursor-pointer">
-              <FaTwitter size={20} />
+              <Link href="/">
+                <FaTwitter size={20} />
+              </Link>
             </div>
             <div className="ring-1 rounded-full p-2 hover:text-gray-500 ring-orange-300 dark:ring-orange-400 cursor-pointer">
-              <BsFacebook size={20} />
+              <Link href="/">
+                <BsFacebook size={20} />
+              </Link>
             </div>
             <div className="ring-1 rounded-full p-2 hover:text-gray-500 ring-orange-300 dark:ring-orange-400 cursor-pointer">
-              <FaLinkedin size={20} />
+              <Link href="/">
+                <FaLinkedin size={20} />
+              </Link>
             </div>
           </div>
         </div>
@@ -136,8 +144,11 @@ const Footer = () => {
       <hr className="w-full border-orange-300 dark:border-orange-400" />
 
       <p className="text-center mt-6">
-      Designed and Developed by <span className="text-orange-400"><Link href="/">@IceLabs</Link></span>
-        </p>
+        Designed and Developed by{" "}
+        <span className="text-orange-400">
+          <Link href="/">@IceLabs</Link>
+        </span>
+      </p>
     </div>
   );
 };
