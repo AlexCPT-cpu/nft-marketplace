@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+ul li::before {
+    content: "\2022";
+    color: black;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+ul li a:hover {
+    color: gray;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 10px;
+}
