@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Image from "next/image"
+import Link from "next/link"
 
 export const Header = () => {
   const [theme, setTheme] = useState<string>("system");
@@ -35,17 +36,17 @@ export const Header = () => {
     <div className="flex top-0 z-10 backdrop-blur-lg fixed w-full bg-[#eee] dark:bg-[#051e2f] justify-between items-center">
       <div className="flex justify-between mt-6 px-4">
         <div className="flex justify-center items-center">
-          <a title="Logo" href="/">
+          <Link title="Logo" href="/">
           <Image className="object-fit w-12 mr-7 rounded-full mb-5" src='/poke.jpg' width={200} height={200} alt="card image" />
-          </a>
+          </Link>
         </div>
         <div className="flex justify-between mt-1 space-x-8">
-          <a href="/">Home</a>
-          <a href="/">Discover </a>
-          <a href="/">Creators</a>
-          <a href="/">Collectors</a>
-          <a href="/">Stats </a>
-          <a href="/">Customize</a>
+          <Link href="/">Home</Link>
+          <Link href="/">Discover </Link>
+          <Link href="/">Creators</Link>
+          <Link href="/">Collectors</Link>
+          <Link href="/">Stats </Link>
+          <Link href="/">Customize</Link>
         </div>
       </div>
 

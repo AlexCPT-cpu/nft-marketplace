@@ -3,6 +3,7 @@ import Image from "next/image";
 import { AiOutlineInstagram } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { FaTwitter, FaLinkedin } from "react-icons/fa";
+import Link from "next/link"
 
 const Footer = () => {
   return (
@@ -12,7 +13,7 @@ const Footer = () => {
       <div className="p-14 flex justify-between flex-row text-black dark:text-gray-400">
         <div className="space-y-3">
           <div>
-            <a href="/">
+            <Link href="/">
               <div className="flex flex-row font-bold text-xl items-center">
                 <Image
                   className="object-fit w-12 rounded-full"
@@ -23,7 +24,7 @@ const Footer = () => {
                 />{" "}
                 &nbsp; &nbsp; ICU
               </div>
-            </a>
+            </Link>
           </div>
 
           <div className="text-xl">
@@ -36,7 +37,7 @@ const Footer = () => {
 
           <div className="flex flex-row items-center space-x-2">
             <div className="ring-1 rounded-full p-2 hover:text-gray-500 ring-orange-300 dark:ring-orange-400 cursor-pointer">
-              <AiOutlineInstagram size={22} />
+              <LinkiOutlineInstagram size={22} />
             </div>
             <div className="ring-1 rounded-full p-2 hover:text-gray-500 ring-orange-300 dark:ring-orange-400 cursor-pointer">
               <FaTwitter size={20} />
@@ -54,25 +55,25 @@ const Footer = () => {
           <h3 className="font-semibold text-2xl mb-4">My Pages</h3>
           <ul>
             <li>
-              <a href="/">Discover</a>
+              <Link href="/">Discover</Link>
             </li>
             <li>
-              <a href="/">Creators</a>
+              <Link href="/">Creators</Link>
             </li>
             <li>
-              <a href="/">Collectors</a>
+              <Link href="/">Collectors</Link>
             </li>
             <li>
-              <a href="/">Ranking</a>
+              <Link href="/">Ranking</Link>
             </li>
             <li>
-              <a href="/">Bid</a>
+              <Link href="/">Bid</Link>
             </li>
             <li>
-              <a href="/">Profile</a>
+              <Link href="/">Profile</Link>
             </li>
             <li>
-              <a href="/">Profile Edit</a>
+              <Link href="/">Profile Edit</Link>
             </li>
           </ul>
         </div>
@@ -81,25 +82,25 @@ const Footer = () => {
           <h3 className="font-semibold text-2xl mb-4">Web Links</h3>
           <ul>
             <li>
-              <a href="/">Create NFT</a>
+              <Link href="/">Create NFT</Link>
             </li>
             <li>
-              <a href="/">Upload Variants</a>
+              <Link href="/">Upload Variants</Link>
             </li>
             <li>
-              <a href="/">Collection Activity</a>
+              <Link href="/">Collection Activity</Link>
             </li>
             <li>
-              <a href="/">Support</a>
+              <Link href="/">Support</Link>
             </li>
             <li>
-              <a href="/">Support Detail</a>
+              <Link href="/">Support Detail</Link>
             </li>
             <li>
-              <a href="/">Activity</a>
+              <Link href="/">Activity</Link>
             </li>
             <li>
-              <a href="/">Table Option</a>
+              <Link href="/">Table Option</Link>
             </li>
           </ul>
         </div>
@@ -108,25 +109,25 @@ const Footer = () => {
           <h3 className="font-semibold text-2xl mb-4">Other Pages</h3>
           <ul>
             <li>
-              <a href="/">Signin</a>
+              <Link href="/">Signin</Link>
             </li>
             <li>
-              <a href="/">Signup</a>
+              <Link href="/">Signup</Link>
             </li>
             <li>
-              <a href="/">Forgot Password</a>
+              <Link href="/">Forgot Password</Link>
             </li>
             <li>
-              <a href="/">Verification</a>
+              <Link href="/">Verification</Link>
             </li>
             <li>
-              <a href="/">Carousel</a>
+              <Link href="/">Carousel</Link>
             </li>
             <li>
-              <a href="/">Form Option</a>
+              <Link href="/">Form Option</Link>
             </li>
             <li>
-              <a href="/">Form Wizard</a>
+              <Link href="/">Form Wizard</Link>
             </li>
           </ul>
         </div>
@@ -135,7 +136,7 @@ const Footer = () => {
       <hr className="w-full border-orange-300 dark:border-orange-400" />
 
       <p className="text-center mt-6">
-      Designed and Developed by <span className="text-orange-400"><a href="/">@IceLabs</a></span>
+      Designed and Developed by <span className="text-orange-400"><Link href="/">@IceLabs</Link></span>
         </p>
     </div>
   );
