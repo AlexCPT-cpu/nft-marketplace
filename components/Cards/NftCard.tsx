@@ -6,7 +6,7 @@ import { BanknotesIcon, ClockIcon } from "@heroicons/react/24/outline";
 
 const NftCard = ({ image, name, timer, likes, price }: NftProps) => {
   return (
-    <div className="border border-orange-300 dark:border-orange-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
+    <div className="border dark:bg-[#041824] border-yellow-400 dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
       <div className="relative">
         <Image className="object-cover w-full rounded-md mb-5" src={image!} width={200} height={200} alt="card image" />
         <div className="absolute top-2 right-3">
@@ -23,7 +23,7 @@ const NftCard = ({ image, name, timer, likes, price }: NftProps) => {
         </div>
       </div>
 
-      <hr className="border-orange-300 dark:border-orange-400 mb-4" />
+      <hr className="border-yellow-400 dark:border-yellow-400 mb-4" />
 
       <div className="flex flex-col text-left space-y-2">
         <div className="flex flex-row items-center">
@@ -35,7 +35,7 @@ const NftCard = ({ image, name, timer, likes, price }: NftProps) => {
         <div className="flex flex-row">
             <CurrencyDollarIcon className="w-6 mr-2" /> <span className="text-slate-400 dark:text-neutral-600">{price} BTC ≈$26.69</span>
         </div>
-        <div className="flex flex-row border rounded-full w-fit border-orange-300 dark:border-orange-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition-all delay-100 from-[#feb019] to-[#ef7e56]">
+        <div className="flex flex-row border rounded-full w-fit border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]">
             <BanknotesIcon className="w-6" /> <span className="dark:text-neutral-500 text-black text-lg ml-3">Place Bid</span>
         </div>
       </div>

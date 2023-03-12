@@ -1,30 +1,15 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-import NftGrid from '@/components/Nft/NftGrid'
+import Hero from '@/components/Home/Hero'
+import TrendingAuctions from '@/components/Home/TrendingAuctions'
+import CreatorOfTheWeek from '@/components/Home/CreatorOfTheWeek'
+import TopCollections from '@/components/Home/TopCollections'
+import CreateAndSell from '@/components/Home/CreateAndSell'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
 
-    /*useEffect(() => {
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-    
-    // Whenever the user explicitly chooses light mode
-    localStorage.theme = 'light'
-    
-    // Whenever the user explicitly chooses dark mode
-    localStorage.theme = 'dark'
-    
-    // Whenever the user explicitly chooses to respect the OS preference
-    localStorage.removeItem('theme')
-  }, [])*/
-  
   return (
     <>
       <Head>
@@ -34,7 +19,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <NftGrid />
+      <div className='mt-32'>
+        <Hero />
+        <TrendingAuctions />
+        <CreatorOfTheWeek />
+        <TopCollections />
+        <CreateAndSell />
+      </div>
     </>
   )
 }

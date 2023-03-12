@@ -10,7 +10,7 @@ const Footer = () => {
     <div className="mt-20 mb-8">
       <hr className="w-full border-orange-300 dark:border-orange-400" />
 
-      <div className="p-14 flex justify-between flex-row text-black dark:text-gray-400">
+      <div className="py-14 lg:px-16 px-8  flex justify-between flex-col space-y-6 lg:flex-row text-black dark:text-gray-400">
         <div className="space-y-3">
           <div>
             <Link href="/">
