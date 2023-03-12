@@ -20,7 +20,7 @@ const MobileNav = ({ visible, visibility }: MobileNavProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col justify-center items-center text-center mx-auto font-semibold text-xl mt-1 space-y-16">
+      <div className="flex flex-col justify-center items-center text-center mx-auto font-semibold text-xl mt-1 space-y-10">
         <div>
           <Link onClick={() => {visibility(false)}} href="/">Home</Link>
         </div>
