@@ -1,5 +1,6 @@
 import { CollectionProps } from "@/types/types";
 import { CheckCircleIcon, CurrencyDollarIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 import Link from "next/link";
 
 const CollectionCard = ({
@@ -15,15 +16,15 @@ const CollectionCard = ({
     <div className="border border-yellow-400 dark:bg-[#041824] dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
       <div className="flex flex-col space-y-0">
         <div className="relative">
-          <img
+          <Image
             className="object-cover w-full rounded-md mb-5 h-32"
-            src={background}
+            src={background!}
             width={200}
             height={200}
             alt="card image"
           />
           <Link href="/">
-            <img
+            <Image
               className="object-cover bg-slate-800/30 absolute ring-1 ring-gray-300 w-16 top-12 cursor-pointer left-5 rounded-full mb-5"
               src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${name}`}
               width={200}
