@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   WalletIcon,
   BellIcon,
@@ -10,6 +10,7 @@ import { Bars3Icon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import MobileNav from "./MobileNav";
+import StatsMenu from "./StatsMenu";
 
 const TOP_OFFSET = 66;
 
@@ -17,6 +18,11 @@ export const Header = () => {
   const [theme, setTheme] = useState<string>("system");
   const [scrolling, setScrolling] = useState<boolean>(false);
   const [navOpen, setNavOpen] = useState<boolean>(false);
+  const [statsDropdown, setStatsDropdown] = useState<boolean>(false);
+
+  const toogleStatsDropdown = useCallback(() => {
+    setStatsDropdown((current) => !current);
+  }, []);
 
   useEffect(() => {
     switch (theme) {
@@ -58,7 +64,7 @@ export const Header = () => {
       {" "}
       {navOpen === false ? (
         <nav
-          className={`flex transition duration-500 top-0 z-10 backdrop-blur-lg border-b border-white dark:border-[#092940] fixed w-full bg-[#eee] dark:bg-[#051e2f] justify-between items-center ${
+          className={`flex transition duration-500 top-0 z-10 backdrop-blur-lg border-b border-white dark:border-[#092940] fixed w-full bg-[#eee] dark:bg-[#051e2f] text-xl justify-between items-center ${
             scrolling && "bg-opacity-30 dark:bg-opacity-80"
           }`}
         >
@@ -74,13 +80,25 @@ export const Header = () => {
                 />
               </Link>
             </div>
-            <div className="hidden lg:flex flex-row justify-between mt-1 space-x-8">
-              <Link href="/">Home</Link>
-              <Link href="/discover">Discover </Link>
-              <Link href="/">Creators</Link>
-              <Link href="/">Collectors</Link>
-              <Link href="/">Stats </Link>
-              <Link href="/">Customize</Link>
+            <div className="hidden text-black dark:text-gray-400 lg:flex flex-row justify-between mt-1 space-x-8">
+              <div>
+                <Link href="/">Home</Link>
+              </div>
+              <div>
+                <Link href="/discover">Discover </Link>
+              </div>
+              <div>
+                <Link href="/creators">Creators</Link>
+              </div>
+              <div>
+                <Link href="/collectors">Collectors</Link>
+              </div>
+              <div className="cursor-pointer" onClick={toogleStatsDropdown}>
+                  Stats <StatsMenu visible={statsDropdown} />{" "}
+              </div>
+              <div>
+                <Link href="/">Customize</Link>
+              </div>
             </div>
           </div>
 
@@ -89,11 +107,11 @@ export const Header = () => {
               <form onSubmit={handleSubmit}>
                 <div className="hidden lg:flex  flex-row justify-center items-center p-6">
                   <div className="border-l border-r border-b border-t border-black dark:border-[#7A756D] justify-center items-center p-1 rounded-tl-md rounded-bl-md">
-                    <MagnifyingGlassIcon className="w-6 fill-black dark:fill-[#7A756D]" />
+                    <MagnifyingGlassIcon className="w-7 fill-black dark:fill-[#7A756D]" />
                   </div>
-                  <div className=" border-r border-b border-t border-black dark:border-[#7A756D] justify-center items-center p-1 rounded-tr-md rounded-br-md">
+                  <div className=" border-r text-lg border-b border-t border-black dark:border-[#7A756D] justify-center items-center p-1 rounded-tr-md rounded-br-md">
                     <input
-                      className="outline-none border-transparent bg-transparent"
+                      className="outline-none border-transparent bg-transparent ml-3"
                       type="text"
                       placeholder="Type of Search"
                     />
@@ -116,19 +134,21 @@ export const Header = () => {
             </div>
 
             <div className="mt-1 lg:mt-5">
-              <div className="rounded-full p-2 mr-2 cursor-pointer bg-gradient-to-r transition-all from-yellow-300 to-orange-400">
-                {theme === "light" ? (
-                  <MoonIcon
-                    onClick={() => setTheme("dark")}
-                    className="w-6 stroke-white transition-all"
-                  />
-                ) : (
-                  <SunIcon
-                    onClick={() => setTheme("light")}
-                    className="w-6 stroke-white transition-all"
-                  />
-                )}
-              </div>
+              {theme === "light" ? (
+                <div
+                  className="rounded-full p-2 mr-2 cursor-pointer bg-gradient-to-r transition-all from-yellow-300 to-orange-400"
+                  onClick={() => setTheme("dark")}
+                >
+                  <MoonIcon className="w-6 stroke-white transition-all" />
+                </div>
+              ) : (
+                <div
+                  className="rounded-full p-2 mr-2 cursor-pointer bg-gradient-to-r transition-all from-yellow-300 to-orange-400"
+                  onClick={() => setTheme("light")}
+                >
+                  <SunIcon className="w-6 stroke-white transition-all" />
+                </div>
+              )}
             </div>
 
             <div className="flex lg:hidden cursor-pointer">

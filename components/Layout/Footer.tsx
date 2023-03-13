@@ -63,13 +63,13 @@ const Footer = () => {
           <h3 className="font-semibold text-2xl mb-4">My Pages</h3>
           <ul>
             <li>
-              <Link href="/">Discover</Link>
+              <Link href="/discover">Discover</Link>
             </li>
             <li>
-              <Link href="/">Creators</Link>
+              <Link href="/creators">Creators</Link>
             </li>
             <li>
-              <Link href="/">Collectors</Link>
+              <Link href="/collectors">Collectors</Link>
             </li>
             <li>
               <Link href="/">Ranking</Link>

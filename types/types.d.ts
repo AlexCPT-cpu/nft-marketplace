@@ -32,3 +32,13 @@ export interface MobileNavProps {
     visible: boolean,
     visibility: any
 }
+
+export interface MetaProps {
+    title?: string,
+    keyword?: string,
+    desc?: string
+}
+
+export interface StatsProps {
+    visible: boolean
+}

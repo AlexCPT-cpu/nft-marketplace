@@ -1,8 +1,8 @@
 import { MobileNavProps } from "@/types/types";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import React from "react";
 import Link from "next/link";
+import MobileStatsMenu from "./MobileStatsMenu";
 
 const MobileNav = ({ visible, visibility }: MobileNavProps) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,25 +21,6 @@ const MobileNav = ({ visible, visibility }: MobileNavProps) => {
       </div>
 
       <div className="flex flex-col justify-center items-center text-center mx-auto font-semibold text-xl mt-1 space-y-10">
-        <div>
-          <Link onClick={() => {visibility(false)}} href="/">Home</Link>
-        </div>
-        <div>
-          <Link onClick={() => {visibility(false)}} href="/discover">Discover </Link>
-        </div>
-        <div>
-          <Link onClick={() => {visibility(false)}} href="/">Creators</Link>
-        </div>
-        <div>
-          <Link onClick={() => {visibility(false)}} href="/">Collectors</Link>
-        </div>
-        <div>
-          <Link onClick={() => {visibility(false)}} href="/">Stats </Link>
-        </div>
-        <div>
-          <Link onClick={() => {visibility(false)}} href="/">Customize</Link>
-        </div>
-
         <div className="flex justify-center">
           <form onSubmit={handleSubmit}>
             <div className="flex  flex-row justify-center items-center p-6">
@@ -56,6 +37,60 @@ const MobileNav = ({ visible, visibility }: MobileNavProps) => {
               <button hidden>submit</button>
             </div>
           </form>
+        </div>
+
+        <div>
+          <Link
+            onClick={() => {
+              visibility(false);
+            }}
+            href="/"
+          >
+            Home
+          </Link>
+        </div>
+        <div>
+          <Link
+            onClick={() => {
+              visibility(false);
+            }}
+            href="/discover"
+          >
+            Discover{" "}
+          </Link>
+        </div>
+        <div>
+          <Link
+            onClick={() => {
+              visibility(false);
+            }}
+            href="/creators"
+          >
+            Creators
+          </Link>
+        </div>
+        <div>
+          <Link
+            onClick={() => {
+              visibility(false);
+            }}
+            href="/collectors"
+          >
+            Collectors
+          </Link>
+        </div>
+        <div>
+          <MobileStatsMenu visibility={visibility} />
+        </div>
+        <div>
+          <Link
+            onClick={() => {
+              visibility(false);
+            }}
+            href="/"
+          >
+            Customize
+          </Link>
         </div>
       </div>
     </div>
