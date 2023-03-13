@@ -42,3 +42,7 @@ export interface MetaProps {
 export interface StatsProps {
     visible: boolean
 }
+
+export interface LayoutProps {
+    children: ReactFragment.ReactNode
+}

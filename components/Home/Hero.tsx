@@ -1,8 +1,10 @@
+import Image from "next/image";
+
 const Hero = () => {
   return (
     <div className="flex flex-col lg:flex-row lg:justify-between items-center px-6 lg:px-16 mb-8 mt-10">
       <div className="lg:hidden flex justify-center mx-auto text-center items-center">
-        <img
+        <Image
           className="w-[850px] h-[350px] md:h-[450px] md:w-[500px] mb-5 rounded-xl mx-auto text-center"
           src="/hero.jpg"
           width={50}
@@ -39,14 +41,14 @@ const Hero = () => {
             EXPLORE ITEMS
           </button>
 
-          <button className="hover:text-white border border-[#feb019] text-[#feb019] hover:bg-gradient-to-r from-[#feb019] via-[#e39601] to-[#f59292] px-8 py-4 rounded-full">
+          <button className="hover:text-white text-sm border border-[#feb019] text-[#feb019] hover:bg-gradient-to-r from-[#feb019] via-[#e39601] to-[#f59292] px-8 py-4 rounded-full">
             CONNECT WALLET
           </button>
         </div>
       </div>
 
       <div className="hidden lg:flex">
-        <img
+        <Image
           className="w-[650px] rounded-xl"
           src="/hero.jpg"
           width={20}

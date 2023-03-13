@@ -39,7 +39,7 @@ const MobileStatsMenu: React.FC<Props> = ({ visibility }) => {
                     href="/stats/ranking"
                     className={`${
                       active
-                        ? "bg-violet-500 text-black dark:text-white"
+                        ? "dark:bg-gray-800/40 bg-gray-300/40 text-black dark:text-white"
                         : "text-black dark:text-white"
                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                   >
@@ -58,7 +58,7 @@ const MobileStatsMenu: React.FC<Props> = ({ visibility }) => {
                     href="/stats/activity"
                     className={`${
                       active
-                        ? "bg-violet-500 text-black dark:text-white"
+                        ? "dark:bg-gray-800/40 bg-gray-300/40 text-black dark:text-white"
                         : "text-black dark:text-white"
                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                   >
