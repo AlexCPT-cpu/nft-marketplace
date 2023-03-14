@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import Hero from '@/components/Home/Hero'
 import TrendingAuctions from '@/components/Home/TrendingAuctions'
 import CreatorOfTheWeek from '@/components/Home/CreatorOfTheWeek'

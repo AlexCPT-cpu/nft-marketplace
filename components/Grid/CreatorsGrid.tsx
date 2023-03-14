@@ -13,7 +13,7 @@ const CreatorsGrid = () => {
       </div>
 
       <div className="flex flex-row items-center px-4 py-1">
-        <div className="font-semibold bg-neutral-200 dark:border-[#2c3641] dark:bg-neutral-900 border-l border-t border-b border-r rounded-tl-md rounded-bl-md px-4 py-2">
+        <div className="font-semibold bg-neutral-200 dark:border-[#2c3641] dark:bg-[#041824] border-l border-t border-b border-r rounded-tl-md rounded-bl-md px-4 py-2">
           Sort By
         </div>
         <div className="border-r flex flex-row border-t dark:border-[#2c3641] border-b rounded-tr-md rounded-br-md px-4 py-2">

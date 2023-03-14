@@ -16,7 +16,7 @@ const CollectorsGrid = () => {
           <div className="font-semibold bg-neutral-200 dark:border-[#2c3641] dark:bg-neutral-900 border-l border-t border-b border-r rounded-tl-md rounded-bl-md px-4 py-2">
             Sort By
           </div>
-          <div className="border-r flex flex-row border-t dark:border-[#2c3641] border-b rounded-tr-md rounded-br-md px-4 py-2">
+          <div className="border-r flex flex-row border-t dark:bg-[#041824] border-b rounded-tr-md rounded-br-md px-4 py-2">
             Most Recent
             <ChevronDownIcon className="w-4 ml-2" />
           </div>
