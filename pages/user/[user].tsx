@@ -2,7 +2,7 @@ import User from "@/components/User/User";
 
 const user = () => {
   return (
-    <div className="mt-38">
+    <div className="mt-28">
           <User />
     </div>
   );

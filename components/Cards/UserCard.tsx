@@ -5,6 +5,8 @@ import { AiOutlineInstagram } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { FaTwitter } from "react-icons/fa";
 import Link from "next/link";
+import useCopyToClipboard from "@/hooks/CopyToClipBoard";
+import { toast } from "react-hot-toast";
 
 const UserCard: React.FC<UserCardProps> = ({
   image,
@@ -13,9 +15,16 @@ const UserCard: React.FC<UserCardProps> = ({
   username,
   referrer,
 }) => {
+  const [value, copy] = useCopyToClipboard();
+
+  const setShare = (url: string) => {
+    const notification = toast.success("Copied Url ... 😉");
+    copy(url);
+  };
+
   return (
-    <div className="border-[1px] flex items-center flex-col lg:justify-between border-gray-200 dark:bg-[#041824] dark:border-[#092940] p-4 rounded-md w-full">
-      <div className="flex items-center space-y-3 lg:space-y-4 flex-col w-full text-center justify-center min-w-[300px] lg:flex-row space-x-10">
+    <div className="border-[1px] flex items-center flex-col lg:flex-row lg:justify-between border-gray-200 dark:bg-[#041824] dark:border-[#092940] p-4 rounded-md w-full">
+      <div className="flex items-center space-y-3 lg:space-y-4 flex-col w-full text-center justify-center min-w-[300px] lg:flex-row lg:space-x-10">
         <div className="ring-1 ring-slate-900 rounded-full">
           <Image
             className="w-28 cursor-pointer rounded-full"
@@ -29,7 +38,14 @@ const UserCard: React.FC<UserCardProps> = ({
           <div className="text-black dark:text-neutral-400 text-3xl font-bold">
             {name}
           </div>
-          <div className="text-[#8c9db5] text-opacity-1"><Link href='/' className="dark:hover:text-gray-200 hover:text-gray-500 cursor-pointer">@{username}</Link></div>
+          <div className="text-[#8c9db5] text-opacity-1">
+            <Link
+              href="/"
+              className="dark:hover:text-gray-200 hover:text-gray-500 cursor-pointer"
+            >
+              @{username}
+            </Link>
+          </div>
 
           <div className="dark:text-gray-400">{desc}</div>
 
@@ -52,7 +68,8 @@ const UserCard: React.FC<UserCardProps> = ({
           </div>
         </div>
       </div>
-      <div className="flex flex-col space-y-4">
+
+      <div className="flex mt-5 lg:mt-0 mb-5 lg:mb-0 flex-col space-y-4">
         <div className="flex flex-row dark:text-neutral-400 space-x-24">
           <div>
             16
@@ -63,7 +80,10 @@ const UserCard: React.FC<UserCardProps> = ({
           </div>
         </div>
         <div className="flex justify-center">
-          <button className="border btn btn-outline text-yellow-400 hover:text-white transition  border-yellow-400 hover:bg-[#feb019] w-60 h-10 rounded-3xl">
+          <button
+            onClick={() => console.log(setShare(document.location.href))}
+            className="border btn btn-outline text-yellow-400 hover:text-white transition  border-yellow-400 hover:bg-[#feb019] w-60 h-10 rounded-3xl"
+          >
             Share
           </button>
         </div>
@@ -75,7 +95,15 @@ const UserCard: React.FC<UserCardProps> = ({
             width={50}
             height={50}
           />
-          <div className="dark:text-gray-400">Invited by <Link href='/' className="dark:hover:text-gray-200 hover:text-gray-500 cursor-pointer">@{referrer}</Link></div>
+          <div className="dark:text-gray-400">
+            Invited by{" "}
+            <Link
+              href="/"
+              className="dark:hover:text-gray-200 hover:text-gray-500 cursor-pointer"
+            >
+              @{referrer}
+            </Link>
+          </div>
         </div>
       </div>
     </div>

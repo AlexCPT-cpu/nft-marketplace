@@ -79,8 +79,8 @@ export interface ActivityItemProps {
    referrer?: string
  }
 
- export interface UserNav {
-  active: ActiveProps
+ export interface UserNftGrid {
+  active?: ActiveProps
  }
 
  export interface ActiveProps {
@@ -89,4 +89,17 @@ export interface ActivityItemProps {
   collections?,
   offersReceived?,
   offersMade?
+ }
+
+ export interface HistoryProps {
+  title?
+  sub?,
+  item1?,
+  item2?,
+ }
+
+ export interface PropertyProps {
+  title?
+  trait?,
+  value?,
  }

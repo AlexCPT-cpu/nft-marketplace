@@ -2,7 +2,7 @@ import React from "react";
 
 const ArrowDownCircle = () => {
   return (
-    <div>
+    <div className="mr-2">
       <svg
         width="28"
         height="28"
