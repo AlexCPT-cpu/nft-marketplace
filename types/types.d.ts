@@ -70,3 +70,23 @@ export interface ActivityItemProps {
   to?: string,
   time?: string
  }
+
+ export interface UserCardProps { 
+   image?: string,
+   name?: string,
+   desc?: string,
+   username?: string,
+   referrer?: string
+ }
+
+ export interface UserNav {
+  active: ActiveProps
+ }
+
+ export interface ActiveProps {
+  created?
+  collected?,
+  collections?,
+  offersReceived?,
+  offersMade?
+ }
