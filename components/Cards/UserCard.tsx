@@ -25,7 +25,7 @@ const UserCard: React.FC<UserCardProps> = ({
   return (
     <div className="border-[1px] flex items-center flex-col lg:flex-row lg:justify-between border-gray-200 dark:bg-[#041824] dark:border-[#092940] p-4 rounded-md w-full">
       <div className="flex items-center space-y-3 lg:space-y-4 flex-col w-full text-center justify-center min-w-[300px] lg:flex-row lg:space-x-10">
-        <div className="ring-1 ring-slate-900 rounded-full">
+        <div className="ring-1 ring-black dark:ring-white  rounded-full">
           <Image
             className="w-28 cursor-pointer rounded-full"
             src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${name}`}
@@ -34,20 +34,20 @@ const UserCard: React.FC<UserCardProps> = ({
             height={50}
           />
         </div>
-        <div className="flex flex-col space-y-4 items-center">
-          <div className="text-black dark:text-neutral-400 text-3xl font-bold">
+        <div className="flex flex-col space-y-4 text-left">
+          <div className="text-black dark:text-neutral-500 text-left text-3xl font-bold">
             {name}
           </div>
-          <div className="text-[#8c9db5] text-opacity-1">
+          <div className="text-neutral-500 text-opacity-1">
             <Link
               href="/"
-              className="dark:hover:text-gray-200 hover:text-gray-500 cursor-pointer"
+              className="dark:hover:text-gray-200 text-left hover:text-neutral-800 cursor-pointer"
             >
               @{username}
             </Link>
           </div>
 
-          <div className="dark:text-gray-400">{desc}</div>
+          <div className="dark:text-gray-500 text-left">{desc}</div>
 
           <div className="flex flex-row items-center space-x-2">
             <div className="ring-1 rounded-full p-2 hover:text-gray-500 ring-orange-300 dark:ring-orange-400 cursor-pointer">

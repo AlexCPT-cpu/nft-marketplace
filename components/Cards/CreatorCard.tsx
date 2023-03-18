@@ -61,7 +61,7 @@ const CreatorCard = ({
         </div>
 
         <div className="text-black dark:text-neutral-400 text-lg font-semibold text-center">
-          Stephine Smith
+          <Link href="/user/1">Stephine Smith</Link>
           <div className="text-black dark:text-gray-600 text-base text-center flex flex-row justify-center mt-1">
             {truncateEthAddress(
               `${address ?? "0xb16c1342E617A5B6E4b631EB114483FDB289c0A4"}`
@@ -117,30 +117,32 @@ const CreatorCard = ({
           </div>
         </div>
 
-        <div className="group text-center space-x-3  pl-20 flex justify-center items-center border rounded-full border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition from-[#feb019] to-[#ef7e56]">
-          <div className="">
-            <svg
-              width="32"
-              height="32"
-              viewBox="0 0 38 38"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M19 30C25.0751 30 30 25.0751 30 19C30 12.9249 25.0751 8 19 8C12.9249 8 8 12.9249 8 19C8 25.0751 12.9249 30 19 30Z"
-                className="fill-[#feb019]"
-              ></path>
-              <path
-                opacity="0.8"
-                d="M36 19C36 28.374 28.374 36 19 36C10.697 36 3.701 29.989 2.276 22H4.301C5.691 28.847 11.743 34 19 34C27.284 34 34 27.284 34 19C34 10.716 27.284 4 19 4C10.716 4 4 10.716 4 19C4 19.338 4.028 19.668 4.05 20H2V19C2 9.626 9.626 2 19 2C28.374 2 36 9.626 36 19ZM18 12V18H12V20H18V26H20V20H26V18H20V12H18Z"
-                className="fill-black dark:fill-gray-600 group-hover:fill-black transition dark:group-hover:fill-white"
-              ></path>
-            </svg>
+        <Link href="/user/1">
+          <div className="group text-center space-x-3  pl-20 flex justify-center items-center border rounded-full border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition from-[#feb019] to-[#ef7e56]">
+            <div className="">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 38 38"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19 30C25.0751 30 30 25.0751 30 19C30 12.9249 25.0751 8 19 8C12.9249 8 8 12.9249 8 19C8 25.0751 12.9249 30 19 30Z"
+                  className="fill-[#feb019]"
+                ></path>
+                <path
+                  opacity="0.8"
+                  d="M36 19C36 28.374 28.374 36 19 36C10.697 36 3.701 29.989 2.276 22H4.301C5.691 28.847 11.743 34 19 34C27.284 34 34 27.284 34 19C34 10.716 27.284 4 19 4C10.716 4 4 10.716 4 19C4 19.338 4.028 19.668 4.05 20H2V19C2 9.626 9.626 2 19 2C28.374 2 36 9.626 36 19ZM18 12V18H12V20H18V26H20V20H26V18H20V12H18Z"
+                  className="fill-black dark:fill-gray-600 group-hover:fill-black transition dark:group-hover:fill-white"
+                ></path>
+              </svg>
+            </div>
+            <div className="text-black text-sm w-full text-center dark:text-neutral-400 group-hover:text-white flex flex-row">
+              FOLLOW
+            </div>
           </div>
-          <div className="text-black text-sm w-full text-center dark:text-neutral-400 group-hover:text-white flex flex-row">
-            FOLLOW
-          </div>
-        </div>
+        </Link>
       </div>
     </div>
   );

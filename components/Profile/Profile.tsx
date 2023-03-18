@@ -1,19 +1,19 @@
 import React from 'react'
-import CreateCard from './CreateCard'
+import ProfileCard from './ProfileCard'
 
-const Create = () => {
+const Profile = () => {
   return (
     <div>
         <div className='text-3xl font-bold'>
-            Create a New NFT
+            Edit User Profile
             <div className='w-full my-3 bg-black/60 border-black/60 dark:bg-white/60 border dark:border-white/60'></div>
         </div>
 
         <div>
-            <CreateCard />
+            <ProfileCard />
         </div>
     </div>
   )
 }
 
-export default Create
+export default Profile

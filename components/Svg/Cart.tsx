@@ -2,14 +2,14 @@ import React from "react";
 
 const Cart = () => {
   return (
-    <div className="mr-2">
+    <div className="mr-2 group">
       <svg
         width="28"
         height="28"
         viewBox="0 0 38 38"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="me-2"
+        className="me-2 group-hover:fill-white"
       >
         <path
           d="M34.81 12L29.66 24H9.61L9.94 23.01L5.81 12H34.81Z"

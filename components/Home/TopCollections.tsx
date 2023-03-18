@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import CollectionCard from "../Cards/CollectionCard";
 
@@ -27,8 +28,8 @@ const TopCollections = () => {
       </div>
       <div className="flex justify-between mt-5">
         <div className="text-2xl lg:text-3xl font-semibold">Top Collections</div>
-        <div className="text-lg lg:text-xl relative transition border-2 border-transparent rounded-sm hover:border-[#feb019]">
-          VIEW ALL
+        <div className="text-lg lg:text-xl relative transition border-2 border-transparent rounded-md p-2 hover:border-[#feb019]">
+        <Link href='/collectors'>VIEW ALL</Link> 
         </div>
       </div>
 

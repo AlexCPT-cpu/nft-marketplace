@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   WalletIcon,
   BellIcon,
+  UserCircleIcon,
   SunIcon,
   MoonIcon,
 } from "@heroicons/react/24/outline";
@@ -97,7 +98,7 @@ export const Header = () => {
                   Stats <StatsMenu visible={statsDropdown} />{" "}
               </div>
               <div>
-                <Link href="/">Customize</Link>
+                <Link href="/create">Create</Link>
               </div>
             </div>
           </div>
@@ -131,6 +132,14 @@ export const Header = () => {
               <div className="rounded-full p-2 bg-gradient-to-r cursor-pointer from-yellow-300 to-orange-400">
                 <BellIcon className="w-6 stroke-white" />
               </div>
+            </div>
+
+            <div className="mt-1 lg:mt-5 mr-2">
+              <Link href='/editprofile'>
+              <div className="rounded-full p-2 bg-gradient-to-r cursor-pointer from-yellow-300 to-orange-400">
+                <UserCircleIcon className="w-6 stroke-white" />
+              </div>
+              </Link>
             </div>
 
             <div className="mt-1 lg:mt-5">

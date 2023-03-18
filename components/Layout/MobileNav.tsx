@@ -87,9 +87,9 @@ const MobileNav = ({ visible, visibility }: MobileNavProps) => {
             onClick={() => {
               visibility(false);
             }}
-            href="/"
+            href="/create"
           >
-            Customize
+            Create
           </Link>
         </div>
       </div>

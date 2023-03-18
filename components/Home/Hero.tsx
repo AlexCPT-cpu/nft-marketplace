@@ -5,10 +5,10 @@ const Hero = () => {
     <div className="flex flex-col lg:flex-row lg:justify-between items-center px-6 lg:px-16 mb-8 mt-10">
       <div className="lg:hidden flex justify-center mx-auto text-center items-center">
         <Image
-          className="w-[850px] h-[350px] md:h-[450px] md:w-[500px] mb-5 rounded-xl mx-auto text-center"
+          className="w-[850px] h-[350px] md:h-[450px] md:w-[500px] mb-5 rounded-xl object-cover mx-auto text-center"
           src="/hero.jpg"
-          width={50}
-          height={50}
+          width={200}
+          height={200}
           alt="hero"
         />
       </div>

@@ -38,7 +38,7 @@ const CollectionCard = ({
         </div>
 
         <div className="text-black dark:text-neutral-400 text-lg font-semibold text-left">
-          {name}
+          <Link href='/collection/1'>{name}</Link>
         </div>
 
         <div className="space-y-4">

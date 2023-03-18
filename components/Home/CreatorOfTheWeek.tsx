@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import CreatorCard from "../Cards/CreatorCard";
 
@@ -27,8 +28,8 @@ const CreatorOfTheWeek = () => {
       </div>
       <div className="flex justify-between mt-5">
         <div className="text-2xl lg:text-3xl font-semibold">Creator of the Week</div>
-        <div className="text-lg lg:text-xl relative transition border-2 border-transparent rounded-sm hover:border-[#feb019]">
-          VIEW ALL
+        <div className="text-lg lg:text-xl relative transition border-2 p-2 rounded-md border-transparent hover:border-[#feb019]">
+         <Link href='/creators'>VIEW ALL</Link> 
         </div>
       </div>
 

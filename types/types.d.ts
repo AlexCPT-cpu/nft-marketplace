@@ -103,3 +103,23 @@ export interface ActivityItemProps {
   trait?,
   value?,
  }
+
+ export interface CollectionCardProps {
+  image?,
+  name?,
+  desc?,
+  username?,
+  items?,
+  owners?,
+  floor?,
+  volume?
+ }
+
+ interface InputProps {
+  id: string;
+  onChange: any;
+  value: string;
+  label: string;
+  type?: string;
+  title?: string;
+}

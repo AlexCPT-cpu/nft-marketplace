@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import NftCard from "../Cards/NftCard";
 
@@ -33,8 +34,8 @@ const TrendingAuctions = () => {
         <div className="text-2xl lg:text-3xl font-semibold">
         Trending Auctions
         </div>
-        <div className="text-lg lg:text-xl relative transition border-2 border-transparent rounded-sm hover:border-[#feb019]">
-        VIEW ALL
+        <div className="text-lg lg:text-xl relative transition border-2 p-2 border-transparent rounded-md hover:border-[#feb019]">
+        <Link href='/discover'>VIEW ALL</Link> 
         </div>
       </div>
 
