@@ -40,7 +40,7 @@ export const CustomConnectButton = () => {
                       <WalletIcon className="w-6 stroke-white" />
                         </div>
                         <div className="px-3">
-                          Connect Wallet
+                          Connect Wallet 
                         </div>
                   </button>
                 );
