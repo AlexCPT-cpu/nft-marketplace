@@ -36,10 +36,10 @@ export const CustomConnectButton = () => {
               if (!connected) {
                 return (
                   <button onClick={openConnectModal} type="button" className="rounded-full p-2 bg-gradient-to-r cursor-pointer from-yellow-300 to-orange-400">
-                      <div className="hidden lg:block">
+                    <div className="hidden lg:block">
                       <WalletIcon className="w-6 stroke-white" />
                         </div>
-                        <div className="px-3">
+                        <div className="px-3 block lg:hidden">
                           Connect Wallet 
                         </div>
                   </button>
