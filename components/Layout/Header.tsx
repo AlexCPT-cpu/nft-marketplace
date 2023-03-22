@@ -59,6 +59,7 @@ export const Header = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(e)
   };
 
   return (
