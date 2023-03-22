@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { HeroConnectButton } from "../Html/HeroConnectButton";
 
 const Hero = () => {
   return (
@@ -36,14 +37,15 @@ const Hero = () => {
           </p>
         </div>
 
-        <div className="text-sm flex flex-col space-y-4 lg:flex-row lg:space-x-3">
-          <button className="bg-gradient-to-r from-[#feb019] via-[#e39601] to-[#f59292] px-10 transition duration-500 py-4 rounded-full">
+        <div className="text-sm flex flex-col space-y-4 items-center justify-center lg:flex-row lg:space-x-3">
+          <div className="mt-4">
+          <button className="bg-gradient-to-r from-[#feb019] via-[#e39601] to-[#f59292] px-12 transition duration-500 py-5 rounded-full">
             EXPLORE ITEMS
           </button>
-
-          <button className="hover:text-white text-sm border border-[#feb019] text-[#feb019] hover:bg-gradient-to-r from-[#feb019] via-[#e39601] to-[#f59292] px-8 py-4 rounded-full">
-            CONNECT WALLET
-          </button>
+          </div>
+          <div>
+          <HeroConnectButton />
+          </div>
         </div>
       </div>
 
