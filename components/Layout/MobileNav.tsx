@@ -2,6 +2,7 @@ import { MobileNavProps } from "@/types/types";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { CustomConnectButton } from "../Html/CustomConnectButton";
 import MobileStatsMenu from "./MobileStatsMenu";
 
 const MobileNav = ({ visible, visibility }: MobileNavProps) => {
@@ -92,6 +93,7 @@ const MobileNav = ({ visible, visibility }: MobileNavProps) => {
             Create
           </Link>
         </div>
+        <CustomConnectButton />
       </div>
     </div>
   );

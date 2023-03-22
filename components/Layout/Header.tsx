@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import MobileNav from "./MobileNav";
 import StatsMenu from "./StatsMenu";
+import { CustomConnectButton } from "../Html/CustomConnectButton";
 
 const TOP_OFFSET = 66;
 
@@ -122,10 +123,8 @@ export const Header = () => {
               </form>
             </div>
 
-            <div className="mt-1 lg:mt-5 mr-2">
-              <div className="rounded-full p-2 bg-gradient-to-r cursor-pointer from-yellow-300 to-orange-400">
-                <WalletIcon className="w-6 stroke-white" />
-              </div>
+            <div className="mt-1 lg:mt-5 mr-2 hidden lg:block">
+                <CustomConnectButton />
             </div>
 
             <div className="mt-1 lg:mt-5 mr-2">
