@@ -28,14 +28,6 @@ const CollectionNav: React.FC = () => {
           activity: true,
         });
         break;
-        setActive({
-          items: false,
-          activity: false,
-          collections: false,
-          offersMade: true,
-          offersReceived: false,
-        });
-        break;
       default:
         setActive({
           items: true,
