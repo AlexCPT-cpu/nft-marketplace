@@ -36,7 +36,12 @@ export const CustomConnectButton = () => {
               if (!connected) {
                 return (
                   <button onClick={openConnectModal} type="button" className="rounded-full p-2 bg-gradient-to-r cursor-pointer from-yellow-300 to-orange-400">
+                      <div className="hidden lg:block">
                       <WalletIcon className="w-6 stroke-white" />
+                        </div>
+                        <div className="px-3">
+                          Connect Wallet
+                        </div>
                   </button>
                 );
               }
@@ -48,7 +53,7 @@ export const CustomConnectButton = () => {
                 );
               }
               return (
-                <div className="rounded-full p-2 bg-gradient-to-r cursor-pointer from-yellow-300 to-orange-400" style={{ display: "flex", gap: 12 }}>
+                <div className="rounded-full p-2 px-4 bg-gradient-to-r cursor-pointer from-yellow-300 to-orange-400" style={{ display: "flex", gap: 12 }}>
                   <button
                     onClick={openChainModal}
                     style={{ display: "flex", alignItems: "center" }}
