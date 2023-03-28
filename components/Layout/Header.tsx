@@ -76,7 +76,7 @@ export const Header = () => {
               <Link title="Logo" href="/">
                 <Image
                   className="object-fit w-12 mr-7 rounded-full mb-5"
-                  src="/poke.jpg"
+                  src="/poke.png"
                   width={200}
                   height={200}
                   alt="card image"
