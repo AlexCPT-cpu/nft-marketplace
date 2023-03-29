@@ -1,9 +1,9 @@
 export type social = string;
 
 export type Item = {
-  name?: string,
-  image?: string
-}
+  name?: string;
+  image?: string;
+};
 
 export interface NftProps {
   image?: string;
@@ -53,73 +53,100 @@ export interface LayoutProps {
 }
 
 export interface RankingItemProps {
-  name?: string,
-  volume?: number,
-  tw4?: number,
-  svd?: number,
-  floor?: number,
-  owners?: number,
-  items?: number,
+  name?: string;
+  volume?: number;
+  tw4?: number;
+  svd?: number;
+  floor?: number;
+  owners?: number;
+  items?: number;
 }
 
-export interface ActivityItemProps { 
-  event?: string,
-  items?: Item,
-  price?: number,
-  from?: string,
-  to?: string,
-  time?: string
- }
+export interface ActivityItemProps {
+  event?: string;
+  items?: Item;
+  price?: number;
+  from?: string;
+  to?: string;
+  time?: string;
+}
 
- export interface UserCardProps { 
-   image?: string,
-   name?: string,
-   desc?: string,
-   username?: string,
-   referrer?: string
- }
+export interface UserCardProps {
+  image?: string;
+  name?: string;
+  desc?: string;
+  username?: string;
+  referrer?: string;
+}
 
- export interface UserNftGrid {
-  active?: ActiveProps
- }
+export interface UserNftGrid {
+  active?: ActiveProps;
+}
 
- export interface ActiveProps {
-  created?
-  collected?,
-  collections?,
-  offersReceived?,
-  offersMade?
- }
+export interface ActiveProps {
+  created?;
+  collected?;
+  collections?;
+  offersReceived?;
+  offersMade?;
+}
 
- export interface HistoryProps {
-  title?
-  sub?,
-  item1?,
-  item2?,
- }
+export interface HistoryProps {
+  title?;
+  sub?;
+  item1?;
+  item2?;
+}
 
- export interface PropertyProps {
-  title?
-  trait?,
-  value?,
- }
+export interface PropertyProps {
+  title?;
+  trait?;
+  value?;
+}
 
- export interface CollectionCardProps {
-  image?,
-  name?,
-  desc?,
-  username?,
-  items?,
-  owners?,
-  floor?,
-  volume?
- }
+export interface CollectionCardProps {
+  image?;
+  name?;
+  desc?;
+  username?;
+  items?;
+  owners?;
+  floor?;
+  volume?;
+}
 
- interface InputProps {
+interface InputProps {
   id: string;
   onChange: any;
   value: string;
   label: string;
   type?: string;
   title?: string;
+}
+
+export interface ApproveProps {
+  collectionAddress: string;
+}
+
+export interface CreateSell {
+    collectionAddress?: string;
+    tokenId?: number;
+    payToken?: string;
+    price?: number;
+}
+
+export interface AcceptOffer {
+  collectionAddress?: string;
+  tokenId?: number;
+  offerer?: string;
+}
+
+export interface CreateAuctionProps {
+  collectionAddress?: string,
+  tokenId?: number,
+  payToken?: string,
+  price?: number,
+  minBid?: number,
+  startTime?: number,
+  endTime?: number
 }
