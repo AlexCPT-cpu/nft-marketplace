@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract N2DNFT is ERC721URIStorage, Ownable {
+contract OriginCreate is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter public _tokenIds;
     address contractAddress;

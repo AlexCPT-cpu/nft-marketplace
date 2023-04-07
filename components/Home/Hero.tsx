@@ -1,7 +1,9 @@
+import axios from "axios";
 import Image from "next/image";
 import { HeroConnectButton } from "../Html/HeroConnectButton";
 
 const Hero = () => {
+
   return (
     <div className="flex flex-col lg:flex-row lg:justify-between items-center px-6 lg:px-16 mb-8 mt-10">
       <div className="lg:hidden flex justify-center mx-auto text-center items-center">

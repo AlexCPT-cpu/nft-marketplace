@@ -11,6 +11,7 @@ export interface NftProps {
   timer?: string;
   likes?: number;
   price?: number;
+  nftAddress?: string
 }
 
 export interface CreatorProps {
@@ -129,10 +130,10 @@ export interface ApproveProps {
 }
 
 export interface CreateSell {
-    collectionAddress?: string;
-    tokenId?: number;
-    payToken?: string;
-    price?: number;
+  collectionAddress?: string;
+  tokenId?: number;
+  payToken?: string;
+  price?: number;
 }
 
 export interface AcceptOffer {
@@ -142,11 +143,44 @@ export interface AcceptOffer {
 }
 
 export interface CreateAuctionProps {
-  collectionAddress?: string,
-  tokenId?: number,
-  payToken?: string,
-  price?: number,
-  minBid?: number,
-  startTime?: number,
-  endTime?: number
+  collectionAddress?: string;
+  tokenId?: number;
+  payToken?: string;
+  price?: number;
+  minBid?: number;
+  startTime?: number;
+  endTime?: number;
+}
+
+export interface NftData {
+  balance: number;
+  contract: any;
+  description: string;
+  media: [
+    {
+      bytes: number,
+      format: string,
+      gateway: string,
+      raw: string,
+      thumbnail: string,
+    }
+  ];
+  rawMetadata: {
+    attributes: [],
+    compiler?: string,
+    date: number,
+    description: string,
+    dna?: string,
+    edition?: string,
+    image?: string,
+    name?: string,
+  };
+  timeLastUpdated: string;
+  title: string;
+  tokenId: string;
+  tokenType: string;
+  tokenUri: {
+    gateway: string;
+    raw: string;
+  };
 }

@@ -1,2 +1,2 @@
-export const factory = '0x122eadba42fdA628654a1Aa09adC4664b6ef2110'
-export const marketPlace = '0x10A20bE71a7161cf81d2511e987fa91225865a32'
+export const factory = '0x0267B48a3D4BcDd334541CD7D2656DF6b6fE7021'
+export const marketPlace = '0xE10AA05Fcbd15Ba004683CA8109E367a5e32c27D'

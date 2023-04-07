@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ankr.com/ankr.js": "^0.3.1",
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.16",
     "@openzeppelin/contracts": "^4.8.2",
@@ -19,6 +20,7 @@
     "@types/react-dom": "18.0.11",
     "@web3modal/ethereum": "^2.2.2",
     "@web3modal/react": "^2.2.2",
+    "alchemy-sdk": "^2.7.0",
     "dotenv": "^16.0.3",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",

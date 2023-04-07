@@ -7,22 +7,21 @@
 const hre = require("hardhat");
 
 async function main() {
-  const UnikFactory = await hre.ethers.getContractFactory("UnikNFTFactory");
-  const MarketPlace = await hre.ethers.getContractFactory("UnikNFTMarketplace");
-
-  const unikFactory = await UnikFactory.deploy();
-  await unikFactory.deployed();
+  const Factory = await hre.ethers.getContractFactory("OriginCreate");
+  const MarketPlace = await hre.ethers.getContractFactory("OriginMarketplace");
 
   const marketPlace = await MarketPlace.deploy(
-    "2",
+    "8000",
     "0xd05DB5264ECAB3C490f7Cc106104Ffe1075d3EeC",
-    unikFactory.address
   );
   await marketPlace.deployed();
 
-  console.log(` Factory Deployed to ${unikFactory.address}`);
+  const factory = await Factory.deploy(marketPlace.address);
+  await factory.deployed();
 
-  console.log(` MarketPlace Deployed to ${marketPlace.address}`);
+  console.log(` Factory Deployed to ${marketPlace.address}`);
+
+  console.log(` MarketPlace Deployed to ${factory.address}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

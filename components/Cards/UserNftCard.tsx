@@ -1,5 +1,5 @@
 import { NftProps } from "@/types/types";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   CheckCircleIcon,
@@ -8,8 +8,28 @@ import {
 } from "@heroicons/react/24/solid";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import getCollectionName from "@/helpers/getCollectionName";
 
-const UserNftCard = ({ image, name, timer, likes, price }: NftProps) => {
+const UserNftCard = ({
+  image,
+  name,
+  timer,
+  likes,
+  price,
+  nftAddress,
+}: NftProps) => {
+  const [nftTitle, setNftTitle] = useState("");
+
+  useEffect(() => {
+    const getNft = async () => {
+      const { name: title } = await getCollectionName(nftAddress!);
+      setNftTitle(title);
+    };
+    if (nftAddress) {
+      getNft();
+    }
+  }, [nftAddress]);
+
   return (
     <div className="border dark:bg-[#041824] border-yellow-400 dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
       <div className="relative">
@@ -39,7 +59,7 @@ const UserNftCard = ({ image, name, timer, likes, price }: NftProps) => {
       <div className="flex flex-col text-left space-y-2">
         <Link href="/">
           <div className="flex flex-row items-center hover:text-gray-400">
-            Super_color{" "}
+            {nftTitle ? nftTitle : "super_blep"}
             <span>
               {" "}
               <CheckCircleIcon className="w-5 fill-green-600 ml-2" />{" "}
@@ -47,14 +67,16 @@ const UserNftCard = ({ image, name, timer, likes, price }: NftProps) => {
           </div>
         </Link>
         <Link href="/">
-          <div className="font-semibold text-xl hover:text-gray-400">
-            {name}
+          <div className="font-semibold text-sm hover:text-gray-400 break-words">
+            {name?.includes(nftTitle) ? name.replace(nftTitle, '') : name}
           </div>
         </Link>
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-row mt-2">
+        <span>
         <CurrencyDollarIcon className="w-6 mr-2" />{" "}
-        <span className="text-slate-400 dark:text-neutral-600">
+        </span>
+        <span className="text-slate-400 flex flex-row whitespace-nowrap dark:text-neutral-600">
           {price} BTC ≈$26.69
         </span>
       </div>
