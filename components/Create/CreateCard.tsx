@@ -5,6 +5,7 @@ import ImageUpload from "../Html/ImageUpload";
 import NftCard from "../Cards/NftCard";
 import PreviewCard from "../Cards/PreviewCard";
 import Link from "next/link";
+import axios from "axios";
 
 const CreateCard = () => {
   const [product, setProduct] = useState("");
@@ -15,8 +16,13 @@ const CreateCard = () => {
   const [image, setImage] = useState("/upload.png");
   const [isLoading, setIsLoading] = useState(false);
 
-  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log('d')
     e.preventDefault();
+    const response = await axios.post('/api/upload', {
+      file: image
+    })
+    console.log(response)
   };
 
   useEffect(() => {
@@ -102,7 +108,7 @@ const CreateCard = () => {
                 setPrice(e.currentTarget.value);
               }}
               label="Price"
-              type="email"
+              type="text"
               title="$ Price for Item"
             />
 
