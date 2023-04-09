@@ -12,7 +12,7 @@ async function main() {
 
   const marketPlace = await MarketPlace.deploy(
     "8000",
-    "0xd05DB5264ECAB3C490f7Cc106104Ffe1075d3EeC",
+    "0xd05DB5264ECAB3C490f7Cc106104Ffe1075d3EeC"
   );
   await marketPlace.deployed();
 
@@ -22,6 +22,19 @@ async function main() {
   console.log(` Factory Deployed to ${marketPlace.address}`);
 
   console.log(` MarketPlace Deployed to ${factory.address}`);
+
+  // await hre.run(`verify:verify`, {
+  //   address: marketPlace.address,
+  //   constructorArguments: [
+  //     "8000",
+  //     "0xd05DB5264ECAB3C490f7Cc106104Ffe1075d3EeC",
+  //   ],
+  // });
+
+  // await hre.run(`verify:verify`, {
+  //   address: factory.address,
+  //   constructorArguments: [marketPlace.address],
+  // });
 }
 
 // We recommend this pattern to be able to use async/await everywhere

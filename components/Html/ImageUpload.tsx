@@ -3,69 +3,42 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 interface DropzoneProps {
-  onChange: (base64: string) => void;
-  label: string;
+  onChange: (base64: File) => void;
+  label?: string;
   value?: string;
   disabled?: boolean;
 }
 
-const ImageUpload: React.FC<DropzoneProps> = ({ onChange, label, value, disabled }) => {
-  const [base64, setBase64] = useState(value);
+const ImageUpload: React.FC<DropzoneProps> = ({ onChange }) => {
+  const [base64, setBase64] = useState<null | string | File>(null);
+  const [image, setImage] = useState('');
 
-  const handleChange = useCallback((base64: string) => {
-    onChange(base64);
-  }, [onChange]);
+  const imgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const i = event.target.files[0];
 
-  const handleDrop = useCallback((files: any) => {
-      const file = files[0]
-      const reader = new FileReader();
-      reader.onload = (event: any) => {
-        setBase64(event.target.result);
-        handleChange(event.target.result);
-      };
-      reader.readAsDataURL(file);
-  }, [handleChange])
+      setBase64(i);
+      onChange(i)
+      setImage(URL.createObjectURL(i));
+    }
+  }
 
-  const { getRootProps, getInputProps } = useDropzone({ 
-    maxFiles: 1, 
-    onDrop: handleDrop, 
-    disabled,
-    accept: {
-      'image/jpeg': [],
-      'image/png': [],
-      'image/jpg': [],
-      'image/webp': [],
-      'image/gif': [],
-      'image/bmp': [],
-      'image/tif': [],
-      'image/tiff': [],
-      'image/mp4': [],
-      'image/webm': [],
-      'image/mp3': [],
-      'image/awv': [],
-      'image/ogg': [],
-      'image/glb': [],
-    } 
-  });
-
-  return ( 
-    <div {...getRootProps({className: 'w-full dark:bg-[#041824] h-full p-4 text-white text-center border-2 border-dotted rounded-md border-neutral-700'})}>
-      <input {...getInputProps()} />
+  return (
+    <div className="w-full dark:bg-[#041824] h-full p-4 text-white text-center border-2 border-dotted rounded-md border-neutral-700">
+      <input type="file" name="myImage" onChange={imgChange} />
       {base64 ? (
         <div className="flex items-center justify-center">
           <Image
-            src={base64}
+            src={image}
             height="100"
             width="100"
             alt="Uploaded image"
             className="w-52 dark:bg-[#041824]"
           />
         </div>
-      ) : (
-        <p className="text-white">{label}</p>
-      )}
+      ) : null}
     </div>
-   );
+  );
 }
  
 export default ImageUpload;

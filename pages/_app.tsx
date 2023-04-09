@@ -30,10 +30,10 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider chains={chains}>
-          <Layout>
-            <Component {...pageProps} />
-            <Toaster />
-          </Layout>
+            <Layout>
+              <Component {...pageProps} />
+              <Toaster />
+            </Layout>
         </RainbowKitProvider>
       </WagmiConfig>
     </>
