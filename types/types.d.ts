@@ -184,3 +184,10 @@ export interface NftData {
     raw: string;
   };
 }
+
+export interface ModalProps {
+  isOpen: boolean,
+  setIsOpen: (state: boolean) => void,
+  fileUrl?: string,
+  previewData?: any
+}

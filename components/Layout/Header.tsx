@@ -67,12 +67,12 @@ export const Header = () => {
       {" "}
       {navOpen === false ? (
         <nav
-          className={`flex transition duration-500 top-0 z-10 backdrop-blur-lg border-b border-white dark:border-[#092940] fixed w-full bg-[#eee] dark:bg-[#051e2f] text-xl justify-between items-center ${
+          className={`flex transition-all duration-500 top-0 z-10 overflow-x-auto scrollbar-hide backdrop-blur-lg border-b border-white dark:border-[#092940] fixed w-full bg-[#eee] dark:bg-[#051e2f] text-xl justify-between items-center ${
             scrolling && "bg-opacity-30 dark:bg-opacity-80"
-          }`}
+          } ${statsDropdown && 'pb-24 transition-all'}`}
         >
           <div className="flex justify-between mt-6 px-4">
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center mr-3">
               <Link title="Logo" href="/">
                 <Image
                   className="object-fit w-12 mr-7 rounded-full mb-5"
@@ -83,7 +83,7 @@ export const Header = () => {
                 />
               </Link>
             </div>
-            <div className="hidden text-black dark:text-gray-400 lg:flex flex-row justify-between mt-1 space-x-8">
+            <div className="hidden text-black dark:text-gray-400 lg:flex flex-row justify-between space-x-8">
               <div>
                 <Link href="/">Home</Link>
               </div>
@@ -96,7 +96,7 @@ export const Header = () => {
               <div>
                 <Link href="/collectors">Collectors</Link>
               </div>
-              <div className="cursor-pointer" onClick={toogleStatsDropdown}>
+              <div className="cursor-pointer text-black dark:text-gray-400" onClick={toogleStatsDropdown}>
                   Stats <StatsMenu visible={statsDropdown} />{" "}
               </div>
               <div>

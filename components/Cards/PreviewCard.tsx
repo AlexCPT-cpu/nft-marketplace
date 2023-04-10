@@ -5,7 +5,7 @@ import { CheckCircleIcon, CurrencyDollarIcon, HeartIcon } from '@heroicons/react
 import { BanknotesIcon, ClockIcon } from "@heroicons/react/24/outline";
 import Cart from "../Svg/Cart";
 
-const PreviewCard = ({ image, name, timer, likes, price }: NftProps) => {
+const PreviewCard = ({ image, name, price }: NftProps) => {
   return (
     <div className="border dark:bg-[#041824] border-yellow-500 dark:border-yellow-500 p-4 rounded-md max-w-[300px] hover:shadow-xl">
       <div className="relative">

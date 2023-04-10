@@ -6,11 +6,6 @@
     box-sizing: border-box;
 }
 
-a {
-    text-decoration: none;
-    color: #9d9b95;
-}
-
 ul li::before {
     content: "\2022";
     color: black;

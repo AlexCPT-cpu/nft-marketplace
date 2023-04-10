@@ -39,7 +39,7 @@ export const CustomConnectButton = () => {
                     <div className="hidden lg:block">
                       <WalletIcon className="w-6 stroke-white" />
                         </div>
-                        <div className="px-3 block lg:hidden">
+                        <div className="px-3 block lg:hidden whitespace-nowrap">
                           Connect Wallet
                         </div>
                   </button>
@@ -47,7 +47,7 @@ export const CustomConnectButton = () => {
               }
               if (chain.unsupported) {
                 return (
-                  <button className="text-red-500" onClick={openChainModal} type="button">
+                  <button className="text-red-500 whitespace-nowrap border p-2" onClick={openChainModal} type="button">
                     Wrong network
                   </button>
                 );
@@ -81,7 +81,7 @@ export const CustomConnectButton = () => {
                       </div>
                     )}
                   </button>
-                  <button className="font-semibold text-lg" onClick={openAccountModal} type="button">
+                  <button className="font-semibold text-lg whitespace-nowrap" onClick={openAccountModal} type="button">
                     {account.displayName}
                   </button>
                 </div>
