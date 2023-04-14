@@ -100,7 +100,7 @@ export const Header = () => {
                   Stats <StatsMenu visible={statsDropdown} />{" "}
               </div>
               <div>
-                <Link href="/create">Create</Link>
+                <Link href="/createnft">Create</Link>
               </div>
             </div>
           </div>
