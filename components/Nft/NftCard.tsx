@@ -15,9 +15,9 @@ const NftCard = ({ image, name, timer, likes, price }: NftProps) => {
   return (
     <div className="border dark:bg-[#041824] border-black dark:border-[#092940] p-4 rounded-md hover:shadow-xl">
       <div className="flex flex-col lg:flex-row lg:justify-between w-full">
-        <div className="relative">
+        <div className="relative lg:mr-3 flex justify-center">
           <Image
-            className="object-cover w-full h-[300px] lg:w-[400px] lg:h-[400px] rounded-md mb-5"
+            className="object-cover w-full h-[300px] lg:w-[400px] lg:h-[400px] rounded-md mb-5 mx-auto flex"
             src={image!}
             width={200}
             height={200}

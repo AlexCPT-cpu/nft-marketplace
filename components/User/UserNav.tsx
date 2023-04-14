@@ -5,7 +5,6 @@ import Cart from "@/components/Svg/Cart";
 import File from "@/components/Svg/File";
 import { useState } from "react";
 import UserNftGrid from "../Grid/UserNftGrid";
-import { useSwipeable } from 'react-swipeable'
 
 const UserNav: React.FC = () => {
   const [active, setActive] = useState({
@@ -74,18 +73,14 @@ const UserNav: React.FC = () => {
     }
   };
 
-  const handlers = useSwipeable({
-    onSwiped: (eventData) => console.log("User Swiped!", eventData)
-  });
-
   return (
     <>
-      <div  {...handlers} className="border relative overflow-auto flex-col lg:flex-row text-left lg:space-x-16 dark:text-gray-500 font-semibold justify-center text-xl flex border-gray-200 dark:bg-[#041824] dark:border-[#092940] p-4 rounded-md w-full">
+      <div className="border whitespace-nowrap overflow-y-auto scrollbar-hide relative overflow-auto flex-col lg:flex-row text-left lg:space-x-16 dark:text-gray-500 font-semibold justify-center text-xl flex border-gray-200 dark:bg-[#041824] dark:border-[#092940] p-4 rounded-md w-full">
         <div
           onClick={() => {
             navigate(0);
           }}
-          className="flex cursor-pointer transition hover:bg-white/10 py-1 px-5 rounded-lg flex-col"
+          className="flex cursor-pointer transition hover:bg-white/10 py-1 px-5 lg:ml-56 ml-0 xl:ml-0 rounded-lg flex-col"
         >
           <div className="flex flex-row">
             <Brush />

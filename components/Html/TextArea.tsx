@@ -5,8 +5,7 @@ const TextArea: React.FC<InputProps> = ({
   id,
   onChange,
   value,
-  label,
-  type,
+  required,
   title,
 }) => {
   return (
@@ -20,7 +19,7 @@ const TextArea: React.FC<InputProps> = ({
           onChange={onChange}
           value={value}
           id={id}
-          required
+          required={required}
           className="
         block
         rounded-md

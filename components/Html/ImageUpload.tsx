@@ -16,7 +16,6 @@ const ImageUpload: React.FC<DropzoneProps> = ({ onChange }) => {
   const imgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const i = event.target.files[0];
-
       setBase64(i);
       onChange(i)
       setImage(URL.createObjectURL(i));

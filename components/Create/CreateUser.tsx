@@ -1,7 +1,8 @@
 import React from 'react'
-import ProfileCard from './ProfileCard'
+import CreatePage from './CreatePage'
 
-const Profile = () => {
+
+const CreateUser = () => {
   return (
     <div>
         <div className='text-3xl font-bold'>
@@ -10,10 +11,10 @@ const Profile = () => {
         </div>
 
         <div>
-            <ProfileCard />
+            <CreatePage />
         </div>
     </div>
   )
 }
 
-export default Profile
+export default CreateUser

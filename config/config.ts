@@ -14,6 +14,7 @@ const options = {
 };
 
 export const factory = "0xE10AA05Fcbd15Ba004683CA8109E367a5e32c27D";
+export const factoryCompared = '0xe10aa05fcbd15ba004683ca8109e367a5e32c27d'
 export const marketPlace = "0x0267B48a3D4BcDd334541CD7D2656DF6b6fE7021";
 
 export const client = ipfsHttpClient(options);

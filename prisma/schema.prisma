@@ -18,12 +18,14 @@ model User {
   background       String?
   email            String?         @unique
   emailVerified    DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
   address          String?
   instaUsername    String?
   twitterUsername  String?
   facebookUsername String?
-  follows          Int?
-  followers        Int?
+  followIds        String[]
+  followerIds      String[]
   description      String?
   invitedBy        String?
   volume           Int?
@@ -62,12 +64,12 @@ model Collection {
   name             String?
   logo             String?
   background       String?
-  address          String?
+  address          String?    @unique
   instaUsername    String?
   twitterUsername  String?
   facebookUsername String?
-  follows          Int?
-  followers        Int?
+  followIds        Int[]
+  followerIds      Int[]
   volume           Int?
   items            Int?
   owners           Int?

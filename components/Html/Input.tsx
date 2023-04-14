@@ -8,6 +8,7 @@ const Input: React.FC<InputProps> = ({
   label,
   type,
   title,
+  required
 }) => {
   return (
     <div className="my-4">
@@ -21,7 +22,7 @@ const Input: React.FC<InputProps> = ({
           value={value}
           type={type}
           id={id}
-          required
+          required={required}
           className="
         block
         rounded-md

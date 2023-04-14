@@ -2,27 +2,28 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Alchemy, Network } from "alchemy-sdk";
 
-type Data = {
-  blockHash: string;
-  ownedNfts: any[];
-  totalCount: number;
-};
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
   const config = {
     apiKey: process.env.ALCHEMY_ID,
     network: Network.ETH_GOERLI,
   };
   if (req.method === "POST") {
+    const alchemy = new Alchemy(config);
+
     try {
       const { address } = req.body;
 
-      const alchemy = new Alchemy(config);
-      const nfts = await alchemy.nft.getNftsForOwner(address);
-      res.status(200).json(nfts);
+      const omitMetadata = false;
+
+      // Get all NFTs
+      const response = await alchemy.nft.getNftsForContract(address, {
+        omitMetadata: omitMetadata,
+      });
+      res.status(200).json(response);
     } catch (ex) {
       console.log(ex);
       res.status(500).end();

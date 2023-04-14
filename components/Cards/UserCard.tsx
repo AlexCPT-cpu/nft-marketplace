@@ -14,6 +14,11 @@ const UserCard: React.FC<UserCardProps> = ({
   desc,
   username,
   referrer,
+  facebook,
+  instagram,
+  followers,
+  follows,
+  twitter
 }) => {
   const [value, copy] = useCopyToClipboard();
 
@@ -51,17 +56,17 @@ const UserCard: React.FC<UserCardProps> = ({
 
           <div className="flex flex-row items-center space-x-2">
             <div className="ring-1 rounded-full p-2 hover:text-gray-500 ring-orange-300 dark:ring-orange-400 cursor-pointer">
-              <Link href="/">
+              <Link target='_blank' href={`https://www.instagram.com/${instagram}`}>
                 <AiOutlineInstagram size={22} />
               </Link>
             </div>
             <div className="ring-1 rounded-full p-2 hover:text-gray-500 ring-orange-300 dark:ring-orange-400 cursor-pointer">
-              <Link href="/">
+              <Link target='_blank' href={`https://www.twitter.com/${twitter}`}>
                 <FaTwitter size={20} />
               </Link>
             </div>
             <div className="ring-1 rounded-full p-2 hover:text-gray-500 ring-orange-300 dark:ring-orange-400 cursor-pointer">
-              <Link href="/">
+              <Link target='_blank' href={`https://www.facebook.com/${facebook}`}>
                 <BsFacebook size={20} />
               </Link>
             </div>
@@ -72,11 +77,11 @@ const UserCard: React.FC<UserCardProps> = ({
       <div className="flex mt-5 lg:mt-0 mb-5 lg:mb-0 flex-col space-y-4">
         <div className="flex flex-row dark:text-neutral-400 space-x-24">
           <div>
-            16
-            <p className="font-bold">Followers</p>
+            {follows?.length}
+            <p className="font-bold">Follows</p>
           </div>
           <div className="dark:text-neutral-400">
-            09 <p className="font-bold">Followers</p>
+            {followers?.length} <p className="font-bold">Followers</p>
           </div>
         </div>
         <div className="flex justify-center">

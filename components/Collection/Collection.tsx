@@ -2,11 +2,12 @@ import React from 'react'
 import CollectionCard from './CollectionCard'
 import CollectionNav from './CollectionNav'
 
-const Collection = () => {
+const Collection = ({ address }: { address: string}) => {
+
   return (
     <div>
         <CollectionCard />
-        <CollectionNav />
+        <CollectionNav address={address} />
     </div>
   )
 }

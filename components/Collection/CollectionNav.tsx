@@ -1,14 +1,10 @@
-import ArrowDownCircle from "@/components/Svg/ArrowDownCircle";
-import ArrowUpCircle from "@/components/Svg/ArrowUpCircle";
 import Brush from "@/components/Svg/Brush";
 import Cart from "@/components/Svg/Cart";
-import File from "@/components/Svg/File";
 import { useState } from "react";
-import UserNftGrid from "../Grid/UserNftGrid";
-import { useSwipeable } from "react-swipeable";
+import CollectionData from "./CollectionData";
 import CollectionNftGrid from "./CollectionNftGrid";
 
-const CollectionNav: React.FC = () => {
+const CollectionNav = ({ address }: { address: string }) => {
   const [active, setActive] = useState({
     items: true,
     activity: false,
@@ -36,16 +32,9 @@ const CollectionNav: React.FC = () => {
     }
   };
 
-  const handlers = useSwipeable({
-    onSwiped: (eventData) => console.log("User Swiped!", eventData),
-  });
-
   return (
     <div>
-      <div
-        {...handlers}
-        className="border mt-8 relative overflow-auto flex-col lg:flex-row text-left lg:space-x-16 dark:text-gray-500 font-semibold justify-center text-xl flex border-gray-200 dark:border-[#092940] p-4 rounded-md w-full"
-      >
+      <div className="border mt-8 relative overflow-auto flex-col lg:flex-row text-left lg:space-x-16 dark:text-gray-500 font-semibold justify-center text-xl flex border-gray-200 dark:border-[#092940] p-4 rounded-md w-full">
         <div
           onClick={() => {
             navigate(0);
@@ -102,7 +91,11 @@ const CollectionNav: React.FC = () => {
         </div>
       </div>
       <div className="mt-8 flex mx-auto justify-center items-center">
-        <CollectionNftGrid />
+        {active.items ? (
+          <CollectionNftGrid address={address} />
+        ) : (
+          <CollectionData />
+        )}
       </div>
     </div>
   );

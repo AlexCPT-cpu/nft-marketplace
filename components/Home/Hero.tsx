@@ -1,4 +1,3 @@
-import axios from "axios";
 import Image from "next/image";
 import { HeroConnectButton } from "../Html/HeroConnectButton";
 
@@ -41,16 +40,15 @@ const Hero = () => {
 
         <div className="text-sm flex flex-col space-y-4 items-center justify-center lg:flex-row lg:space-x-3">
           <div className="mt-4">
-          <button className="bg-gradient-to-r from-[#feb019] via-[#e39601] to-[#f59292] px-12 transition duration-500 py-5 rounded-full">
-            EXPLORE ITEMS
-          </button>
+            <button className="bg-gradient-to-r from-[#feb019] via-[#e39601] to-[#f59292] px-12 transition duration-500 py-5 rounded-full">
+              EXPLORE ITEMS
+            </button>
           </div>
           <div>
-          <HeroConnectButton />
+            <HeroConnectButton />
           </div>
         </div>
       </div>
-
       <div className="hidden lg:flex">
         <Image
           className="w-[650px] rounded-xl"

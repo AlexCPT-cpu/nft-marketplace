@@ -15,7 +15,7 @@ const { chains, provider } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "My RainbowKit App",
+  appName: "Origin Marketplace",
   chains,
 });
 
@@ -26,14 +26,15 @@ const wagmiClient = createClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+
   return (
     <>
       <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider chains={chains}>
-            <Layout>
-              <Component {...pageProps} />
-              <Toaster />
-            </Layout>
+          <Layout>
+            <Component {...pageProps} />
+            <Toaster />
+          </Layout>
         </RainbowKitProvider>
       </WagmiConfig>
     </>

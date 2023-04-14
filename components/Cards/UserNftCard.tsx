@@ -17,8 +17,9 @@ const UserNftCard = ({
   likes,
   price,
   nftAddress,
+  nftId
 }: NftProps) => {
-  const [nftTitle, setNftTitle] = useState("");
+  const [nftTitle, setNftTitle] = useState<any>("");
 
   useEffect(() => {
     const getNft = async () => {
@@ -31,7 +32,7 @@ const UserNftCard = ({
   }, [nftAddress]);
 
   return (
-    <div className="border dark:bg-[#041824] border-yellow-400 dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
+    <div className="border dark:bg-[#041824] transition delay-200 border-yellow-400 dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
       <div className="relative">
         <Image
           className="object-cover w-full rounded-md mb-5"
@@ -57,7 +58,7 @@ const UserNftCard = ({
       <hr className="border-yellow-400 dark:border-yellow-400 mb-4" />
 
       <div className="flex flex-col text-left space-y-2">
-        <Link href="/">
+        <Link href={`/collection/${nftAddress}`}>
           <div className="flex flex-row items-center hover:text-gray-400">
             {nftTitle ? nftTitle : "super_blep"}
             <span>
@@ -66,7 +67,7 @@ const UserNftCard = ({
             </span>
           </div>
         </Link>
-        <Link href="/">
+        <Link href={`/collection/${nftAddress}/nft/${nftId}`}>
           <div className="font-semibold text-sm hover:text-gray-400 break-words">
             {name?.includes(nftTitle) ? name.replace(nftTitle, '') : name}
           </div>

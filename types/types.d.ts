@@ -11,7 +11,8 @@ export interface NftProps {
   timer?: string;
   likes?: number;
   price?: number;
-  nftAddress?: string
+  nftAddress?: string;
+  nftId?: string;
 }
 
 export interface CreatorProps {
@@ -78,6 +79,11 @@ export interface UserCardProps {
   desc?: string;
   username?: string;
   referrer?: string;
+  followers?: number;
+  follows?: number;
+  twitter?: string;
+  facebook?: string;
+  instagram?: string;
 }
 
 export interface UserNftGrid {
@@ -123,6 +129,7 @@ interface InputProps {
   label: string;
   type?: string;
   title?: string;
+  required?: boolean;
 }
 
 export interface ApproveProps {
