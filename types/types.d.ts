@@ -79,8 +79,8 @@ export interface UserCardProps {
   desc?: string;
   username?: string;
   referrer?: string;
-  followers?: number;
-  follows?: number;
+  followers?: number[];
+  follows?: number[];
   twitter?: string;
   facebook?: string;
   instagram?: string;

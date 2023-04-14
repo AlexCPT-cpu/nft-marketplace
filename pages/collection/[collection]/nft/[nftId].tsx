@@ -33,6 +33,7 @@ const NftId = () => {
 
   return (
     <div className='mt-28 px-4 lg:px-16'>
+      {/*@ts-ignore */}
         <Nft collection={collection} nft={indexedNft} />
     </div>
   )

@@ -110,7 +110,7 @@ const ProfileCard = () => {
           <ImageUpload
             value={image}
             disabled={isLoading}
-            onChange={(image) => setImage(image)}
+            onChange={(image: any) => setImage(image)}
             label="Change Profile Picture Here"
           />
         </div>
