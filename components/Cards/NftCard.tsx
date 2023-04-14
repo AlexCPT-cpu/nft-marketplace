@@ -36,7 +36,7 @@ const NftCard = ({ image, name, timer, likes, price }: NftProps) => {
         <div className="flex flex-row">
             <CurrencyDollarIcon className="w-6 mr-2" /> <span className="text-slate-400 dark:text-neutral-600">{price} BTC ≈$26.69</span>
         </div>
-        <Link href='/nft/1'>
+        <Link href='/'>
         <div className="flex flex-row border rounded-full w-fit border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]">
             <BanknotesIcon className="w-6" /> <span className="dark:text-neutral-500 text-black text-lg ml-3">Place Bid</span>
         </div>

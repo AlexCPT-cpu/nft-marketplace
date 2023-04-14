@@ -61,7 +61,7 @@ const CreatorCard = ({
         </div>
 
         <div className="text-black dark:text-neutral-400 text-lg font-semibold text-center">
-          <Link href="/user/1">Stephine Smith</Link>
+          <Link href="/">Stephine Smith</Link>
           <div className="text-black dark:text-gray-600 text-base text-center flex flex-row justify-center mt-1">
             {truncateEthAddress(
               `${address ?? "0xb16c1342E617A5B6E4b631EB114483FDB289c0A4"}`
