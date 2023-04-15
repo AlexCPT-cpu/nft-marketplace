@@ -13,6 +13,8 @@ export interface NftProps {
   price?: number;
   nftAddress?: string;
   nftId?: string;
+  fullData?: any
+  buttonTitle?: string;
 }
 
 export interface CreatorProps {
@@ -196,5 +198,9 @@ export interface ModalProps {
   isOpen: boolean,
   setIsOpen: (state: boolean) => void,
   fileUrl?: string,
-  previewData?: any
+  previewData?: any,
+  colAddress?: string,
+  nftId?: string | number,
+  price?: number,
+  payToken?: string
 }

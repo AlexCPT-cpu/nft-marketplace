@@ -4,7 +4,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import PreviewCard from "../Cards/PreviewCard";
-import Loader from "./Loader";
+import Loader from "../Html/Loader";
 import toast from "react-hot-toast";
 import { useAccount, useWaitForTransaction } from "wagmi";
 
@@ -85,7 +85,7 @@ export default function CreateModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-black dark:bg-[#092940] p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-[#092940] p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="text-lg leading-6 text-white dark:text-neutral-500 ext-xl font-bold"

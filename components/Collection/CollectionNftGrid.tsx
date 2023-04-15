@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import UserNftCard from '../Cards/UserNftCard'
-import { NftData, UserNftGrid } from '@/types/types'
+import { NftData } from '@/types/types'
 import fetch from '@/helpers/fetch'
 
 const CollectionNftGrid = ({ address }: { address: string }) => {

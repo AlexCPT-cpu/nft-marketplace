@@ -1,9 +1,9 @@
 import { CreateSell } from "@/types/types";
 import Marketplace from '@/config/Marketplace.json'
 import { marketPlace } from "@/config/config";
-import { useContractWrite, useContractRead, usePrepareContractWrite, useWaitForTransaction, useAccount } from "wagmi";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
-const useCancel = ({ collectionAddress, tokenId }: CreateSell) => {
+const useCancel = (collectionAddress: string, tokenId: string | number) => {
     const { config: cancelConfig } = usePrepareContractWrite({
         // @ts-ignore
         address: marketPlace,
@@ -12,7 +12,7 @@ const useCancel = ({ collectionAddress, tokenId }: CreateSell) => {
         args: [collectionAddress, tokenId],
       });
     
-      const { write: callCancel } = useContractWrite({
+      const { data, write: callCancel } = useContractWrite({
         ...cancelConfig,
         onError(error) {
           console.log("Error", error);
@@ -25,7 +25,7 @@ const useCancel = ({ collectionAddress, tokenId }: CreateSell) => {
         },
       });
 
-  return { callCancel }
+  return { callCancel, data }
 }
 
 export default useCancel

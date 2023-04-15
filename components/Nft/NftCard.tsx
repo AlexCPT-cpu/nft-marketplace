@@ -1,5 +1,5 @@
-import { NftProps } from "@/types/types";
-import React from "react";
+import { NftData, NftProps } from "@/types/types";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   CheckCircleIcon,
@@ -10,8 +10,76 @@ import {
 import {} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import History from "./History";
+import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
+import axios from "axios";
+import SellModal from "../Modals/SellModal";
+import toast from "react-hot-toast";
+import BidModal from "../Modals/BidModal";
+import useCancel from "@/hooks/cancels/useCancel";
+import Loader from "../Html/Loader";
+import BuyModal from "../Modals/BuyModal";
 
-const NftCard = ({ image, name, timer, likes, price }: NftProps) => {
+const NftCard = ({
+  image,
+  name,
+  timer,
+  likes,
+  price,
+  nftId,
+  nftAddress,
+  fullData,
+}: NftProps) => {
+  const [isOwner, setIsOwner] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBidModal, setBidModal] = useState(false);
+  const [isBuyModal, setBuyModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const { chain } = useNetwork();
+
+  const { address } = useAccount();
+
+  const { callCancel, data } = useCancel(
+    nftAddress as string,
+    fullData[0]?.tokenId
+  );
+
+  const waitForTransaction = useWaitForTransaction({
+    confirmations: 2,
+    hash: data?.hash,
+    chainId: chain?.id,
+    onSuccess(data) {
+      if (data) {
+        setLoading(false);
+        toast.success("NFT minted successfuly");
+        setTimeout(() => window.location.reload(), 3000);
+      } else {
+        console.log("error");
+        setLoading(false);
+        toast.error("error minting NFT");
+      }
+    },
+  });
+  const { isSuccess, status } = waitForTransaction;
+
+  useEffect(() => {
+    const getNFTs = async () => {
+      const response = await axios.post("/api/nfts", {
+        address: address,
+      });
+      return response.data;
+    };
+    if (address) {
+      getNFTs().then((data) => {
+        data.ownedNfts.map((item: NftData) => {
+          if (item.tokenId === fullData[0]?.tokenId) {
+            setIsOwner(true);
+          }
+        });
+      });
+    }
+  }, [address, nftId, nftAddress, fullData]);
+
   return (
     <div className="border dark:bg-[#041824] border-black dark:border-[#092940] p-4 rounded-md hover:shadow-xl">
       <div className="flex flex-col lg:flex-row lg:justify-between w-full">
@@ -36,7 +104,7 @@ const NftCard = ({ image, name, timer, likes, price }: NftProps) => {
               </span>
             </Link>
           </div>
-
+          {loading && <Loader setLoading={setLoading} />}
           <div className="flex flex-col my-3 py-2">
             <div className="text-xl font-">Current Price</div>
             <div className="flex flex-row">
@@ -51,21 +119,73 @@ const NftCard = ({ image, name, timer, likes, price }: NftProps) => {
             Auction ending in
             <div className="text-3xl text-red-500">{"7:25:3"}</div>
           </div>
+          <SellModal
+            isOpen={isModalOpen}
+            setIsOpen={setIsModalOpen}
+            fileUrl={""}
+          />
+          <BidModal
+           isOpen={isBidModal}
+           setIsOpen={setBidModal} 
+           fileUrl={""} />
+          <BuyModal 
+           isOpen={isBidModal} 
+           setIsOpen={setBidModal}
+           fileUrl={""} />
 
           <div className="flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-4">
-            <div className="flex flex-row border rounded-full w-fit border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer group hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]">
-              <BanknotesIcon className="w-6 group-hover:fill-white fill-yellow-400" />{" "}
-              <span className="dark:text-neutral-500 text-black text-lg ml-3">
-                Place Bid
-              </span>
-            </div>
+            {isOwner ? (
+              <div
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
+                className="flex flex-row border rounded-full w-fit items-center border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer group hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
+              >
+                <BanknotesIcon className="w-6 group-hover:fill-white fill-yellow-400" />{" "}
+                <span className="dark:text-neutral-500 text-black whitespace-nowrap text-lg ml-3">
+                  Sell NFT
+                </span>
+              </div>
+            ) : (
+              <div
+                onClick={() => {
+                  setBuyModal(true)
+                }}
+                className="flex flex-row border rounded-full w-fit border-yellow-400 items-center dark:border-yellow-400 px-8 py-3 cursor-pointer group hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
+              >
+                <BanknotesIcon className="w-6 group-hover:fill-white items-center fill-yellow-400" />{" "}
+                <span className="dark:text-neutral-500 text-black text-lg ml-3 text-center whitespace-nowrap">
+                  Buy NFT
+                </span>
+              </div>
+            )}
 
-            <div className="flex flex-row border group rounded-full w-fit border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]">
-              <ShoppingCartIcon className="w-6 group-hover:fill-white fill-yellow-400" />{" "}
-              <span className="dark:text-neutral-500 text-black text-lg ml-3">
-                Place Bid
-              </span>
-            </div>
+            {isOwner ? (
+              <div
+                onClick={() => {
+                  setLoading(true);
+                  callCancel?.();
+                }}
+                className="flex flex-row border group rounded-full w-fit items-center border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
+              >
+                <ShoppingCartIcon className="w-6 group-hover:fill-white fill-yellow-400" />{" "}
+                <span className="dark:text-neutral-500 text-black text-lg ml-3 text-center whitespace-nowrap">
+                  Cancel
+                </span>
+              </div>
+            ) : (
+              <div
+                onClick={() => {
+                  setBidModal(true);
+                }}
+                className="flex flex-row border group items-center rounded-full w-fit border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
+              >
+                <ShoppingCartIcon className="w-6 group-hover:fill-white fill-yellow-400" />{" "}
+                <span className="dark:text-neutral-500 text-black text-lg ml-3 whitespace-nowrap">
+                  Place Bid
+                </span>
+              </div>
+            )}
           </div>
         </div>
 

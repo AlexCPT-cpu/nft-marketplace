@@ -1,7 +1,7 @@
 import { AcceptOffer, CreateAuctionProps, CreateSell } from "@/types/types";
 import Marketplace from '@/config/Marketplace.json'
 import { marketPlace } from "@/config/config";
-import { useContractWrite, useContractRead, usePrepareContractWrite, useWaitForTransaction, useAccount } from "wagmi";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
 const usePlaceBid = ({ collectionAddress, tokenId, minBid }: CreateAuctionProps) => {
     const { config: bidConfig } = usePrepareContractWrite({

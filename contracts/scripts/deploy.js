@@ -7,21 +7,33 @@
 const hre = require("hardhat");
 
 async function main() {
-  const Factory = await hre.ethers.getContractFactory("OriginCreate");
-  const MarketPlace = await hre.ethers.getContractFactory("OriginMarketplace");
+  // const Factory = await hre.ethers.getContractFactory("OriginCreate");
+  // const MarketPlace = await hre.ethers.getContractFactory("OriginMarketplace");
 
-  const marketPlace = await MarketPlace.deploy(
-    "8000",
-    "0xd05DB5264ECAB3C490f7Cc106104Ffe1075d3EeC"
-  );
-  await marketPlace.deployed();
+  // const marketPlace = await MarketPlace.deploy(
+  //   "8000",
+  //   "0xd05DB5264ECAB3C490f7Cc106104Ffe1075d3EeC"
+  // );
+  // await marketPlace.deployed();
 
-  const factory = await Factory.deploy(marketPlace.address);
-  await factory.deployed();
+  // const factory = await Factory.deploy(marketPlace.address);
+  // await factory.deployed();
 
-  console.log(` Factory Deployed to ${marketPlace.address}`);
+  // console.log(` Factory Deployed to ${marketPlace.address}`);
 
-  console.log(` MarketPlace Deployed to ${factory.address}`);
+  // console.log(` MarketPlace Deployed to ${factory.address}`);
+  const Token = await hre.ethers.getContractFactory("PayToken");
+  const busd = await Token.deploy('BUSD')
+  const usdt = await Token.deploy('USDT')
+  const bnb = await Token.deploy('BNB')
+
+  await busd.deployed()
+  await usdt.deployed()
+  await bnb.deployed()
+
+  console.log(`busd ${busd.address}`)
+  console.log(`usdt ${usdt.address}`)
+  console.log(`bnb ${bnb.address}`)
 
   // await hre.run(`verify:verify`, {
   //   address: marketPlace.address,

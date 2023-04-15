@@ -1,9 +1,10 @@
 import { CreateSell } from "@/types/types";
 import Marketplace from '@/config/Marketplace.json'
 import { marketPlace } from "@/config/config";
-import { useContractWrite, useContractRead, usePrepareContractWrite, useWaitForTransaction, useAccount } from "wagmi";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
-const useCreateSell = ({ collectionAddress, tokenId, payToken, price }: CreateSell) => {
+const useCreateSell = (collectionAddress: string, tokenId: string| number, payToken: string, price: number) => {
+  console.log(collectionAddress)
     const { config: createConfig } = usePrepareContractWrite({
         // @ts-ignore
         address: marketPlace,
@@ -12,7 +13,7 @@ const useCreateSell = ({ collectionAddress, tokenId, payToken, price }: CreateSe
         args: [collectionAddress, tokenId, payToken, price],
       });
     
-      const { write: callCreate } = useContractWrite({
+      const { data, write: callCreate } = useContractWrite({
         ...createConfig,
         onError(error) {
           console.log("Error", error);
@@ -25,7 +26,7 @@ const useCreateSell = ({ collectionAddress, tokenId, payToken, price }: CreateSe
         },
       });
 
-  return { callCreate }
+  return { callCreate, data }
 }
 
 export default useCreateSell

@@ -13,6 +13,7 @@ import Link from "next/link";
 import MobileNav from "./MobileNav";
 import StatsMenu from "./StatsMenu";
 import { CustomConnectButton } from "../Html/CustomConnectButton";
+import { useAccount } from "wagmi";
 
 const TOP_OFFSET = 66;
 
@@ -61,6 +62,8 @@ export const Header = () => {
     e.preventDefault();
     console.log(e)
   };
+
+  const { address } = useAccount()
 
   return (
     <>
@@ -135,7 +138,7 @@ export const Header = () => {
             </div>
 
             <div className="mt-1 lg:mt-5 mr-2">
-              <Link href='/editprofile'>
+              <Link href={`/user/${address}`}>
               <div className="rounded-full p-2 bg-gradient-to-r cursor-pointer from-yellow-300 to-orange-400">
                 <UserCircleIcon className="w-6 stroke-white" />
               </div>

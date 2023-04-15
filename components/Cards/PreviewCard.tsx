@@ -5,7 +5,7 @@ import { CheckCircleIcon, CurrencyDollarIcon, HeartIcon } from '@heroicons/react
 import { BanknotesIcon, ClockIcon } from "@heroicons/react/24/outline";
 import Cart from "../Svg/Cart";
 
-const PreviewCard = ({ image, name, price }: NftProps) => {
+const PreviewCard = ({ image, name, price, buttonTitle }: NftProps) => {
   return (
     <div className="border dark:bg-[#041824] border-yellow-500 dark:border-yellow-500 p-4 rounded-md max-w-[300px] hover:shadow-xl">
       <div className="relative">
@@ -22,7 +22,7 @@ const PreviewCard = ({ image, name, price }: NftProps) => {
             <CurrencyDollarIcon className="w-6 mr-2" /> <span className="text-slate-400 dark:text-neutral-600">{price} BTC ≈$26.69</span>
         </div>
         <div className="flex group flex-row border rounded-full w-fit border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]">
-            <Cart /> <span className="dark:text-neutral-300 text-black text-lg ml-3">Buy Now</span>
+            <Cart /> <span className="dark:text-neutral-300 text-black text-lg ml-3">{buttonTitle}</span>
         </div>
       </div>
     </div>
@@ -35,6 +35,7 @@ PreviewCard.defaultProps = {
   timer: "21:50:23",
   likes: 13,
   price: 0.083,
+  buttonTitle: 'Buy Now'
 };
 
 export default PreviewCard;
