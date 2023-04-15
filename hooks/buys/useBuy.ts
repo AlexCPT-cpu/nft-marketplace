@@ -1,9 +1,8 @@
-import { CreateSell } from "@/types/types";
 import Marketplace from '@/config/Marketplace.json'
 import { marketPlace } from "@/config/config";
-import { useContractWrite, useContractRead, usePrepareContractWrite, useWaitForTransaction, useAccount } from "wagmi";
+import { useContractWrite, useContractRead, usePrepareContractWrite } from "wagmi";
 
-const useBuy = (collectionAddress: string, tokenId: string| number, payToken: string, price: number) => {
+const useBuy = (collectionAddress: string, tokenId: string| number, payToken: string, price: string) => {
     const { config: buyConfig } = usePrepareContractWrite({
         // @ts-ignore
         address: marketPlace,

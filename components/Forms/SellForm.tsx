@@ -13,10 +13,10 @@ import { BUSD, USDT, BNB } from "@/config/config";
 const SellForm = ({
   modalOptions,
   setP,
-  setToken
+  setToken,
 }: {
   modalOptions: (state: boolean) => void;
-  setP: (state: number) => void;
+  setP: (state: string) => void;
   setToken: (state: string) => void;
 }) => {
   const router = useRouter();
@@ -30,16 +30,16 @@ const SellForm = ({
   });
   const [loading, setLoading] = useState(false);
   const { chain } = useNetwork();
-  
+
   useEffect(() => {
-    if(active.busd) {
-      setToken(BUSD)
-    } else if(active.usdt) {
-      setToken(USDT)
-    } else if(active.bnb) {
-      setToken(BNB)
+    if (active.busd) {
+      setToken(BUSD);
+    } else if (active.usdt) {
+      setToken(USDT);
+    } else if (active.bnb) {
+      setToken(BNB);
     }
-  }, [active, setToken])
+  }, [active, setToken]);
 
   const { usdtApprove, busdApprove, bnbApprove } = useApproveTokens();
   const { approveUsdt, approveBusd, approveBnb, usdtData, bnbData, busdData } =
@@ -153,7 +153,7 @@ const SellForm = ({
         id="Price"
         value={price}
         onChange={(e: any) => {
-          setP(Number(e.currentTarget.value));
+          setP(String(ethers.utils.parseUnits(e.currentTarget.value.toString(), "ether")));
           setPrice(e.currentTarget.value);
         }}
         label="Enter Price"
@@ -198,8 +198,8 @@ const SellForm = ({
         ) : (
           <div
             onClick={() => {
-              setLoading(true);
               modalOptions(false);
+              setLoading(true);
               select(1);
               approveUsdt?.();
             }}
@@ -239,8 +239,8 @@ const SellForm = ({
         ) : (
           <div
             onClick={() => {
-              setLoading(true);
               modalOptions(false);
+              setLoading(true);
               select(2);
               approveBusd?.();
             }}
@@ -280,8 +280,8 @@ const SellForm = ({
         ) : (
           <div
             onClick={() => {
-              setLoading(true);
               modalOptions(false);
+              setLoading(true);
               select(3);
               approveBnb?.();
             }}

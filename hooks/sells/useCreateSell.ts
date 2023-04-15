@@ -3,7 +3,7 @@ import Marketplace from '@/config/Marketplace.json'
 import { marketPlace } from "@/config/config";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
-const useCreateSell = (collectionAddress: string, tokenId: string| number, payToken: string, price: number) => {
+const useCreateSell = (collectionAddress: string, tokenId: string| number, payToken: string, price: string) => {
   console.log(collectionAddress)
     const { config: createConfig } = usePrepareContractWrite({
         // @ts-ignore

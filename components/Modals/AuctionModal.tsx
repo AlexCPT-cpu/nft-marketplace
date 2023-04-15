@@ -7,7 +7,7 @@ import PreviewCard from "../Cards/PreviewCard";
 import Loader from "../Html/Loader";
 import toast from "react-hot-toast";
 import { useAccount, useWaitForTransaction } from "wagmi";
-import BuyForm from "../Forms/BuyForm";
+import AuctionForm from "../Forms/AuctionForm";
 import useBuy from "@/hooks/buys/useBuy";
 
 export default function BuyModal({
@@ -105,7 +105,7 @@ export default function BuyModal({
                     as="h3"
                     className="text-lg leading-6 text-white dark:text-neutral-500 ext-xl font-bold"
                   >
-                    Buy Item
+                    Auction Item
                   </Dialog.Title>
                   <div className="mt-2 flex flex-col lg:flex-row lg:justify-between items-center">
                     <div>
@@ -113,7 +113,7 @@ export default function BuyModal({
                     </div>
 
                     <div className="h-full">
-                      <BuyForm setToken={setPayT} setP={setSPrice} modalOptions={setIsOpen} />
+                      <AuctionForm setToken={setPayT} setP={setSPrice} modalOptions={setIsOpen} />
                     </div>
                   </div>
 

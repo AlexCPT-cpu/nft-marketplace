@@ -23,7 +23,7 @@ export default function SellModal({
 
   const [loading, setLoading] = useState(false);
   const [payT, setPayT] = useState('')
-  const [sPrice, setSPrice] = useState(0)
+  const [sPrice, setSPrice] = useState('')
 
   const { write, data } = useCreate(fileUrl!);
 

@@ -7,10 +7,10 @@ import PreviewCard from "../Cards/PreviewCard";
 import Loader from "../Html/Loader";
 import toast from "react-hot-toast";
 import { useAccount, useWaitForTransaction } from "wagmi";
-import BuyForm from "../Forms/BuyForm";
-import useBuy from "@/hooks/buys/useBuy";
+import OfferForm from "../Forms/OfferForm";
+import useOffer from "@/hooks/offers/useOffer";
 
-export default function BuyModal({
+export default function MakeOfferModal({
   isOpen,
   setIsOpen,
   fileUrl,
@@ -30,7 +30,7 @@ export default function BuyModal({
   const isOnSale = false;
   const isAuction = false;
 
-  const { callBuy, data: sellData } = useBuy(
+  const { callOffer, data: sellData } = useOffer(
     colAddress!,
     nftId!,
     payT!,
@@ -70,7 +70,7 @@ export default function BuyModal({
   const callMint = async () => {
     setIsOpen(false);
     setLoading(true);
-    await callBuy?.();
+    await callOffer?.();
   };
 
   return (
@@ -105,7 +105,7 @@ export default function BuyModal({
                     as="h3"
                     className="text-lg leading-6 text-white dark:text-neutral-500 ext-xl font-bold"
                   >
-                    Buy Item
+                    Make Offer For Item
                   </Dialog.Title>
                   <div className="mt-2 flex flex-col lg:flex-row lg:justify-between items-center">
                     <div>
@@ -113,7 +113,7 @@ export default function BuyModal({
                     </div>
 
                     <div className="h-full">
-                      <BuyForm setToken={setPayT} setP={setSPrice} modalOptions={setIsOpen} />
+                      <OfferForm setToken={setPayT} setP={setSPrice} modalOptions={setIsOpen} />
                     </div>
                   </div>
 

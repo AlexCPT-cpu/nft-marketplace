@@ -17,6 +17,9 @@ export interface NftProps {
   buttonTitle?: string;
   nftAddress?: string;
   nftId?: string | number;
+  CollectionName?: string;
+  creator?: string;
+  owner?: string
 }
 
 export interface CreatorProps {
