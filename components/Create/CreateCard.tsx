@@ -5,7 +5,7 @@ import ImageUpload from "../Html/ImageUpload";
 import Link from "next/link";
 import { client } from "@/config/config";
 import Loader from "../Html/Loader";
-import CreateModal from "../Html/CreateModal";
+import CreateModal from "../Modals/CreateModal";
 import axios from "axios";
 
 const CreateCard = () => {
