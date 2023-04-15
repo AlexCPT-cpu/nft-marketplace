@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const fetcher = (url: string, address: string) =>
-  axios
+const fetcher = async (url: string, address: string) =>
+  await axios
     .post(url, {
       address: address,
     })

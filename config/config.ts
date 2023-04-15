@@ -1,7 +1,7 @@
 import { create as ipfsHttpClient } from "ipfs-http-client";
 
-const projectId = process.env.projectId;
-const projectSecret = process.env.projectSecret;
+const projectId = '2O7jwbbhhA0eiGVFyhvTVoBcmTU';
+const projectSecret = '3203afb495405676d364746a0884fe98';
 const auth =
   "Basic " + Buffer.from(projectId + ":" + projectSecret).toString("base64");
 const options = {

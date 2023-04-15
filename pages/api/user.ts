@@ -8,13 +8,13 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const { address } = req.body;
+    console.log(address);
     try {
-  
-        const user = await prismadb.user.findFirst({
-          where: {
-            address
-          }
-        });
+      const user = await prismadb.user.findFirst({
+        where: {
+          address,
+        },
+      });
       res.status(200).json(user);
     } catch (ex) {
       console.log(ex);
