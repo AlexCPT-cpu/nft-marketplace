@@ -1,10 +1,9 @@
 import useUser from "@/hooks/useUser";
-import { useAccount } from "wagmi";
 import UserCard from "../Cards/UserCard";
 import UserNav from "./UserNav";
 
 const User = ({ userAddr }: { userAddr: string }) => {
-  const address = useAccount();
+
   const { user } = useUser(userAddr);
 
   if (!user) return;

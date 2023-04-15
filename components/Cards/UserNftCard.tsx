@@ -32,6 +32,7 @@ const UserNftCard = ({
   }, [nftAddress]);
 
   return (
+    <Link href={`/collection/${nftAddress}/nft/${nftId}`}>
     <div className="border dark:bg-[#041824] transition delay-200 border-yellow-400 dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
       <div className="relative">
         <Image
@@ -82,6 +83,7 @@ const UserNftCard = ({
         </span>
       </div>
     </div>
+    </Link>
   );
 };
 

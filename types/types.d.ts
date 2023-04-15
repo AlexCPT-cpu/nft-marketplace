@@ -15,6 +15,8 @@ export interface NftProps {
   nftId?: string;
   fullData?: any
   buttonTitle?: string;
+  nftAddress?: string;
+  nftId?: string | number;
 }
 
 export interface CreatorProps {
@@ -35,6 +37,7 @@ export interface CollectionProps {
   sold?: number;
   items?: number;
   description?: string;
+  address?: string;
 }
 
 export interface MobileNavProps {

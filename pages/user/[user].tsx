@@ -1,6 +1,5 @@
 import User from "@/components/User/User";
 import { useRouter } from "next/router";
-import { useAccount } from "wagmi";
 
 const UserPage = () => {
   const router = useRouter();

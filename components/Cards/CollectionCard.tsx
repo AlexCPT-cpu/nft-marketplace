@@ -11,8 +11,10 @@ const CollectionCard = ({
   sold,
   items,
   description,
+  address
 }: CollectionProps) => {
   return (
+    <Link href={`/collection/${address ?? '1'}`}>
     <div className="border border-yellow-400 dark:bg-[#041824] dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
       <div className="flex flex-col space-y-0">
         <div className="relative">
@@ -64,6 +66,7 @@ const CollectionCard = ({
         <div></div>
       </div>
     </div>
+    </Link>
   );
 };
 

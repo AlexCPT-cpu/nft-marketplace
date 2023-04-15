@@ -12,7 +12,7 @@ const UserNftGrid: React.FC<UserNftGrid> = ({ active }) => {
 
   const navNfts = useMemo(() => {
     const returned: NftData[] = []
-    const parsed = userNfts[0]?.map((nft: NftData) => {
+    userNfts[0]?.map((nft: NftData) => {
       if(nft.contract?.address === factoryCompared) {
         returned.push(nft)
       }

@@ -4,9 +4,11 @@ import Image from "next/image";
 import { CheckCircleIcon, CurrencyDollarIcon, HeartIcon } from '@heroicons/react/24/solid'
 import { BanknotesIcon, ClockIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { factory } from "@/config/config";
 
-const NftCard = ({ image, name, timer, likes, price }: NftProps) => {
+const NftCard = ({ image, name, timer, likes, price, nftAddress, nftId }: NftProps) => {
   return (
+    <Link href={`/collection/${nftAddress ?? factory}/nft/${nftId ?? 1}`}>
     <div className="border dark:bg-[#041824] border-yellow-400 dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
       <div className="relative">
         <Image className="object-cover w-full rounded-md mb-5" src={image!} width={200} height={200} alt="card image" />
@@ -43,6 +45,7 @@ const NftCard = ({ image, name, timer, likes, price }: NftProps) => {
         </Link>
       </div>
     </div>
+    </Link>
   );
 };
 
