@@ -3,14 +3,14 @@ import NftCard from "./NftCard";
 import Properties from "./Properties";
 
 const Nft = ({ nft, collection }: { nft: any; collection: string }) => {
-  console.log(nft);
+
   return (
     <div className="flex w-full flex-col">
       <NftCard
         fullData={nft}
-        nftId={nft.tokenId}
-        name={nft?.rawMetadata?.name}
-        CollectionName={nft.title}
+        nftId={nft[0]?.tokenId}
+        name={nft[0]?.rawMetadata?.name}
+        CollectionName={nft[0]?.title}
         nftAddress={collection}
         image={nft[0]?.media[0]?.thumbnail}
       />

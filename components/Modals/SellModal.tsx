@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { useAccount, useWaitForTransaction } from "wagmi";
 import SellForm from "../Forms/SellForm";
 import useCreateSell from "@/hooks/sells/useCreateSell";
+import useApprove from "@/hooks/useApprove";
+import { MarketContext } from "@/context/marketplaceContext";
 
 export default function SellModal({
   isOpen,
@@ -20,12 +22,14 @@ export default function SellModal({
   price,
   payToken,
 }: ModalProps) {
-
   const [loading, setLoading] = useState(false);
-  const [payT, setPayT] = useState('')
-  const [sPrice, setSPrice] = useState('')
+  const [payT, setPayT] = useState("");
+  const [sPrice, setSPrice] = useState("");
 
   const { write, data } = useCreate(fileUrl!);
+
+  const { collAddress } = MarketContext();
+  console.log(collAddress);
 
   const isOnSale = false;
   const isAuction = false;
@@ -38,6 +42,7 @@ export default function SellModal({
   );
 
   const { address } = useAccount();
+  const { isApproved, callApprove, data: apprData } = useApprove(collAddress!);
 
   const router = useRouter();
 
@@ -48,6 +53,7 @@ export default function SellModal({
   function openModal() {
     setIsOpen(true);
   }
+
   const waitForTransaction = useWaitForTransaction({
     confirmations: 2,
     hash: data?.hash,
@@ -65,7 +71,23 @@ export default function SellModal({
       }
     },
   });
-  const { isSuccess, status } = waitForTransaction;
+
+  useWaitForTransaction({
+    confirmations: 2,
+    hash: apprData?.hash,
+    chainId: 5,
+    onSettled(data, error) {
+      if (data) {
+        setLoading(false);
+        setIsOpen(true);
+        toast.success("NFT Approved successfully");
+      } else {
+        console.log(error);
+        setLoading(false);
+        toast.error("error Approving NFT");
+      }
+    },
+  });
 
   const callMint = async () => {
     setIsOpen(false);
@@ -113,20 +135,39 @@ export default function SellModal({
                     </div>
 
                     <div className="h-full">
-                      <SellForm setToken={setPayT} setP={setSPrice} modalOptions={setIsOpen} />
+                      <SellForm
+                        setToken={setPayT}
+                        setP={setSPrice}
+                        modalOptions={setIsOpen}
+                      />
                     </div>
                   </div>
 
                   <div className="mt-4 flex justify-center items-center">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-[#feb019] px-4
-                       py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
-                    from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
-                      onClick={callMint}
-                    >
-                      Sell NFT
-                    </button>
+                    {isApproved ? (
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-[#feb019] px-4
+                                         py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
+                                      from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
+                        onClick={callMint}
+                      >
+                        Sell NFT
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-[#feb019] px-4
+                                       py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
+                                    from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
+                        onClick={() => {
+                          setLoading(true);
+                          callApprove?.();
+                        }}
+                      >
+                        Approve To Sell
+                      </button>
+                    )}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

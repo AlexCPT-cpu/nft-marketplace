@@ -1,13 +1,17 @@
+"use client";
+
 import Nft from '@/components/Nft/Nft'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import fetch from '@/helpers/fetch'
 import { NftData } from '@/types/types'
+import { MarketContext } from '@/context/marketplaceContext';
 
 const NftId = () => {
 
   const router = useRouter()
   const { collection, nftId } = router.query
+  const { setCollAddress } = MarketContext()
 
   const [colNfts, setColNfts] = useState<any>()
 
@@ -17,9 +21,10 @@ const NftId = () => {
       address: collection
     })
     setColNfts(response?.data)
+    setCollAddress(collection)
   }
  getData()
-  }, [collection])
+  }, [collection, setCollAddress])
 
   const indexedNft = useMemo(() => {
     const returned: NftData[] = []

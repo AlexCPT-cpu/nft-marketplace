@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { useAccount, useWaitForTransaction } from "wagmi";
 import AuctionForm from "../Forms/AuctionForm";
 import useBuy from "@/hooks/buys/useBuy";
+import useApprove from "@/hooks/useApprove";
+import { MarketContext } from "@/context/marketplaceContext";
 
 export default function BuyModal({
   isOpen,
@@ -40,6 +42,25 @@ export default function BuyModal({
   const { address } = useAccount();
 
   const router = useRouter();
+
+  const { collAddress } = MarketContext();
+  const { isApproved, callApprove, data: apprData } = useApprove(collAddress!);
+  useWaitForTransaction({
+    confirmations: 2,
+    hash: apprData?.hash,
+    chainId: 5,
+    onSettled(data, error) {
+      if (data) {
+        setLoading(false);
+        setIsOpen(true);
+        toast.success("NFT Approved successfully");
+      } else {
+        console.log(error);
+        setLoading(false);
+        toast.error("error Approving NFT");
+      }
+    },
+  });
 
   function closeModal() {
     setIsOpen(false);
@@ -118,15 +139,30 @@ export default function BuyModal({
                   </div>
 
                   <div className="mt-4 flex justify-center items-center">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-[#feb019] px-4
-                       py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
-                    from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
-                      onClick={callMint}
-                    >
-                      Buy NFT
-                    </button>
+                  {isApproved ? (
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-[#feb019] px-4
+                                         py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
+                                      from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
+                        onClick={callMint}
+                      >
+                        Buy NFT
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-[#feb019] px-4
+                                       py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
+                                    from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
+                        onClick={() => {
+                          setLoading(true);
+                          callApprove?.();
+                        }}
+                      >
+                        Approve To Sell
+                      </button>
+                    )}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

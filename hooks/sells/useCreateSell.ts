@@ -4,13 +4,13 @@ import { marketPlace } from "@/config/config";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
 const useCreateSell = (collectionAddress: string, tokenId: string| number, payToken: string, price: string) => {
-  console.log(collectionAddress)
+
     const { config: createConfig } = usePrepareContractWrite({
         // @ts-ignore
         address: marketPlace,
         abi: Marketplace,
         functionName: "createSell",
-        args: [collectionAddress, tokenId, payToken, price],
+        args: [collectionAddress ?? '', tokenId, payToken, price],
       });
     
       const { data, write: callCreate } = useContractWrite({

@@ -19,6 +19,7 @@ import Loader from "../Html/Loader";
 import BuyModal from "../Modals/BuyModal";
 import AuctionModal from "../Modals/AuctionModal";
 import MakeOfferModal from "../Modals/MakeOfferModal";
+import { MarketContext } from "@/context/marketplaceContext";
 
 const NftCard = ({
   image,
@@ -44,12 +45,14 @@ const NftCard = ({
   const [isOffer, setIsOffer] = useState(false);
   const [isSell, setIsSell] = useState(false);
 
+  const { collAddress } = MarketContext()
+
   const { chain } = useNetwork();
 
   const { address } = useAccount();
 
   const { callCancel, data } = useCancel(
-    nftAddress as string,
+    collAddress as string,
     fullData[0]?.tokenId
   );
 
