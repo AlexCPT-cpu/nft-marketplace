@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id               String          @id @default(auto()) @map("_id") @db.ObjectId
+  id               String          @id @default(uuid())
   name             String?
   username         String?         @unique
   image            String?
@@ -20,7 +20,7 @@ model User {
   emailVerified    DateTime?
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
-  address          String?
+  address          String?         @unique
   instaUsername    String?
   twitterUsername  String?
   facebookUsername String?
@@ -28,39 +28,44 @@ model User {
   followerIds      String[]
   description      String?
   invitedBy        String?
-  volume           Int?
+  volume           Decimal?
   items            Int?
   collections      Collection[]
   offersReceived   OffersReceied[]
   offersMade       OffersMade[]
   userNfts         NFT[]
+
+  @@unique([username, address])
+  @@index([address])
 }
 
 model NFT {
-  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  id                String          @id @default(uuid())
   collection        Collection?     @relation(fields: [collectionId], references: [id])
-  collectionId      String?         @db.ObjectId
+  collectionId      String?
   collectionUid     String?
   Activity          Activity[]
   nftId             Int?
-  collectionAddress String?
+  image             String?
+  collectionAddress String?         @unique
   category          String?
   isAuctioned       Boolean?
   isOffered         Boolean?
+  currentValue      Decimal?
   latestBid         Int?
   latestOffer       Int?
   auctionTimer      Int?
   likes             Int?
   User              User?           @relation(fields: [userId], references: [id])
-  userId            String?         @db.ObjectId
+  userId            String?
   OffersReceied     OffersReceied[]
   OffersMade        OffersMade[]
 }
 
 model Collection {
-  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  id               String     @id @default(uuid())
   creator          User?      @relation(fields: [collectionId], references: [id])
-  collectionId     String?    @db.ObjectId
+  collectionId     String?
   name             String?
   logo             String?
   background       String?
@@ -70,52 +75,50 @@ model Collection {
   facebookUsername String?
   followIds        Int[]
   followerIds      Int[]
-  volume           Int?
+  volume           Decimal?
   items            Int?
   owners           Int?
   sold             Int?
   likes            Int?
   floorPrice       Int?
   description      String?
-  categories       Category[] @relation(fields: [categoryIds], references: [id])
-  categoryIds      String[]   @db.ObjectId
+  categories       Category[]
   NFTs             NFT[]
 }
 
 model Category {
-  id            String       @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  collections   Collection[] @relation(fields: [collectionIds], references: [id])
-  collectionIds String[]     @db.ObjectId
+  id          String       @id @default(uuid())
+  name        String?
+  collections Collection[]
 }
 
 model OffersReceied {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String? @db.ObjectId
-  nft    NFT?    @relation(fields: [nFTId], references: [id])
-  price  Int?
-  nFTId  String? @db.ObjectId
+  id     String   @id @default(uuid())
+  user   User?    @relation(fields: [userId], references: [id])
+  userId String?
+  nft    NFT?     @relation(fields: [nftId], references: [id])
+  price  Decimal?
+  nftId  String?
 }
 
 model OffersMade {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String? @db.ObjectId
-  nft    NFT?    @relation(fields: [nFTId], references: [id])
-  price  Int?
-  nFTId  String? @db.ObjectId
+  id     String   @id @default(uuid())
+  user   User?    @relation(fields: [userId], references: [id])
+  userId String?
+  nft    NFT?     @relation(fields: [nftId], references: [id])
+  price  Decimal?
+  nftId  String?
 }
 
 model Activity {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(uuid())
   activityType String?
-  item         NFT?    @relation(fields: [nftId], references: [id])
-  price        Int?
+  item         NFT?     @relation(fields: [nftId], references: [id])
+  price        Decimal?
   from         String?
   fromAddress  String?
   to           String?
   toAddress    String?
   time         String?
-  nftId        String? @db.ObjectId
+  nftId        String?
 }

@@ -10,7 +10,7 @@ const useApproveTokens = () => {
     abi: erc20ABI,
     functionName: "allowance",
     args: [
-      address ?? "0x7c13C3B93b6c80E5ff6D47B7ffFB7C599E9D960A",
+      address!,
       marketPlace,
     ],
   });

@@ -19,8 +19,6 @@ const SellForm = ({
   setP: (state: string) => void;
   setToken: (state: string) => void;
 }) => {
-  const router = useRouter();
-  const { address } = useAccount();
   const [price, setPrice] = useState("1");
   const [active, setActive] = useState({
     eth: true,
@@ -29,72 +27,6 @@ const SellForm = ({
     usdt: false,
   });
   const [loading, setLoading] = useState(false);
-  const { chain } = useNetwork();
-
-  useEffect(() => {
-    if (active.busd) {
-      setToken(BUSD);
-    } else if (active.usdt) {
-      setToken(USDT);
-    } else if (active.bnb) {
-      setToken(BNB);
-    }
-  }, [active, setToken]);
-
-  const { usdtApprove, busdApprove, bnbApprove } = useApproveTokens();
-  const { approveUsdt, approveBusd, approveBnb, usdtData, bnbData, busdData } =
-    useTokens();
-
-  const waitForUsdtApprove = useWaitForTransaction({
-    confirmations: 2,
-    hash: usdtData?.hash,
-    chainId: chain?.id,
-    onSuccess(data) {
-      if (data) {
-        setLoading(false);
-        toast.success("Usdt Approval Successful");
-        modalOptions(true);
-      } else {
-        console.log("error");
-        setLoading(false);
-        toast.error("Usdt Approval Failed");
-      }
-    },
-  });
-
-  const waitForBnbApprove = useWaitForTransaction({
-    confirmations: 2,
-    hash: bnbData?.hash,
-    chainId: chain?.id,
-    onSuccess(data) {
-      if (data) {
-        setLoading(false);
-        toast.success("Bnb Approval Successful");
-        modalOptions(true);
-      } else {
-        console.log("error");
-        setLoading(false);
-        toast.error("Bnb Approval Failed");
-      }
-    },
-  });
-
-  const waitForBusdApprove = useWaitForTransaction({
-    confirmations: 2,
-    hash: busdData?.hash,
-    chainId: chain?.id,
-    onSuccess(data) {
-      if (data) {
-        setLoading(false);
-        toast.success("Busd Approval Successful");
-        modalOptions(false);
-      } else {
-        console.log("error");
-        setLoading(false);
-        toast.error("Busd Approval Failed");
-      }
-    },
-  });
 
   const select = (index: number) => {
     switch (index) {
@@ -113,6 +45,7 @@ const SellForm = ({
           bnb: false,
           usdt: true,
         });
+        setToken(USDT);
         break;
       case 2:
         setActive({
@@ -121,6 +54,7 @@ const SellForm = ({
           bnb: false,
           usdt: false,
         });
+        setToken(BUSD);
         break;
       case 3:
         setActive({
@@ -129,23 +63,10 @@ const SellForm = ({
           bnb: true,
           usdt: false,
         });
+        setToken(BNB);
         break;
     }
   };
-
-  const UsdtBool = useMemo(() => {
-    return Number(usdtApprove) > Number(ethers.utils.parseUnits(price));
-  }, [price, usdtApprove]);
-
-  const BusdBool = useMemo(() => {
-    return Number(busdApprove) > Number(ethers.utils.parseUnits(price));
-  }, [price, busdApprove]);
-
-  const BnbBool = useMemo(() => {
-    return Number(bnbApprove) > Number(ethers.utils.parseUnits(price));
-  }, [price, bnbApprove]);
-
-  const approve = () => {};
 
   return (
     <form className="flex flex-col justify-between h-full px-8">
@@ -153,7 +74,11 @@ const SellForm = ({
         id="Price"
         value={price}
         onChange={(e: any) => {
-          setP(String(ethers.utils.parseUnits(e.currentTarget.value.toString(), "ether")));
+          setP(
+            String(
+              ethers.utils.parseUnits(e.currentTarget.value.toString(), "ether")
+            )
+          );
           setPrice(e.currentTarget.value);
         }}
         label="Enter Price"
@@ -178,128 +103,56 @@ const SellForm = ({
           </div>
           <div>ETH</div>
         </div>
-        {UsdtBool ? (
-          <div
-            onClick={() => select(1)}
-            className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
+        <div
+          onClick={() => select(1)}
+          className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
               ${active.usdt && "bg-blue-500/50"}`}
-          >
-            <div className="rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
-              <Image
-                className="mx-2"
-                src="/usdt.png"
-                alt="usdt"
-                width={50}
-                height={50}
-              />
-            </div>
-            <div>USDT</div>
+        >
+          <div className="rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
+            <Image
+              className="mx-2"
+              src="/usdt.png"
+              alt="usdt"
+              width={50}
+              height={50}
+            />
           </div>
-        ) : (
-          <div
-            onClick={() => {
-              modalOptions(false);
-              setLoading(true);
-              select(1);
-              approveUsdt?.();
-            }}
-            className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
-            ${active.usdt && "bg-blue-500/50"}`}
-          >
-            <div className="rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
-              <Image
-                className="mx-2"
-                src="/usdt.png"
-                alt="usdt"
-                width={50}
-                height={50}
-              />
-            </div>
-            <div className="whitespace-nowrap">Enable USDT</div>
-          </div>
-        )}
+          <div>USDT</div>
+        </div>
 
-        {BusdBool ? (
-          <div
-            onClick={() => select(2)}
-            className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
+        <div
+          onClick={() => select(2)}
+          className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
           ${active.busd && "bg-blue-500/50"}`}
-          >
-            <div className="rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
-              <Image
-                className="mx-2"
-                src="/busd.png"
-                alt="busd"
-                width={50}
-                height={50}
-              />
-            </div>
-            <div>BUSD</div>
+        >
+          <div className="rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
+            <Image
+              className="mx-2"
+              src="/busd.png"
+              alt="busd"
+              width={50}
+              height={50}
+            />
           </div>
-        ) : (
-          <div
-            onClick={() => {
-              modalOptions(false);
-              setLoading(true);
-              select(2);
-              approveBusd?.();
-            }}
-            className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
-          ${active.busd && "bg-blue-500/50"}`}
-          >
-            <div className="rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
-              <Image
-                className="mx-2"
-                src="/busd.png"
-                alt="busd"
-                width={50}
-                height={50}
-              />
-            </div>
-            <div className="whitespace-nowrap">Enable BUSD</div>
-          </div>
-        )}
+          <div>BUSD</div>
+        </div>
 
-        {BnbBool ? (
-          <div
-            onClick={() => select(3)}
-            className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
+        <div
+          onClick={() => select(3)}
+          className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
           ${active.bnb && "bg-blue-500/50"}`}
-          >
-            <div className="rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
-              <Image
-                className="mx-2"
-                src="/bnb.png"
-                alt="bnb"
-                width={50}
-                height={50}
-              />
-            </div>
-            <div>BNB</div>
+        >
+          <div className="rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
+            <Image
+              className="mx-2"
+              src="/bnb.png"
+              alt="bnb"
+              width={50}
+              height={50}
+            />
           </div>
-        ) : (
-          <div
-            onClick={() => {
-              modalOptions(false);
-              setLoading(true);
-              select(3);
-              approveBnb?.();
-            }}
-            className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
-          ${active.bnb && "bg-blue-500/50"}`}
-          >
-            <div className="rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition">
-              <Image
-                className="mx-2"
-                src="/bnb.png"
-                alt="bnb"
-                width={50}
-                height={50}
-              />
-            </div>
-            <div className="whitespace-nowrap">Enable BNB</div>
-          </div>
-        )}
+          <div>BNB</div>
+        </div>
       </div>
     </form>
   );

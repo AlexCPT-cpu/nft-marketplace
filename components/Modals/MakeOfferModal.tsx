@@ -1,4 +1,3 @@
-import useCreate from "@/hooks/nfts/useCreate";
 import { ModalProps } from "@/types/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
@@ -9,6 +8,7 @@ import toast from "react-hot-toast";
 import { useAccount, useWaitForTransaction } from "wagmi";
 import OfferForm from "../Forms/OfferForm";
 import useOffer from "@/hooks/offers/useOffer";
+import { MarketContext } from "@/context/marketplaceContext";
 
 export default function MakeOfferModal({
   isOpen,
@@ -20,22 +20,12 @@ export default function MakeOfferModal({
   price,
   payToken,
 }: ModalProps) {
-
   const [loading, setLoading] = useState(false);
-  const [payT, setPayT] = useState('')
-  const [sPrice, setSPrice] = useState('')
+  const [payT, setPayT] = useState("");
+  const [sPrice, setSPrice] = useState("");
+  const { collAddress } = MarketContext();
 
-  const { write, data } = useCreate(fileUrl!);
-
-  const isOnSale = false;
-  const isAuction = false;
-
-  const { callOffer, data: sellData } = useOffer(
-    colAddress!,
-    nftId!,
-    payT!,
-    sPrice!
-  );
+  const { callOffer, data } = useOffer(collAddress!, nftId!, payT!, sPrice!);
 
   const { address } = useAccount();
 
@@ -48,6 +38,7 @@ export default function MakeOfferModal({
   function openModal() {
     setIsOpen(true);
   }
+
   const waitForTransaction = useWaitForTransaction({
     confirmations: 2,
     hash: data?.hash,
@@ -100,7 +91,7 @@ export default function MakeOfferModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-gray-800 dark:bg-[#092940] p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-[#092940] p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="text-lg leading-6 text-white dark:text-neutral-500 ext-xl font-bold"
@@ -113,7 +104,11 @@ export default function MakeOfferModal({
                     </div>
 
                     <div className="h-full">
-                      <OfferForm setToken={setPayT} setP={setSPrice} modalOptions={setIsOpen} />
+                      <OfferForm
+                        setToken={setPayT}
+                        setP={setSPrice}
+                        modalOptions={setIsOpen}
+                      />
                     </div>
                   </div>
 
@@ -122,10 +117,12 @@ export default function MakeOfferModal({
                       type="button"
                       className="inline-flex justify-center rounded-md border border-[#feb019] px-4
                        py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
+                       disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none
                     from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
                       onClick={callMint}
+                      disabled={!callOffer}
                     >
-                      Buy NFT
+                      Make Offer
                     </button>
                   </div>
                 </Dialog.Panel>

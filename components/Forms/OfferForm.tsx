@@ -145,8 +145,6 @@ const OfferForm = ({
     return Number(bnbApprove) > Number(ethers.utils.parseUnits(price));
   }, [price, bnbApprove]);
 
-  const approve = () => {};
-
   return (
     <form className="flex flex-col justify-between h-full px-8">
       <FormInput

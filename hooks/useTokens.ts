@@ -3,6 +3,7 @@ import { USDT, BUSD, BNB, marketPlace } from "@/config/config";
 import { ethers } from "ethers";
 
 const useTokens = () => {
+
   const { config: usdtConfig } = usePrepareContractWrite({
     // @ts-ignore
     address: USDT,

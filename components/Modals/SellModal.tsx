@@ -2,7 +2,7 @@ import useCreate from "@/hooks/nfts/useCreate";
 import { ModalProps } from "@/types/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import PreviewCard from "../Cards/PreviewCard";
 import Loader from "../Html/Loader";
 import toast from "react-hot-toast";
@@ -11,6 +11,7 @@ import SellForm from "../Forms/SellForm";
 import useCreateSell from "@/hooks/sells/useCreateSell";
 import useApprove from "@/hooks/useApprove";
 import { MarketContext } from "@/context/marketplaceContext";
+import fetch from "@/helpers/fetch";
 
 export default function SellModal({
   isOpen,
@@ -29,7 +30,6 @@ export default function SellModal({
   const { write, data } = useCreate(fileUrl!);
 
   const { collAddress } = MarketContext();
-  console.log(collAddress);
 
   const isOnSale = false;
   const isAuction = false;
@@ -46,6 +46,23 @@ export default function SellModal({
 
   const router = useRouter();
 
+  const addSell = useCallback(async () => {
+    const response = await fetch("POST", "/api/update-nft", {
+      nftId: 1,
+      collectionAddress: "",
+      category: "",
+      isAuctioned: false,
+      isOffered: false,
+      latestBid: 0,
+      latestOffer: 0,
+      auctionTimer: 0,
+      likes: 0,
+      currentValue: 0,
+      image: "",
+    });
+    console.log(response);
+  }, []);
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -54,7 +71,7 @@ export default function SellModal({
     setIsOpen(true);
   }
 
-  const waitForTransaction = useWaitForTransaction({
+  useWaitForTransaction({
     confirmations: 2,
     hash: data?.hash,
     chainId: 5,
@@ -67,7 +84,7 @@ export default function SellModal({
       } else {
         console.log(error);
         setLoading(false);
-        toast.error("error Listing for cell");
+        toast.error("error Listing for sell");
       }
     },
   });
@@ -122,7 +139,7 @@ export default function SellModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-gray-800 dark:bg-[#092940] p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-[#092940] p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="text-lg leading-6 text-white dark:text-neutral-500 ext-xl font-bold"
@@ -146,8 +163,10 @@ export default function SellModal({
                   <div className="mt-4 flex justify-center items-center">
                     {isApproved ? (
                       <button
+                        disabled={!callCreate}
                         type="button"
                         className="inline-flex justify-center rounded-md border border-[#feb019] px-4
+                        disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none
                                          py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
                                       from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
                         onClick={callMint}

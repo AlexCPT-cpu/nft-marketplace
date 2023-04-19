@@ -10,7 +10,7 @@ export default async function handler(
     const { address } = req.body;
     console.log(address);
     try {
-      const user = await prismadb.user.findFirst({
+      const user = await prismadb.user.findUnique({
         where: {
           address,
         },

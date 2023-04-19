@@ -45,7 +45,7 @@ const NftCard = ({
   const [isOffer, setIsOffer] = useState(false);
   const [isSell, setIsSell] = useState(false);
 
-  const { collAddress } = MarketContext()
+  const { collAddress } = MarketContext();
 
   const { chain } = useNetwork();
 
@@ -136,6 +136,7 @@ const NftCard = ({
             isOpen={isModalOpen}
             setIsOpen={setIsModalOpen}
             fileUrl={""}
+            nftId={nftId}
           />
           <BidModal isOpen={isBidModal} setIsOpen={setBidModal} fileUrl={""} />
 
@@ -143,14 +144,16 @@ const NftCard = ({
 
           <MakeOfferModal
             isOpen={isMakeOfferModal}
-            setIsOpen={setAuctionModal}
+            setIsOpen={setIsMakeOfferModal}
             fileUrl={""}
+            nftId={nftId}
           />
 
           <AuctionModal
             isOpen={isAuctionModal}
             setIsOpen={setAuctionModal}
             fileUrl={""}
+            nftId={nftId}
           />
 
           <div className="flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-4">
@@ -181,17 +184,21 @@ const NftCard = ({
                     </span>
                   </div>
                 ) : (
-                  <div
-                    onClick={() => {
-                      setIsMakeOfferModal(true);
-                    }}
-                    className="flex flex-row border rounded-full w-fit border-yellow-400 items-center dark:border-yellow-400 px-8 py-3 cursor-pointer group hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
-                  >
-                    <BanknotesIcon className="w-6 group-hover:fill-white items-center fill-yellow-400" />{" "}
-                    <span className="dark:text-neutral-500 text-black text-lg ml-3 text-center whitespace-nowrap">
-                      Make Offer
-                    </span>
-                  </div>
+                  <>
+                    {isOffer ? (
+                      <div
+                        onClick={() => {
+                          setIsMakeOfferModal(true);
+                        }}
+                        className="flex flex-row border rounded-full w-fit border-yellow-400 items-center dark:border-yellow-400 px-8 py-3 cursor-pointer group hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
+                      >
+                        <BanknotesIcon className="w-6 group-hover:fill-white items-center fill-yellow-400" />{" "}
+                        <span className="dark:text-neutral-500 text-black text-lg ml-3 text-center whitespace-nowrap">
+                          Make Offer
+                        </span>
+                      </div>
+                    ) : null}
+                  </>
                 )}
               </>
             )}

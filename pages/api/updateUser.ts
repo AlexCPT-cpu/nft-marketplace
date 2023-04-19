@@ -22,7 +22,8 @@ export default async function handler(
         bio,
         image,
         background,
-        invited,
+        followerIds,
+        followIds,
       } = req.body;
 
       const existingUser = await prismadb.user.findUnique({
@@ -36,7 +37,6 @@ export default async function handler(
       }
       const user = await prismadb.user.create({
         data: {
-          address,
           name,
           description: bio,
           instaUsername: instagram ?? "",
@@ -45,9 +45,8 @@ export default async function handler(
           username: userName,
           image: image ?? "",
           background: background ?? "",
-          followerIds: [],
-          followIds: [],
-          invitedBy: invited ?? "",
+          followerIds: followerIds,
+          followIds: followIds,
           volume: 0,
           items: 0,
         },

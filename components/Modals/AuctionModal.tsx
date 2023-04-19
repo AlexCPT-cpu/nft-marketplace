@@ -1,4 +1,3 @@
-import useCreate from "@/hooks/nfts/useCreate";
 import { ModalProps } from "@/types/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
@@ -8,11 +7,12 @@ import Loader from "../Html/Loader";
 import toast from "react-hot-toast";
 import { useAccount, useWaitForTransaction } from "wagmi";
 import AuctionForm from "../Forms/AuctionForm";
-import useBuy from "@/hooks/buys/useBuy";
 import useApprove from "@/hooks/useApprove";
 import { MarketContext } from "@/context/marketplaceContext";
+import DatePicker from "../Html/Calender";
+import useCreateAuction from "@/hooks/auctions/useCreateAuction";
 
-export default function BuyModal({
+export default function AuctionModal({
   isOpen,
   setIsOpen,
   fileUrl,
@@ -22,29 +22,31 @@ export default function BuyModal({
   price,
   payToken,
 }: ModalProps) {
-
   const [loading, setLoading] = useState(false);
-  const [payT, setPayT] = useState('')
-  const [sPrice, setSPrice] = useState('')
+  const [payT, setPayT] = useState("");
+  const [sPrice, setSPrice] = useState("");
+  const [minBid, setMinBid] = useState("");
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
+  const [error, setError] = useState(false);
+  const { collAddress } = MarketContext();
 
-  const { write, data } = useCreate(fileUrl!);
-
-  const isOnSale = false;
-  const isAuction = false;
-
-  const { callBuy, data: sellData } = useBuy(
-    colAddress!,
+  const { callCreateAuction, data } = useCreateAuction(
+    collAddress!,
     nftId!,
     payT!,
-    sPrice!
+    sPrice!,
+    minBid,
+    new Date(startDate!)?.getTime(),
+    new Date(endDate!)?.getTime()
   );
 
   const { address } = useAccount();
 
   const router = useRouter();
 
-  const { collAddress } = MarketContext();
   const { isApproved, callApprove, data: apprData } = useApprove(collAddress!);
+
   useWaitForTransaction({
     confirmations: 2,
     hash: apprData?.hash,
@@ -69,7 +71,8 @@ export default function BuyModal({
   function openModal() {
     setIsOpen(true);
   }
-  const waitForTransaction = useWaitForTransaction({
+
+  useWaitForTransaction({
     confirmations: 2,
     hash: data?.hash,
     chainId: 5,
@@ -86,12 +89,11 @@ export default function BuyModal({
       }
     },
   });
-  const { isSuccess, status } = waitForTransaction;
 
   const callMint = async () => {
     setIsOpen(false);
     setLoading(true);
-    await callBuy?.();
+    await callCreateAuction?.();
   };
 
   return (
@@ -121,7 +123,7 @@ export default function BuyModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-gray-800 dark:bg-[#092940] p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-[#092940] p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="text-lg leading-6 text-white dark:text-neutral-500 ext-xl font-bold"
@@ -134,26 +136,53 @@ export default function BuyModal({
                     </div>
 
                     <div className="h-full">
-                      <AuctionForm setToken={setPayT} setP={setSPrice} modalOptions={setIsOpen} />
+                      <AuctionForm
+                        setToken={setPayT}
+                        setP={setSPrice}
+                        modalOptions={setIsOpen}
+                        setMinBid={setMinBid}
+                        minBid={minBid}
+                      />
+                      <div className="flex justify-center items-center flex-col lg:flex-row">
+                        <DatePicker
+                          error={error}
+                          setError={setError}
+                          title="Start Date"
+                          onChange={setStartDate}
+                          value={startDate!}
+                        />
+                        <DatePicker
+                          error={error}
+                          setError={setError}
+                          start={startDate}
+                          end={endDate}
+                          title="End Date"
+                          onChange={setEndDate}
+                          value={endDate!}
+                        />
+                      </div>
                     </div>
                   </div>
 
                   <div className="mt-4 flex justify-center items-center">
-                  {isApproved ? (
+                    {isApproved ? (
                       <button
                         type="button"
                         className="inline-flex justify-center rounded-md border border-[#feb019] px-4
                                          py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
+                                         disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none
                                       from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
                         onClick={callMint}
+                        disabled={!callCreateAuction}
                       >
-                        Buy NFT
+                        Auction NFT
                       </button>
                     ) : (
                       <button
                         type="button"
                         className="inline-flex justify-center rounded-md border border-[#feb019] px-4
                                        py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
+                                       disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none
                                     from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
                         onClick={() => {
                           setLoading(true);
