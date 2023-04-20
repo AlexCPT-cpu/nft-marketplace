@@ -1,8 +1,21 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NftCard from "../Cards/NftCard";
+import fetch from "@/helpers/fetch";
 
 const NftGrid = () => {
+
+  const [data, setData] = useState<any[]>([])
+
+  useEffect(() => {
+    const get = async () => {
+      const response = await fetch("GET", "/api/getNfts");
+      setData(response?.data);
+    };
+
+    get();
+  }, []);
+
   return (
     <div className="mx-auto mt-32 text-center justify-center items-center">
       <div className="flex flex-col md:flex-row justify-between px-3 lg:px-10 mb-6">
@@ -24,14 +37,11 @@ const NftGrid = () => {
       </div>
       <hr className="mb-8 mx-7 md:mx-14" />
       <div className="grid grid-cols-1 md:grid-cols-2 md:pl-12 lg:grid-cols-4 mx-auto items-center justify-center pl-10 gap-8">
-        <NftCard />
-        <NftCard />
-        <NftCard />
-        <NftCard />
-        <NftCard />
-        <NftCard />
-        <NftCard />
-        <NftCard />
+        {data?.map((nft) => (
+          <NftCard
+          image={nft.image} 
+          key={nft.id} />
+        ))}
       </div>
     </div>
   );

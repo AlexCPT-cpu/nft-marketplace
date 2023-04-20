@@ -6,21 +6,24 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 model User {
-  id               String          @id @default(uuid())
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
   name             String?
-  username         String?         @unique
+  username         String?   @unique
   image            String?
   background       String?
-  email            String?         @unique
+  email            String?   @unique
   emailVerified    DateTime?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  address          String?         @unique
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  address          String?   @unique
   instaUsername    String?
   twitterUsername  String?
   facebookUsername String?
@@ -28,93 +31,85 @@ model User {
   followerIds      String[]
   description      String?
   invitedBy        String?
-  volume           Decimal?
+  volume           Float?
   items            Int?
-  collections      Collection[]
-  offersReceived   OffersReceied[]
-  offersMade       OffersMade[]
-  userNfts         NFT[]
-
-  @@unique([username, address])
-  @@index([address])
+  collections      String[]
+  offersReceived   String[]
+  offersMade       String[]
+  userNfts         String[]
 }
 
 model NFT {
-  id                String          @id @default(uuid())
-  collection        Collection?     @relation(fields: [collectionId], references: [id])
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
   collectionId      String?
-  collectionUid     String?
-  Activity          Activity[]
+  Activity          String[]
   nftId             Int?
   image             String?
-  collectionAddress String?         @unique
+  collectionAddress String?
   category          String?
   isAuctioned       Boolean?
+  isSell            Boolean?
   isOffered         Boolean?
-  currentValue      Decimal?
+  currentValue      Float?
+  currency          String?
+  listedPrice       Float?
   latestBid         Int?
   latestOffer       Int?
   auctionTimer      Int?
   likes             Int?
-  User              User?           @relation(fields: [userId], references: [id])
   userId            String?
-  OffersReceied     OffersReceied[]
-  OffersMade        OffersMade[]
+  OffersReceived    String[]
+  OffersMade        String[]
 }
 
 model Collection {
-  id               String     @id @default(uuid())
-  creator          User?      @relation(fields: [collectionId], references: [id])
-  collectionId     String?
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  creator          String?
   name             String?
   logo             String?
   background       String?
-  address          String?    @unique
+  address          String?
   instaUsername    String?
   twitterUsername  String?
   facebookUsername String?
-  followIds        Int[]
-  followerIds      Int[]
-  volume           Decimal?
+  followIds        String[]
+  followerIds      String[]
+  volume           Float?
   items            Int?
   owners           Int?
   sold             Int?
   likes            Int?
   floorPrice       Int?
   description      String?
-  categories       Category[]
-  NFTs             NFT[]
+  categories       String[]
+  NFTs             String[]
 }
 
 model Category {
-  id          String       @id @default(uuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String?
-  collections Collection[]
+  collections String[]
 }
 
-model OffersReceied {
-  id     String   @id @default(uuid())
-  user   User?    @relation(fields: [userId], references: [id])
+model OffersReceived {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
   userId String?
-  nft    NFT?     @relation(fields: [nftId], references: [id])
-  price  Decimal?
+  price  Float?
   nftId  String?
 }
 
 model OffersMade {
-  id     String   @id @default(uuid())
-  user   User?    @relation(fields: [userId], references: [id])
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
   userId String?
-  nft    NFT?     @relation(fields: [nftId], references: [id])
-  price  Decimal?
+  price  Float?
   nftId  String?
 }
 
 model Activity {
-  id           String   @id @default(uuid())
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   activityType String?
-  item         NFT?     @relation(fields: [nftId], references: [id])
-  price        Decimal?
+  item         String[]
+  price        Float?
   from         String?
   fromAddress  String?
   to           String?

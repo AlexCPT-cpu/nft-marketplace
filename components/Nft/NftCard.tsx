@@ -20,6 +20,9 @@ import BuyModal from "../Modals/BuyModal";
 import AuctionModal from "../Modals/AuctionModal";
 import MakeOfferModal from "../Modals/MakeOfferModal";
 import { MarketContext } from "@/context/marketplaceContext";
+import getCollectionName from "@/helpers/getCollectionName";
+import truncateEthAddress from "truncate-eth-address";
+import getOwner from "@/helpers/getOwner";
 
 const NftCard = ({
   image,
@@ -45,6 +48,9 @@ const NftCard = ({
   const [isOffer, setIsOffer] = useState(false);
   const [isSell, setIsSell] = useState(false);
 
+  const [Creator, setCreator] = useState("");
+  const [Own, setOwn] = useState("");
+
   const { collAddress } = MarketContext();
 
   const { chain } = useNetwork();
@@ -56,7 +62,7 @@ const NftCard = ({
     fullData[0]?.tokenId
   );
 
-  const waitForTransaction = useWaitForTransaction({
+  useWaitForTransaction({
     confirmations: 2,
     hash: data?.hash,
     chainId: chain?.id,
@@ -72,7 +78,6 @@ const NftCard = ({
       }
     },
   });
-  const { isSuccess, status } = waitForTransaction;
 
   useEffect(() => {
     const getNFTs = async () => {
@@ -91,6 +96,17 @@ const NftCard = ({
       });
     }
   }, [address, nftId, nftAddress, fullData]);
+
+  useEffect(() => {
+    const getNft = async () => {
+      const { data }: any = await getCollectionName(collAddress);
+      const { data: own }: any = await getOwner(collAddress, nftId!);
+      setCreator(data?.creator);
+      setOwn(own);
+    };
+
+    getNft();
+  }, [collAddress, nftId]);
 
   return (
     <div className="border dark:bg-[#041824] border-black dark:border-[#092940] p-4 rounded-md hover:shadow-xl">
@@ -135,7 +151,7 @@ const NftCard = ({
           <SellModal
             isOpen={isModalOpen}
             setIsOpen={setIsModalOpen}
-            fileUrl={""}
+            fileUrl={image}
             nftId={nftId}
           />
           <BidModal isOpen={isBidModal} setIsOpen={setBidModal} fileUrl={""} />
@@ -267,7 +283,7 @@ const NftCard = ({
               <div>Creator</div>
               <div className="font-bold hover:text-gray-400 dark:hover:text-gray-400 dark:text-gray-500">
                 <Link className="whitespace-nowrap" href="/">
-                  {creator}
+                  {truncateEthAddress(Creator)}
                 </Link>
               </div>
             </div>
@@ -287,7 +303,7 @@ const NftCard = ({
               <div>Owner</div>
               <div className="font-bold hover:text-gray-400 dark:hover:text-gray-400 dark:text-gray-500">
                 <Link className="whitespace-nowrap" href="/">
-                  @{owner}
+                  {truncateEthAddress(Own)}
                 </Link>
               </div>
             </div>

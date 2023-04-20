@@ -1,8 +1,7 @@
-import useCreate from "@/hooks/nfts/useCreate";
 import { ModalProps } from "@/types/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import PreviewCard from "../Cards/PreviewCard";
 import Loader from "../Html/Loader";
 import toast from "react-hot-toast";
@@ -12,6 +11,7 @@ import useCreateSell from "@/hooks/sells/useCreateSell";
 import useApprove from "@/hooks/useApprove";
 import { MarketContext } from "@/context/marketplaceContext";
 import fetch from "@/helpers/fetch";
+import { ethers } from "ethers";
 
 export default function SellModal({
   isOpen,
@@ -27,14 +27,9 @@ export default function SellModal({
   const [payT, setPayT] = useState("");
   const [sPrice, setSPrice] = useState("");
 
-  const { write, data } = useCreate(fileUrl!);
-
   const { collAddress } = MarketContext();
 
-  const isOnSale = false;
-  const isAuction = false;
-
-  const { callCreate, data: sellData } = useCreateSell(
+  const { callCreate, data } = useCreateSell(
     colAddress!,
     nftId!,
     payT!,
@@ -47,28 +42,27 @@ export default function SellModal({
   const router = useRouter();
 
   const addSell = useCallback(async () => {
-    const response = await fetch("POST", "/api/update-nft", {
-      nftId: 1,
-      collectionAddress: "",
+    const response = await fetch("POST", "/api/updatenft", {
+      address,
+      nftId,
+      collectionAddress: collAddress,
       category: "",
       isAuctioned: false,
       isOffered: false,
+      isSell: true,
       latestBid: 0,
       latestOffer: 0,
       auctionTimer: 0,
       likes: 0,
       currentValue: 0,
-      image: "",
+      image: fileUrl,
+      price: Number(ethers.utils.formatUnits(sPrice)),
+      currency: payT,
     });
-    console.log(response);
-  }, []);
+  }, [fileUrl, nftId, collAddress, address, payT, sPrice]);
 
   function closeModal() {
     setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
   }
 
   useWaitForTransaction({
@@ -77,10 +71,15 @@ export default function SellModal({
     chainId: 5,
     onSettled(data, error) {
       if (data) {
-        setLoading(false);
-        setIsOpen(true);
-        toast.success("Sell Created successfuly");
-        router.push(`/user/${address}`);
+        const run = async () => {
+          setLoading(false);
+          setIsOpen(true);
+          toast.success("Sell Created successfuly");
+          await addSell();
+          router.push(`/user/${address}`);
+        };
+
+        run();
       } else {
         console.log(error);
         setLoading(false);
@@ -148,7 +147,7 @@ export default function SellModal({
                   </Dialog.Title>
                   <div className="mt-2 flex flex-col lg:flex-row lg:justify-between items-center">
                     <div>
-                      <PreviewCard buttonTitle="Sell Now" />
+                      <PreviewCard image={fileUrl} buttonTitle="Sell Now" />
                     </div>
 
                     <div className="h-full">

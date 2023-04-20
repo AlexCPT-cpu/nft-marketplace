@@ -1,7 +1,7 @@
 import { ModalProps } from "@/types/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import PreviewCard from "../Cards/PreviewCard";
 import Loader from "../Html/Loader";
 import toast from "react-hot-toast";
@@ -11,6 +11,8 @@ import useApprove from "@/hooks/useApprove";
 import { MarketContext } from "@/context/marketplaceContext";
 import DatePicker from "../Html/Calender";
 import useCreateAuction from "@/hooks/auctions/useCreateAuction";
+import fetch from "@/helpers/fetch";
+import { ethers } from "ethers";
 
 export default function AuctionModal({
   isOpen,
@@ -47,6 +49,26 @@ export default function AuctionModal({
 
   const { isApproved, callApprove, data: apprData } = useApprove(collAddress!);
 
+  const addSell = useCallback(async () => {
+    const response = await fetch("POST", "/api/updatenft", {
+      address,
+      nftId,
+      collectionAddress: collAddress,
+      category: "",
+      isAuctioned: true,
+      isOffered: false,
+      isSell: false,
+      latestBid: 0,
+      latestOffer: 0,
+      auctionTimer: new Date(endDate!)?.getTime(),
+      likes: 0,
+      currentValue: 0,
+      image: fileUrl,
+      price: Number(ethers.utils.formatUnits(sPrice)),
+      currency: payT,
+    });
+  }, [fileUrl, nftId, collAddress, address, payT, sPrice, endDate]);
+
   useWaitForTransaction({
     confirmations: 2,
     hash: apprData?.hash,
@@ -78,10 +100,14 @@ export default function AuctionModal({
     chainId: 5,
     onSettled(data, error) {
       if (data) {
-        setLoading(false);
-        setIsOpen(true);
-        toast.success("Sell Created successfuly");
-        router.push(`/user/${address}`);
+        const run = async () => {
+          setLoading(false);
+          setIsOpen(true);
+          toast.success("Sell Created successfuly");
+          await addSell();
+          router.push(`/user/${address}`);
+        };
+        run();
       } else {
         console.log(error);
         setLoading(false);

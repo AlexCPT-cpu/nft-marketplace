@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id               String          @id @default(uuid())
+    name             String?
+    username         String?         @unique
+    image            String?
+    background       String?
+    email            String?         @unique
+    emailVerified    DateTime?
+    createdAt        DateTime        @default(now())
+    updatedAt        DateTime        @updatedAt
+    address          String?         @unique
+    instaUsername    String?
+    twitterUsername  String?
+    facebookUsername String?
+    followIds        String[]
+    followerIds      String[]
+    description      String?
+    invitedBy        String?
+    volume           Decimal?
+    items            Int?
+    collections      Collection[]
+    offersReceived   OffersReceied[]
+    offersMade       OffersMade[]
+    userNfts         NFT[]
+
+    @@unique([username, address])
+    @@index([address])
+}
+
+model NFT {
+    id                String          @id @default(uuid())
+    collection        Collection?     @relation(fields: [collectionId], references: [id])
+    collectionId      String?
+    collectionUid     String?
+    Activity          Activity[]
+    nftId             Int?
+    image             String?
+    collectionAddress String?         @unique
+    category          String?
+    isAuctioned       Boolean?
+    isOffered         Boolean?
+    currentValue      Decimal?
+    latestBid         Int?
+    latestOffer       Int?
+    auctionTimer      Int?
+    likes             Int?
+    User              User?           @relation(fields: [userId], references: [id])
+    userId            String?
+    OffersReceied     OffersReceied[]
+    OffersMade        OffersMade[]
+}
+
+model Collection {
+    id               String     @id @default(uuid())
+    creator          User?      @relation(fields: [collectionId], references: [id])
+    collectionId     String?
+    name             String?
+    logo             String?
+    background       String?
+    address          String?    @unique
+    instaUsername    String?
+    twitterUsername  String?
+    facebookUsername String?
+    followIds        String[]
+    followerIds      String[]
+    volume           Decimal?
+    items            Int?
+    owners           Int?
+    sold             Int?
+    likes            Int?
+    floorPrice       Int?
+    description      String?
+    categories       Category[]
+    NFTs             NFT[]
+}
+
+model Category {
+    id          String       @id @default(uuid())
+    name        String?
+    collections Collection[]
+}
+
+model OffersReceied {
+    id     String   @id @default(uuid())
+    user   User?    @relation(fields: [userId], references: [id])
+    userId String?
+    nft    NFT?     @relation(fields: [nftId], references: [id])
+    price  Decimal?
+    nftId  String?
+}
+
+model OffersMade {
+    id     String   @id @default(uuid())
+    user   User?    @relation(fields: [userId], references: [id])
+    userId String?
+    nft    NFT?     @relation(fields: [nftId], references: [id])
+    price  Decimal?
+    nftId  String?
+}
+
+model Activity {
+    id           String   @id @default(uuid())
+    activityType String?
+    item         NFT?     @relation(fields: [nftId], references: [id])
+    price        Decimal?
+    from         String?
+    fromAddress  String?
+    to           String?
+    toAddress    String?
+    time         String?
+    nftId        String?
+}

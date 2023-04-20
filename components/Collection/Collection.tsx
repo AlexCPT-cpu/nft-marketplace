@@ -6,7 +6,7 @@ const Collection = ({ address }: { address: string}) => {
 
   return (
     <div>
-        <CollectionCard />
+        <CollectionCard address={address} />
         <CollectionNav address={address} />
     </div>
   )

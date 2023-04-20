@@ -128,6 +128,7 @@ export interface CollectionCardProps {
   owners?;
   floor?;
   volume?;
+  address?;
 }
 
 interface InputProps {

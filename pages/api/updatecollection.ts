@@ -10,53 +10,51 @@ export default async function handler(
     try {
       const {
         address,
+        creator,
         name,
         logo,
         collectionAddress,
-        image,
         background,
         instaUsername,
         twitterUsername,
         facebookUsername,
-        volume,
         items,
         owners,
-        sold,
-        likes,
-        floorPrice,
         description,
       } = req.body;
 
-      const user = await prismadb.user.update({
+      const collection = await prismadb.collection.create({
+        data: {
+          name,
+          logo,
+          address: collectionAddress,
+          background,
+          instaUsername,
+          twitterUsername,
+          facebookUsername,
+          volume: 0,
+          items,
+          owners,
+          sold: 0,
+          likes: 0,
+          floorPrice: 0,
+          description,
+          creator,
+        },
+      });
+
+      const updatedUser = await prismadb.user.update({
         where: {
           address,
         },
         data: {
           collections: {
-            create: [
-              {
-                name,
-                logo,
-                collectionAddress,
-                image,
-                background,
-                instaUsername,
-                twitterUsername,
-                facebookUsername,
-                volume,
-                items,
-                owners,
-                sold,
-                likes,
-                floorPrice,
-                description,
-              },
-            ],
+            push: collection.id,
           },
         },
       });
 
-      res.status(200).json(user);
+      res.status(200).json(updatedUser);
     } catch (ex) {
       console.log(ex);
       res.status(500).end();

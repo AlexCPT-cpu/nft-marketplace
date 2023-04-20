@@ -47,6 +47,7 @@ export default async function handler(
           background: background ?? "",
           followerIds: [],
           followIds: [],
+          userNfts: [],
           invitedBy: invited ?? "",
           volume: 0,
           items: 0,
