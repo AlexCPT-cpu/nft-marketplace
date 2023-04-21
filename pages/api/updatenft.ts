@@ -8,57 +8,57 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const {
-        address,
-        nftId,
-        category,
-        isAuctioned,
-        isOffered,
-        isSell,
-        latestBid,
-        latestOffer,
-        auctionTimer,
-        likes,
-        currentValue,
-        image,
-        collectionAddress,
-        collectionId,
-        price,
-        currency,
-      } = req.body;
+      // const {
+      //   address,
+      //   nftId,
+      //   category,
+      //   isAuctioned,
+      //   isOffered,
+      //   isSell,
+      //   latestBid,
+      //   latestOffer,
+      //   auctionTimer,
+      //   likes,
+      //   currentValue,
+      //   image,
+      //   collectionAddress,
+      //   collectionId,
+      //   price,
+      //   currency,
+      // } = req.body;
 
-      const nft = await prismadb.nFT.create({
-        data: {
-          nftId: Number(nftId),
-          collectionAddress,
-          category,
-          isAuctioned,
-          isOffered,
-          isSell,
-          latestBid,
-          latestOffer,
-          auctionTimer,
-          likes,
-          currentValue,
-          image,
-          collectionId,
-          currency,
-          listedPrice: price,
-        },
-      });
+      // const nft = await prismadb.nFT.create({
+      //   data: {
+      //     nftId: Number(nftId),
+      //     collectionAddress,
+      //     category,
+      //     isAuctioned,
+      //     isOffered,
+      //     isSell,
+      //     latestBid,
+      //     latestOffer,
+      //     auctionTimer,
+      //     likes,
+      //     currentValue,
+      //     image,
+      //     collectionId,
+      //     currency,
+      //     listedPrice: price,
+      //   },
+      // });
 
-      const updatedUser = await prismadb.user.update({
-        where: {
-          address,
-        },
-        data: {
-          userNfts: {
-            push: nft.id,
-          },
-        },
-      });
+      // const updatedUser = await prismadb.user.update({
+      //   where: {
+      //     address,
+      //   },
+      //   data: {
+      //     userNfts: {
+      //       push: nft.id,
+      //     },
+      //   },
+      // });
 
-      res.status(200).json(updatedUser);
+      // res.status(200).json(updatedUser);
     } catch (ex) {
       console.log(ex);
       res.status(500).end();
