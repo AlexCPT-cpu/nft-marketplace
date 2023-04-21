@@ -21,15 +21,25 @@ const UserNftGrid: React.FC<UserNftGrid> = ({ active, userNfts }) => {
 
   useEffect(() => {
     if (active?.created === true) {
-      setCurrentNfts(navNfts);
+      if (userNfts) {
+        setCurrentNfts(navNfts);
+      }
     } else if (active?.collected === true) {
-      setCurrentNfts(userNfts[0]);
+      if (userNfts) {
+        setCurrentNfts(userNfts[0]);
+      }
     } else if (active?.collections === true) {
-      setCurrentNfts(navNfts);
+      if (userNfts) {
+        setCurrentNfts(navNfts);
+      }
     } else if (active?.offersMade === true) {
-      setCurrentNfts(navNfts);
+      if (userNfts) {
+        setCurrentNfts(navNfts);
+      }
     } else if (active?.offersReceived === true) {
-      setCurrentNfts(userNfts[0]);
+      if (userNfts) {
+        setCurrentNfts(userNfts[0]);
+      }
     }
   }, [active, userNfts, navNfts]);
 

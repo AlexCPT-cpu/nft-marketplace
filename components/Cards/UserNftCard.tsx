@@ -23,7 +23,7 @@ const UserNftCard = ({
 
   useEffect(() => {
     const getNft = async () => {
-      const { name: title } = await getCollectionName(nftAddress!);
+      const { data: title } = await getCollectionName(nftAddress!);
       setNftTitle(title);
     };
     if (nftAddress) {

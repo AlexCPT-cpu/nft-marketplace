@@ -30,12 +30,13 @@ const CreateColCard = () => {
         twitterUsername: twitter,
         facebookUsername: facebook,
         description: desc,
+        website,
       });
       console.log(response);
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [address, desc, twitter, facebook, instagram, website, product]);
 
   return (
     <div className="flex flex-col lg:flex-row lg:justify-between space-x-0 lg:space-x-10">
