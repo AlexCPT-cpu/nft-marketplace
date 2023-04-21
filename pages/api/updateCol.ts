@@ -35,7 +35,6 @@ export default async function handler(
           likes: 2,
           floorPrice: 0,
           description,
-          creator: '',
         },
       });
 
