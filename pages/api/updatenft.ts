@@ -41,7 +41,6 @@ export default async function handler(
           currentValue,
           image,
           collectionId,
-          currency,
           listedPrice: price,
         },
       });
