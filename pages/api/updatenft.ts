@@ -34,7 +34,6 @@ export default async function handler(
           category,
           isAuctioned,
           isOffered,
-          isSell,
           latestBid,
           latestOffer,
           auctionTimer,
