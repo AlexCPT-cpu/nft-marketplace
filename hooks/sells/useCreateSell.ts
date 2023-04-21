@@ -1,7 +1,6 @@
 import Marketplace from "@/config/Marketplace.json";
 import { marketPlace } from "@/config/config";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
-import { MarketContext } from "@/context/marketplaceContext";
 
 const useCreateSell = (
   collectionAddress: string,
@@ -9,13 +8,13 @@ const useCreateSell = (
   payToken: string,
   price: string
 ) => {
-  const { collAddress } = MarketContext();
+
   const { config: createConfig } = usePrepareContractWrite({
     // @ts-ignore
     address: marketPlace,
     abi: Marketplace,
-    functionName: "createSell",
-    args: [collAddress, tokenId, payToken, price],
+    functionName: "listToken",
+    args: [collectionAddress, tokenId, price, 1800000],
   });
 
   const { data, write: callCreate } = useContractWrite({

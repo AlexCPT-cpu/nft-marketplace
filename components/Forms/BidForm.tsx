@@ -11,11 +11,12 @@ import { useRouter } from "next/router";
 
 const BidForm = ({
   modalOptions,
+  setP
 }: {
   modalOptions: (state: boolean) => void;
+  setP: (value: string) => void
 }) => {
-  const router = useRouter();
-  const { address } = useAccount();
+
   const [price, setPrice] = useState("1");
   const [active, setActive] = useState({
     eth: true,
@@ -138,6 +139,11 @@ const BidForm = ({
         id="Price"
         value={price}
         onChange={(e: any) => {
+          setP(
+            String(
+              ethers.utils.parseUnits(e.currentTarget.value.toString(), "ether")
+            )
+          );
           setPrice(e.currentTarget.value);
         }}
         label="Enter Price"

@@ -11,28 +11,22 @@ contract OriginCreate is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter public _tokenIds;
     address contractAddress;
-    uint256 public cost = 0.0075 ether;
+
+    uint256 public cost = 0.00075 ether;
+    uint256 public totalSupply;
 
     constructor(address marketContract) ERC721("OriginNFT", "OriginNFT") {
         contractAddress = marketContract;
     }
 
-    function createNFT(string memory tokenURI) public returns (uint) {
-        _tokenIds.increment();
-        uint256 newItemId = _tokenIds.current();
-        _mint(msg.sender, newItemId);
-        _setTokenURI(newItemId, tokenURI);
-        setApprovalForAll(contractAddress, true);
-        return newItemId;
-    }
-
     function mintNFT(string memory tokenURI) public payable returns (uint) {
-        require(msg.value == cost, "Need to send 0.075 ether!");
+        require(msg.value == cost, "Need to send 0.00075 ether!");
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _mint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);
         setApprovalForAll(contractAddress, true);
+        totalSupply += 1;
         return newItemId;
     }
 

@@ -1,8 +1,21 @@
+import fetch from "@/helpers/fetch";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CollectionCard from "../Cards/CollectionCard";
 
 const TopCollections = () => {
+
+  const [collections, setColls] = useState<any[]>([])
+
+  useEffect(() => {
+    const get = async () => {
+      const response = await fetch("GET", "/api/getCollections");
+      setColls(response?.data);
+    };
+
+    get();
+  }, []);
+
   return (
     <div className="lg:px-16 px-8 mt-7 mb-10 text-black dark:text-gray-400">
       <div className="flex flex-row text-xl items-center text-center">
@@ -34,10 +47,14 @@ const TopCollections = () => {
       </div>
 
       <div className="grid md:grid-cols-2 md:pl-7 grid-cols-1 lg:grid-cols-4 mx-auto items-center justify-center pl-3 lg:pl-1 gap-8 my-5">
-        <CollectionCard background="/bg3.jpg" />
-        <CollectionCard background="/bg1.jpg" />
-        <CollectionCard background="/bg4.jpg" />
-        <CollectionCard background="/bg2.jpg" />
+        {collections?.map(collection => (
+           <CollectionCard
+           address={collection.address}
+            name={collection.name}
+            sold={collection.sold}
+            key={collection?.id}
+             />
+        ))}
       </div>
     </div>
   );

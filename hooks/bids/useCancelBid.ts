@@ -2,16 +2,16 @@ import Marketplace from '@/config/Marketplace.json'
 import { marketPlace } from "@/config/config";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
-const useCompleteBid = (collectionAddress: string, tokenId: string | number, bidder: string, price: number) => {
+const useCancelBid = (collectionAddress: string, tokenId: string | number) => {
     const { config: bidConfig } = usePrepareContractWrite({
         // @ts-ignore
         address: marketPlace,
         abi: Marketplace,
-        functionName: "acceptBidForToken",
-        args: [collectionAddress, tokenId, bidder, price],
+        functionName: "withdrawBidForToken",
+        args: [collectionAddress, tokenId,]
       });
     
-      const { data, write: callCompleteBid } = useContractWrite({
+      const { data, write: callCancelBid } = useContractWrite({
         ...bidConfig,
         onError(error) {
           console.log("Error", error);
@@ -24,7 +24,7 @@ const useCompleteBid = (collectionAddress: string, tokenId: string | number, bid
         },
       });
 
-  return { callCompleteBid, data }
+  return { callCancelBid, data }
 }
 
-export default useCompleteBid
+export default useCancelBid

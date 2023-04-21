@@ -1,4 +1,3 @@
-import useCreate from "@/hooks/nfts/useCreate";
 import { ModalProps } from "@/types/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
@@ -8,15 +7,19 @@ import Loader from "../Html/Loader";
 import toast from "react-hot-toast";
 import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
 import BidForm from "../Forms/BidForm";
+import usePlaceBid from "@/hooks/bids/usePlaceBid";
 
 export default function BidModal({
   isOpen,
   setIsOpen,
+  colAddress,
+  nftId,
   fileUrl,
   previewData,
 }: ModalProps) {
+
   const [loading, setLoading] = useState(false);
-  const { write, data } = useCreate(fileUrl!);
+  const [price, setPrice] = useState('')
 
   const { address } = useAccount();
   const { chain } = useNetwork()
@@ -30,6 +33,13 @@ export default function BidModal({
   function openModal() {
     setIsOpen(true);
   }
+
+  const { data, callPlaceBid } = usePlaceBid(
+    colAddress!,
+    nftId!,
+    price
+  )
+
   const waitForTransaction = useWaitForTransaction({
     confirmations: 2,
     hash: data?.hash,
@@ -51,7 +61,7 @@ export default function BidModal({
   const callMint = async () => {
     setIsOpen(false);
     setLoading(true);
-    await write?.();
+    await callPlaceBid?.();
 
     if (isSuccess && status === "success") {
       setLoading(false);
@@ -100,7 +110,9 @@ export default function BidModal({
                     </div>
 
                     <div className="h-full">
-                      <BidForm modalOptions={setIsOpen} />
+                      <BidForm 
+                      modalOptions={setIsOpen}
+                      setP={setPrice} />
                     </div>
                   </div>
 

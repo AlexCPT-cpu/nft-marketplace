@@ -28,7 +28,7 @@ const NftId = () => {
 
   const indexedNft = useMemo(() => {
     const returned: NftData[] = []
-    const parsed = colNfts?.nfts?.map((nft: NftData) => {
+    colNfts?.nfts?.map((nft: NftData) => {
       if(nft.tokenId === nftId) {
         returned.push(nft)
       }

@@ -30,14 +30,16 @@ export default function BuyModal({
   const isOnSale = false;
   const isAuction = false;
 
+  const { address } = useAccount()
+
   const { callBuy, data: sellData } = useBuy(
     colAddress!,
     nftId!,
     payT!,
-    sPrice!
+    sPrice!,
+    address!
   );
 
-  const { address } = useAccount();
 
   const router = useRouter();
 

@@ -1,8 +1,39 @@
+import fetch from "@/helpers/fetch";
+import axios from "axios";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import truncateEthAddress from "truncate-eth-address";
+import { useAccount } from "wagmi";
 import CreatorCard from "../Cards/CreatorCard";
 
 const CreatorOfTheWeek = () => {
+  const [data, setData] = useState<any[]>([]);
+  const [nftLength, setNftLength] = useState(0);
+
+  const { address } = useAccount();
+
+  useEffect(() => {
+    const get = async () => {
+      const response = await fetch("GET", "/api/getCreators");
+      setData(response?.data);
+      response.data.map(async (creator: any) => {});
+    };
+
+    get();
+  }, []);
+
+  useEffect(() => {
+    const getNFTs = async () => {
+      const response = await axios.post("/api/nfts", {
+        address: address,
+      });
+      return response.data;
+    };
+    if (address) {
+      getNFTs().then((data) => setNftLength(data?.ownedNfts?.length));
+    }
+  }, [address]);
+
   return (
     <div className="lg:px-16 px-8 mt-7 mb-10 text-black dark:text-gray-400">
       <div className="flex flex-row text-xl items-center text-center">
@@ -27,17 +58,25 @@ const CreatorOfTheWeek = () => {
         TOP CREATOR
       </div>
       <div className="flex justify-between mt-5">
-        <div className="text-2xl lg:text-3xl font-semibold">Creator of the Week</div>
+        <div className="text-2xl lg:text-3xl font-semibold">
+          Creator of the Week
+        </div>
         <div className="text-lg lg:text-xl relative transition border-2 p-2 rounded-md border-transparent hover:border-[#feb019]">
-         <Link href='/creators'>VIEW ALL</Link> 
+          <Link href="/creators">VIEW ALL</Link>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 md:pl-7 lg:grid-cols-4 mx-auto items-center justify-center pl-3 lg:pl-1  gap-8 my-5">
-        <CreatorCard />
-        <CreatorCard background="/bg2.jpg" />
-        <CreatorCard background="/bg3.jpg" />
-        <CreatorCard background="/bg4.jpg" />
+        {data?.map((creator) => {
+          return (
+            <CreatorCard
+              name={creator.name}
+              address={creator?.address}
+              key={creator.id}
+              followers={creator.followerIds?.length}
+            />
+          );
+        })}
       </div>
     </div>
   );

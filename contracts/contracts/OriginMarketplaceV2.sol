@@ -16,22 +16,17 @@ import "./lib/OriginMarketplaceRoyalty.sol";
  * @title ORIGIN Marketplace contract V2
  * Note: Payment tokens usually is the chain native coin's wrapped token, e.g. WETH, WBNB
  */
-contract OriginMarketplaceV2 is
-    IOriginMarketplaceV2,
-    Ownable,
-    OriginMarketplaceRoyalty,
-    ReentrancyGuard
-{
+contract OriginMarketplaceV2 is IOriginMarketplaceV2, Ownable, OriginMarketplaceRoyalty, ReentrancyGuard {
     using Address for address;
     using EnumerableSet for EnumerableSet.UintSet;
     using EnumerableSet for EnumerableSet.AddressSet;
     using SafeERC20 for IERC20;
 
+    IERC20 private immutable _paymentToken;
+
     constructor(address _paymentTokenAddress) {
         _paymentToken = IERC20(_paymentTokenAddress);
     }
-
-    IERC20 private immutable _paymentToken;
 
     bool private _isTradingEnabled = true;
     uint8 private _serviceFeeFraction = 20;
@@ -70,17 +65,8 @@ contract OriginMarketplaceV2 is
      * The timestamp set needs to be in the allowed range
      * Listing must be valid
      */
-    function listToken(
-        address erc721Address,
-        uint256 tokenId,
-        uint256 value,
-        uint256 expireTimestamp
-    )
-        external
-        override
-        onlyTradingOpen
-        onlyAllowedExpireTimestamp(expireTimestamp)
-    {
+    function listToken(address erc721Address, uint256 tokenId, uint256 value, uint256 expireTimestamp)
+     external override onlyTradingOpen onlyAllowedExpireTimestamp(expireTimestamp) {
         Listing memory listing = Listing({
             tokenId: tokenId,
             value: value,
@@ -103,10 +89,7 @@ contract OriginMarketplaceV2 is
      * @dev See {IORIGINMarketplaceV2-delistToken}.
      * msg.sender must be the seller of the listing record
      */
-    function delistToken(address erc721Address, uint256 tokenId)
-        external
-        override
-    {
+    function delistToken(address erc721Address, uint256 tokenId) external override {
         require(
             _erc721Market[erc721Address].listings[tokenId].seller == msg.sender,
             "Only token seller can delist token"
@@ -127,12 +110,7 @@ contract OriginMarketplaceV2 is
      * msg.sender must not the owner of token
      * msg.value must be at least sell price plus fees
      */
-    function buyToken(address erc721Address, uint256 tokenId)
-        external
-        payable
-        override
-        nonReentrant
-    {
+    function buyToken(address erc721Address, uint256 tokenId) external payable override nonReentrant {
         Listing memory listing = _erc721Market[erc721Address].listings[tokenId];
         require(
             _isListingValid(erc721Address, listing),
@@ -188,17 +166,8 @@ contract OriginMarketplaceV2 is
      * @dev See {ORIGINMarketplaceV2-enterBidForToken}.
      * People can only enter bid if bid is valid
      */
-    function enterBidForToken(
-        address erc721Address,
-        uint256 tokenId,
-        uint256 value,
-        uint256 expireTimestamp
-    )
-        external
-        override
-        onlyTradingOpen
-        onlyAllowedExpireTimestamp(expireTimestamp)
-    {
+    function enterBidForToken(address erc721Address, uint256 tokenId, uint256 value, uint256 expireTimestamp)
+     external override onlyTradingOpen onlyAllowedExpireTimestamp(expireTimestamp) {
         Bid memory bid = Bid(tokenId, value, msg.sender, expireTimestamp);
 
         require(_isBidValid(erc721Address, bid), "Bid is not valid");
@@ -215,11 +184,8 @@ contract OriginMarketplaceV2 is
      * There must be a bid exists
      * remove this bid record
      */
-    function withdrawBidForToken(address erc721Address, uint256 tokenId)
-        external
-        override
-    {
-        Bid memory bid = _erc721Market[erc721Address].bids[tokenId].bids[
+    function withdrawBidForToken(address erc721Address, uint256 tokenId) external override {
+         Bid memory bid = _erc721Market[erc721Address].bids[tokenId].bids[
             msg.sender
         ];
         require(
@@ -237,12 +203,8 @@ contract OriginMarketplaceV2 is
      * Must have approved this contract to transfer token
      * Must have a valid existing bid that matches
      */
-    function acceptBidForToken(
-        address erc721Address,
-        uint256 tokenId,
-        address bidder,
-        uint256 value
-    ) external override nonReentrant {
+    function acceptBidForToken(address erc721Address, uint256 tokenId, address bidder, uint256 value)
+     external override nonReentrant {
         require(
             _isTokenOwner(erc721Address, tokenId, msg.sender),
             "Only token owner can accept bid of token"
@@ -319,12 +281,7 @@ contract OriginMarketplaceV2 is
     /**
      * @dev See {IORIGINMarketplaceV2-getTokenListing}.
      */
-    function getTokenListing(address erc721Address, uint256 tokenId)
-        public
-        view
-        override
-        returns (Listing memory validListing)
-    {
+    function getTokenListing(address erc721Address, uint256 tokenId) public view override returns (Listing memory validListing) {
         Listing memory listing = _erc721Market[erc721Address].listings[tokenId];
         if (_isListingValid(erc721Address, listing)) {
             validListing = listing;
@@ -334,23 +291,15 @@ contract OriginMarketplaceV2 is
     /**
      * @dev See {IORIGINMarketplaceV2-numTokenListings}.
      */
-    function numTokenListings(address erc721Address)
-        public
-        view
-        override
-        returns (uint256)
-    {
+    function numTokenListings(address erc721Address) public view override returns (uint256) {
         return _erc721Market[erc721Address].tokenIdWithListing.length();
     }
 
     /**
      * @dev See {IORIGINMarketplaceV2-getTokenListings}.
      */
-    function getTokenListings(
-        address erc721Address,
-        uint256 from,
-        uint256 size
-    ) public view override returns (Listing[] memory listings) {
+    function getTokenListings(address erc721Address, uint256 from, uint256 size) 
+     public view override returns (Listing[] memory listings) {
         uint256 listingsCount = numTokenListings(erc721Address);
 
         if (from < listingsCount && size > 0) {
@@ -376,11 +325,8 @@ contract OriginMarketplaceV2 is
     /**
      * @dev See {IORIGINMarketplaceV2-getBidderTokenBid}.
      */
-    function getBidderTokenBid(
-        address erc721Address,
-        uint256 tokenId,
-        address bidder
-    ) public view override returns (Bid memory validBid) {
+    function getBidderTokenBid(address erc721Address, uint256 tokenId, address bidder) 
+     public view override returns (Bid memory validBid) {
         Bid memory bid = _erc721Market[erc721Address].bids[tokenId].bids[
             bidder
         ];
@@ -392,12 +338,7 @@ contract OriginMarketplaceV2 is
     /**
      * @dev See {IORIGINMarketplaceV2-getTokenBids}.
      */
-    function getTokenBids(address erc721Address, uint256 tokenId)
-        external
-        view
-        override
-        returns (Bid[] memory bids)
-    {
+    function getTokenBids(address erc721Address, uint256 tokenId) external view override returns (Bid[] memory bids) {
         uint256 bidderCount = _erc721Market[erc721Address]
             .bids[tokenId]
             .bidders
@@ -421,12 +362,7 @@ contract OriginMarketplaceV2 is
     /**
      * @dev See {IORIGINMarketplaceV2-getTokenHighestBid}.
      */
-    function getTokenHighestBid(address erc721Address, uint256 tokenId)
-        public
-        view
-        override
-        returns (Bid memory highestBid)
-    {
+    function getTokenHighestBid(address erc721Address, uint256 tokenId) public view override returns (Bid memory highestBid) {
         highestBid = Bid(tokenId, 0, address(0), 0);
         uint256 bidderCount = _erc721Market[erc721Address]
             .bids[tokenId]
@@ -451,23 +387,15 @@ contract OriginMarketplaceV2 is
     /**
      * @dev See {IORIGINMarketplaceV2-numTokenWithBids}.
      */
-    function numTokenWithBids(address erc721Address)
-        public
-        view
-        override
-        returns (uint256)
-    {
+    function numTokenWithBids(address erc721Address) public view override returns (uint256) {
         return _erc721Market[erc721Address].tokenIdWithBid.length();
     }
 
     /**
      * @dev See {IORIGINMarketplaceV2-getTokenHighestBids}.
      */
-    function getTokenHighestBids(
-        address erc721Address,
-        uint256 from,
-        uint256 size
-    ) public view override returns (Bid[] memory highestBids) {
+    function getTokenHighestBids( address erc721Address, uint256 from, uint256 size) 
+      public view override returns (Bid[] memory highestBids) {
         uint256 tokenCount = numTokenWithBids(erc721Address);
 
         if (from < tokenCount && size > 0) {
@@ -487,12 +415,7 @@ contract OriginMarketplaceV2 is
         }
     }
 
-    function getBidderBids(
-        address erc721Address,
-        address bidder,
-        uint256 from,
-        uint256 size
-    ) external view override returns (Bid[] memory bidderBids) {
+    function getBidderBids(address erc721Address, address bidder, uint256 from, uint256 size) external view override returns (Bid[] memory bidderBids) {
         uint256 tokenCount = numTokenWithBids(erc721Address);
 
         if (from < tokenCount && size > 0) {
@@ -516,11 +439,7 @@ contract OriginMarketplaceV2 is
     /**
      * @dev check if the account is the owner of this erc721 token
      */
-    function _isTokenOwner(
-        address erc721Address,
-        uint256 tokenId,
-        address account
-    ) private view returns (bool) {
+    function _isTokenOwner(address erc721Address, uint256 tokenId, address account) private view returns (bool) {
         IERC721 _erc721 = IERC721(erc721Address);
         try _erc721.ownerOf(tokenId) returns (address tokenOwner) {
             return tokenOwner == account;
@@ -532,11 +451,7 @@ contract OriginMarketplaceV2 is
     /**
      * @dev check if this contract has approved to transfer this erc721 token
      */
-    function _isTokenApproved(address erc721Address, uint256 tokenId)
-        private
-        view
-        returns (bool)
-    {
+    function _isTokenApproved(address erc721Address, uint256 tokenId) private view returns (bool) {
         IERC721 _erc721 = IERC721(erc721Address);
         try _erc721.getApproved(tokenId) returns (address tokenOperator) {
             return tokenOperator == address(this);
@@ -548,11 +463,7 @@ contract OriginMarketplaceV2 is
     /**
      * @dev check if this contract has approved to all of this owner's erc721 tokens
      */
-    function _isAllTokenApproved(address erc721Address, address owner)
-        private
-        view
-        returns (bool)
-    {
+    function _isAllTokenApproved(address erc721Address, address owner) private view returns (bool) {
         IERC721 _erc721 = IERC721(erc721Address);
         return _erc721.isApprovedForAll(owner, address(this));
     }
@@ -564,11 +475,7 @@ contract OriginMarketplaceV2 is
      * The sell price must be more than 0
      * The listing mustn't be expired
      */
-    function _isListingValid(address erc721Address, Listing memory listing)
-        private
-        view
-        returns (bool isValid)
-    {
+    function _isListingValid(address erc721Address, Listing memory listing) private view returns (bool isValid) {
         if (
             _isTokenOwner(erc721Address, listing.tokenId, listing.seller) &&
             (_isTokenApproved(erc721Address, listing.tokenId) ||
@@ -588,11 +495,7 @@ contract OriginMarketplaceV2 is
      * Bid price must > 0
      * Bid mustn't been expired
      */
-    function _isBidValid(address erc721Address, Bid memory bid)
-        private
-        view
-        returns (bool isValid)
-    {
+    function _isBidValid(address erc721Address, Bid memory bid) private view returns (bool isValid) {
         if (
             !_isTokenOwner(erc721Address, bid.tokenId, bid.bidder) &&
             _paymentToken.allowance(bid.bidder, address(this)) >= bid.value &&
@@ -620,11 +523,7 @@ contract OriginMarketplaceV2 is
      * @param tokenId erc721 token Id
      * @param bidder bidder address
      */
-    function _removeBidOfBidder(
-        address erc721Address,
-        uint256 tokenId,
-        address bidder
-    ) private {
+    function _removeBidOfBidder(address erc721Address, uint256 tokenId, address bidder) private {
         if (
             _erc721Market[erc721Address].bids[tokenId].bidders.contains(bidder)
         ) {
@@ -645,11 +544,7 @@ contract OriginMarketplaceV2 is
      * @dev Calculate service fee, royalty fee and left value
      * @param value bidder address
      */
-    function _calculateFees(address erc721Address, uint256 value)
-        private
-        view
-        returns (uint256 _serviceFee, uint256 _royaltyFee)
-    {
+    function _calculateFees(address erc721Address, uint256 value) private view returns (uint256 _serviceFee, uint256 _royaltyFee) {
         uint256 _royaltyFeeFraction = royalty(erc721Address).feeFraction;
         uint256 _baseFractions = 1000 +
             _serviceFeeFraction +

@@ -1,51 +1,37 @@
 import React, { useEffect, useMemo, useState } from "react";
 import UserNftCard from "../Cards/UserNftCard";
 import { NftData, UserNftGrid } from "@/types/types";
-import { useAccount } from "wagmi";
-import axios from "axios";
 import { factoryCompared } from "@/config/config";
 
-const UserNftGrid: React.FC<UserNftGrid> = ({ active }) => {
-  const { address } = useAccount();
-  const [userNfts, setUserNfts] = useState<any>([]);
-  const [currentNfts, setCurrentNfts] = useState<any>([])
+const UserNftGrid: React.FC<UserNftGrid> = ({ active, userNfts }) => {
+  const [currentNfts, setCurrentNfts] = useState<any>([]);
 
   const navNfts = useMemo(() => {
-    const returned: NftData[] = []
-    userNfts[0]?.map((nft: NftData) => {
-      if(nft.contract?.address === factoryCompared) {
-        returned.push(nft)
-      }
-    })
-    return returned
-  }, [userNfts])
-
-  
-  useEffect(() => {
-    const getNFTs = async () => {
-      const response = await axios.post("/api/nfts", {
-        address: address,
+    const returned: NftData[] = [];
+    //@ts-ignore
+    if (userNfts) {
+      userNfts[0]?.map((nft: NftData) => {
+        if (nft.contract?.address === factoryCompared) {
+          returned.push(nft);
+        }
       });
-      return response.data;
-    };
-    if (address) {
-      getNFTs().then((data) => setUserNfts([data?.ownedNfts]));
     }
-  }, [address]);
+    return returned;
+  }, [userNfts]);
 
   useEffect(() => {
-    if(active?.created === true) {
-      setCurrentNfts(navNfts)
-    } else if(active?.collected === true) {
-      setCurrentNfts(userNfts[0])
-    } else if(active?.collections === true) {
-      setCurrentNfts(navNfts)
-    } else if(active?.offersMade === true) {
-      setCurrentNfts(navNfts)
-    } else if(active?.offersReceived === true) {
-      setCurrentNfts(userNfts[0])
+    if (active?.created === true) {
+      setCurrentNfts(navNfts);
+    } else if (active?.collected === true) {
+      setCurrentNfts(userNfts[0]);
+    } else if (active?.collections === true) {
+      setCurrentNfts(navNfts);
+    } else if (active?.offersMade === true) {
+      setCurrentNfts(navNfts);
+    } else if (active?.offersReceived === true) {
+      setCurrentNfts(userNfts[0]);
     }
-  }, [active, userNfts, navNfts])
+  }, [active, userNfts, navNfts]);
 
   const NavItem = ({ nft }: { nft: NftData }) => {
     if (active?.created === true)
@@ -93,9 +79,7 @@ const UserNftGrid: React.FC<UserNftGrid> = ({ active }) => {
           nftId={nft.tokenId}
         />
       );
-    return <div>
-      
-    </div>;
+    return <div></div>;
   };
 
   return (

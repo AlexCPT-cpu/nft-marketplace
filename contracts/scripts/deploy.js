@@ -7,33 +7,22 @@
 const hre = require("hardhat");
 
 async function main() {
-  // const Factory = await hre.ethers.getContractFactory("OriginCreate");
-  // const MarketPlace = await hre.ethers.getContractFactory("OriginMarketplace");
+  const Factory = await hre.ethers.getContractFactory("OriginCreate");
+  const MarketPlace = await hre.ethers.getContractFactory(
+    "OriginMarketplaceV2"
+  );
 
-  // const marketPlace = await MarketPlace.deploy(
-  //   "8000",
-  //   "0xd05DB5264ECAB3C490f7Cc106104Ffe1075d3EeC"
-  // );
-  // await marketPlace.deployed();
+  const marketPlace = await MarketPlace.deploy(
+    "0x7c13C3B93b6c80E5ff6D47B7ffFB7C599E9D960A"
+  );
+  await marketPlace.deployed();
 
-  // const factory = await Factory.deploy(marketPlace.address);
-  // await factory.deployed();
+  const factory = await Factory.deploy(marketPlace.address);
+  await factory.deployed();
 
-  // console.log(` Factory Deployed to ${marketPlace.address}`);
+  console.log(` Factory Deployed to ${marketPlace.address}`);
 
-  // console.log(` MarketPlace Deployed to ${factory.address}`);
-  const Token = await hre.ethers.getContractFactory("PayToken");
-  const busd = await Token.deploy('BUSD')
-  const usdt = await Token.deploy('USDT')
-  const bnb = await Token.deploy('BNB')
-
-  await busd.deployed()
-  await usdt.deployed()
-  await bnb.deployed()
-
-  console.log(`busd ${busd.address}`)
-  console.log(`usdt ${usdt.address}`)
-  console.log(`bnb ${bnb.address}`)
+  console.log(` MarketPlace Deployed to ${factory.address}`);
 
   // await hre.run(`verify:verify`, {
   //   address: marketPlace.address,
@@ -57,6 +46,7 @@ main().catch((error) => {
 });
 
 /*
- Factory Deployed to 0x122eadba42fdA628654a1Aa09adC4664b6ef2110
- MarketPlace Deployed to 0x10A20bE71a7161cf81d2511e987fa91225865a32
+ Factory Deployed to 0x76F69BE8739b4B0D8A23c498b880614aA01bA91B
+ MarketPlace Deployed to 0x9b16A72bECd3F3f9354F9EA71751ABC532229a28
+ npx hardhat verify --network goerli 0x9b16A72bECd3F3f9354F9EA71751ABC532229a28 "0x7c13C3B93b6c80E5ff6D47B7ffFB7C599E9D960A"
 */

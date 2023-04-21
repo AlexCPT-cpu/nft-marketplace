@@ -8,7 +8,7 @@ const useCancel = (collectionAddress: string, tokenId: string | number) => {
         // @ts-ignore
         address: marketPlace,
         abi: Marketplace,
-        functionName: "cancelListedNFT",
+        functionName: "delistToken",
         args: [collectionAddress, tokenId],
       });
     

@@ -96,6 +96,7 @@ export interface UserCardProps {
 
 export interface UserNftGrid {
   active?: ActiveProps;
+  userNfts?: any[]
 }
 
 export interface ActiveProps {

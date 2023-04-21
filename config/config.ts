@@ -15,10 +15,16 @@ const options = {
 
 export const factory = "0xE10AA05Fcbd15Ba004683CA8109E367a5e32c27D";
 export const factoryCompared = '0xe10aa05fcbd15ba004683ca8109e367a5e32c27d'
-export const marketPlace = "0x0267B48a3D4BcDd334541CD7D2656DF6b6fE7021";
+export const marketPlace = "0x9b16A72bECd3F3f9354F9EA71751ABC532229a28";
 export const USDT = '0x5C60F27A2F569A4F559B5AeF5E0338B85eBe43E3'
 export const BUSD = '0x678a7d9e71Ef547D48164a0207836aa37Bbb13c0'
 export const BNB = '0x7c13C3B93b6c80E5ff6D47B7ffFB7C599E9D960A'
+
+export const Factory = '0x76F69BE8739b4B0D8A23c498b880614aA01bA91B'
+export const MarketPlace = '0x0267B48a3D4BcDd334541CD7D2656DF6b6fE7021'
+//BNB is used as WBNB here
+
+//current marketplace add ress is V2 market and V1 is Marketplace same goes for abi
 
 export const client = ipfsHttpClient(options);
 

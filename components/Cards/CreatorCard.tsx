@@ -1,5 +1,5 @@
 import { CreatorProps } from "@/types/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import {
   ClipboardDocumentCheckIcon,
@@ -13,6 +13,7 @@ import truncateEthAddress from "truncate-eth-address";
 import useCopyToClipboard from "@/hooks/CopyToClipBoard";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import fetch from "@/helpers/fetch";
 
 const CreatorCard = ({
   image,
@@ -25,6 +26,21 @@ const CreatorCard = ({
 }: CreatorProps) => {
   const [copyToBoard, setCopyToBoard] = useState<boolean>(false);
   const [value, copy] = useCopyToClipboard();
+  const [list, setList] = useState(0);
+
+  useEffect(() => {
+    const creatorData = async () => {
+      if (address) {
+        const response = await fetch("POST", "/api/nfts", {
+          address: address,
+        });
+        setList(response.data.ownedNfts.length);
+      }
+    };
+
+    creatorData();
+  }, [address]);
+
 
   const setCopyAddress = (addr: string) => {
     const notification = toast.success("Copied ... 😉");
@@ -36,7 +52,6 @@ const CreatorCard = ({
   };
 
   return (
-    <Link href={`/user/${address ?? "1"}`}>
       <div className="border border-yellow-400 dark:bg-[#041824] dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
         <div className="flex flex-col space-y-5">
           <div className="relative">
@@ -47,7 +62,7 @@ const CreatorCard = ({
               height={200}
               alt="card image"
             />
-            <Link href="/">
+            <Link href={`/user/${address ?? "1"}`}>
               <Image
                 className="object-cover absolute ring-1 bg-slate-800/30 ring-gray-300 w-16 top-12 cursor-pointer left-24 rounded-full mb-5"
                 src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${name}`}
@@ -62,21 +77,18 @@ const CreatorCard = ({
           </div>
 
           <div className="text-black dark:text-neutral-400 text-lg font-semibold text-center">
-            <Link href="/">Stephine Smith</Link>
+          <Link href={`/user/${address ?? "1"}`}>{name}</Link>
             <div className="text-black dark:text-gray-600 text-base text-center flex flex-row justify-center mt-1">
-              {truncateEthAddress(
-                `${address ?? "0xb16c1342E617A5B6E4b631EB114483FDB289c0A4"}`
-              )}
+              {truncateEthAddress(`${address}`)}
               {copyToBoard ? (
                 <ClipboardDocumentCheckIcon className="w-4 cursor-pointer ml-3" />
               ) : (
                 <DocumentDuplicateIcon
                   className="w-4 cursor-pointer ml-3"
-                  onClick={() =>
-                    setCopyAddress(
-                      address ?? "0xb16c1342E617A5B6E4b631EB114483FDB289c0A4"
-                    )
-                  }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCopyAddress(address!);
+                  }}
                 />
               )}
             </div>
@@ -112,13 +124,13 @@ const CreatorCard = ({
 
             <div className="flex flex-col">
               <div className="text-black dark:text-neutral-400 font-bold text-xl">
-                {items}
+                {list}
               </div>
               <div className="text-black dark:text-gray-600">Items</div>
             </div>
           </div>
 
-          <Link href="/user/1">
+          <Link href={`/user/${address ?? "1"}`}>
             <div className="group text-center space-x-3  pl-20 flex justify-center items-center border rounded-full border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition from-[#feb019] to-[#ef7e56]">
               <div className="">
                 <svg
@@ -146,7 +158,6 @@ const CreatorCard = ({
           </Link>
         </div>
       </div>
-    </Link>
   );
 };
 

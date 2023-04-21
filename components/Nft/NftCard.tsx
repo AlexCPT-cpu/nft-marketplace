@@ -17,8 +17,6 @@ import BidModal from "../Modals/BidModal";
 import useCancel from "@/hooks/cancels/useCancel";
 import Loader from "../Html/Loader";
 import BuyModal from "../Modals/BuyModal";
-import AuctionModal from "../Modals/AuctionModal";
-import MakeOfferModal from "../Modals/MakeOfferModal";
 import { MarketContext } from "@/context/marketplaceContext";
 import getCollectionName from "@/helpers/getCollectionName";
 import truncateEthAddress from "truncate-eth-address";
@@ -41,8 +39,6 @@ const NftCard = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBidModal, setBidModal] = useState(false);
   const [isBuyModal, setBuyModal] = useState(false);
-  const [isAuctionModal, setAuctionModal] = useState(false);
-  const [isMakeOfferModal, setIsMakeOfferModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isAuction, setIsAuction] = useState(false);
   const [isOffer, setIsOffer] = useState(false);
@@ -111,9 +107,9 @@ const NftCard = ({
   return (
     <div className="border dark:bg-[#041824] border-black dark:border-[#092940] p-4 rounded-md hover:shadow-xl">
       <div className="flex flex-col lg:flex-row lg:justify-between w-full">
-        <div className="relative lg:mr-3 flex justify-center">
+        <div className="relative lg:mr-3 flex w-full justify-center">
           <Image
-            className="object-cover w-full h-[300px] lg:w-[400px] lg:h-[400px] rounded-md mb-5 mx-auto flex"
+            className="xl:w-[400px] xl:h-[400px] w-[400px] h-[320px] rounded-lg mb-5 mx-auto flex object-cover"
             src={image!}
             width={200}
             height={200}
@@ -154,21 +150,17 @@ const NftCard = ({
             fileUrl={image}
             nftId={nftId}
           />
-          <BidModal isOpen={isBidModal} setIsOpen={setBidModal} fileUrl={""} />
-
-          <BuyModal isOpen={isBuyModal} setIsOpen={setBuyModal} fileUrl={""} />
-
-          <MakeOfferModal
-            isOpen={isMakeOfferModal}
-            setIsOpen={setIsMakeOfferModal}
-            fileUrl={""}
+          <BidModal
+            isOpen={isBidModal}
+            setIsOpen={setBidModal}
+            fileUrl={image}
             nftId={nftId}
           />
 
-          <AuctionModal
-            isOpen={isAuctionModal}
-            setIsOpen={setAuctionModal}
-            fileUrl={""}
+          <BuyModal
+            isOpen={isBuyModal}
+            setIsOpen={setBuyModal}
+            fileUrl={image}
             nftId={nftId}
           />
 
@@ -200,21 +192,7 @@ const NftCard = ({
                     </span>
                   </div>
                 ) : (
-                  <>
-                    {isOffer ? (
-                      <div
-                        onClick={() => {
-                          setIsMakeOfferModal(true);
-                        }}
-                        className="flex flex-row border rounded-full w-fit border-yellow-400 items-center dark:border-yellow-400 px-8 py-3 cursor-pointer group hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
-                      >
-                        <BanknotesIcon className="w-6 group-hover:fill-white items-center fill-yellow-400" />{" "}
-                        <span className="dark:text-neutral-500 text-black text-lg ml-3 text-center whitespace-nowrap">
-                          Make Offer
-                        </span>
-                      </div>
-                    ) : null}
-                  </>
+                  <></>
                 )}
               </>
             )}
@@ -234,19 +212,7 @@ const NftCard = ({
                       Cancel Sell
                     </span>
                   </div>
-                ) : (
-                  <div
-                    onClick={() => {
-                      setAuctionModal(true);
-                    }}
-                    className="flex flex-row border group rounded-full w-fit items-center border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
-                  >
-                    <ShoppingCartIcon className="w-6 group-hover:fill-white fill-yellow-400" />{" "}
-                    <span className="dark:text-neutral-500 text-black text-lg ml-3 text-center whitespace-nowrap">
-                      Auction NFT
-                    </span>
-                  </div>
-                )}
+                ) : null}
               </>
             ) : (
               <>
@@ -268,12 +234,12 @@ const NftCard = ({
           </div>
         </div>
 
-        <div className="flex flex-col space-y-4 mr-0 lg:mr-60 lg:justify-center justify-start my-5 lg:mt-0 items-center">
+        <div className="flex flex-col space-y-4 mr-0 xl:mr-52 lg:ml-11 lg:justify-center justify-start my-5 lg:mt-0 items-center">
           <div className="flex items-center justify-start lg:justify-center mr-auto flex-row">
             <div className="ring-1 ring-gray-300 dark:ring-gray-300 bg-slate-500/5 p-1 rounded-full">
               <Image
                 className="w-10 cursor-pointer rounded-full"
-                src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${name}`}
+                src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${creator}`}
                 alt="avatar"
                 width={50}
                 height={50}
@@ -293,7 +259,7 @@ const NftCard = ({
             <div className="ring-1 ring-gray-300 dark:ring-gray-300 bg-slate-500/5 p-1 rounded-full">
               <Image
                 className="w-10 cursor-pointer rounded-full"
-                src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${name}`}
+                src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${Own}`}
                 alt="avatar"
                 width={50}
                 height={50}

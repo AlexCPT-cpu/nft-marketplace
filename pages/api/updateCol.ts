@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prismadb from "@/lib/prismadb";
-import type { User } from "@prisma/client";
+import type { Collection, User } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<User>
+  res: NextApiResponse<User | Collection>
 ) {
   if (req.method === "POST") {
     try {
@@ -18,43 +18,28 @@ export default async function handler(
         instaUsername,
         twitterUsername,
         facebookUsername,
-        items,
-        owners,
         description,
       } = req.body;
 
       const collection = await prismadb.collection.create({
         data: {
           name,
-          logo,
+          logo: '',
           address: collectionAddress,
-          background,
+          background: '',
           instaUsername,
           twitterUsername,
           facebookUsername,
           volume: 0,
-          items,
-          owners,
           sold: 0,
-          likes: 0,
+          likes: 2,
           floorPrice: 0,
           description,
-          creator,
+          creator: '',
         },
       });
 
-      const updatedUser = await prismadb.user.update({
-        where: {
-          address,
-        },
-        data: {
-          collections: {
-            push: collection.id,
-          },
-        },
-      });
-
-      res.status(200).json(updatedUser);
+      res.status(200).json(collection);
     } catch (ex) {
       console.log(ex);
       res.status(500).end();
