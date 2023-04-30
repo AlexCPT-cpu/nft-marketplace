@@ -1,4 +1,4 @@
-// Sources flattened with hardhat v2.13.0 https://hardhat.org
+// Sources flattened with hardhat v2.14.0 https://hardhat.org
 
 // File @openzeppelin/contracts/utils/Context.sol@v4.8.2
 
@@ -113,6 +113,70 @@ abstract contract Ownable is Context {
 }
 
 
+// File @openzeppelin/contracts/token/ERC20/extensions/draft-IERC20Permit.sol@v4.8.2
+
+// SPDX-License-Identifier: MIT
+// OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/draft-IERC20Permit.sol)
+
+pragma solidity ^0.8.0;
+
+/**
+ * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
+ * https://eips.ethereum.org/EIPS/eip-2612[EIP-2612].
+ *
+ * Adds the {permit} method, which can be used to change an account's ERC20 allowance (see {IERC20-allowance}) by
+ * presenting a message signed by the account. By not relying on {IERC20-approve}, the token holder account doesn't
+ * need to send a transaction, and thus is not required to hold Ether at all.
+ */
+interface IERC20Permit {
+    /**
+     * @dev Sets `value` as the allowance of `spender` over ``owner``'s tokens,
+     * given ``owner``'s signed approval.
+     *
+     * IMPORTANT: The same issues {IERC20-approve} has related to transaction
+     * ordering also apply here.
+     *
+     * Emits an {Approval} event.
+     *
+     * Requirements:
+     *
+     * - `spender` cannot be the zero address.
+     * - `deadline` must be a timestamp in the future.
+     * - `v`, `r` and `s` must be a valid `secp256k1` signature from `owner`
+     * over the EIP712-formatted function arguments.
+     * - the signature must use ``owner``'s current nonce (see {nonces}).
+     *
+     * For more information on the signature format, see the
+     * https://eips.ethereum.org/EIPS/eip-2612#specification[relevant EIP
+     * section].
+     */
+    function permit(
+        address owner,
+        address spender,
+        uint256 value,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external;
+
+    /**
+     * @dev Returns the current nonce for `owner`. This value must be
+     * included whenever a signature is generated for {permit}.
+     *
+     * Every successful call to {permit} increases ``owner``'s nonce by one. This
+     * prevents a signature from being used multiple times.
+     */
+    function nonces(address owner) external view returns (uint256);
+
+    /**
+     * @dev Returns the domain separator used in the encoding of the signature for {permit}, as defined by {EIP712}.
+     */
+    // solhint-disable-next-line func-name-mixedcase
+    function DOMAIN_SEPARATOR() external view returns (bytes32);
+}
+
+
 // File @openzeppelin/contracts/token/ERC20/IERC20.sol@v4.8.2
 
 // SPDX-License-Identifier: MIT
@@ -199,501 +263,2032 @@ interface IERC20 {
 }
 
 
-// File @openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol@v4.8.2
+// File @openzeppelin/contracts/utils/Address.sol@v4.8.2
 
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/IERC20Metadata.sol)
+// OpenZeppelin Contracts (last updated v4.8.0) (utils/Address.sol)
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 /**
- * @dev Interface for the optional metadata functions from the ERC20 standard.
- *
- * _Available since v4.1._
+ * @dev Collection of functions related to the address type
  */
-interface IERC20Metadata is IERC20 {
+library Address {
     /**
-     * @dev Returns the name of the token.
+     * @dev Returns true if `account` is a contract.
+     *
+     * [IMPORTANT]
+     * ====
+     * It is unsafe to assume that an address for which this function returns
+     * false is an externally-owned account (EOA) and not a contract.
+     *
+     * Among others, `isContract` will return false for the following
+     * types of addresses:
+     *
+     *  - an externally-owned account
+     *  - a contract in construction
+     *  - an address where a contract will be created
+     *  - an address where a contract lived, but was destroyed
+     * ====
+     *
+     * [IMPORTANT]
+     * ====
+     * You shouldn't rely on `isContract` to protect against flash loan attacks!
+     *
+     * Preventing calls from contracts is highly discouraged. It breaks composability, breaks support for smart wallets
+     * like Gnosis Safe, and does not provide security since it can be circumvented by calling from a contract
+     * constructor.
+     * ====
      */
-    function name() external view returns (string memory);
+    function isContract(address account) internal view returns (bool) {
+        // This method relies on extcodesize/address.code.length, which returns 0
+        // for contracts in construction, since the code is only stored at the end
+        // of the constructor execution.
+
+        return account.code.length > 0;
+    }
 
     /**
-     * @dev Returns the symbol of the token.
+     * @dev Replacement for Solidity's `transfer`: sends `amount` wei to
+     * `recipient`, forwarding all available gas and reverting on errors.
+     *
+     * https://eips.ethereum.org/EIPS/eip-1884[EIP1884] increases the gas cost
+     * of certain opcodes, possibly making contracts go over the 2300 gas limit
+     * imposed by `transfer`, making them unable to receive funds via
+     * `transfer`. {sendValue} removes this limitation.
+     *
+     * https://diligence.consensys.net/posts/2019/09/stop-using-soliditys-transfer-now/[Learn more].
+     *
+     * IMPORTANT: because control is transferred to `recipient`, care must be
+     * taken to not create reentrancy vulnerabilities. Consider using
+     * {ReentrancyGuard} or the
+     * https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].
      */
-    function symbol() external view returns (string memory);
+    function sendValue(address payable recipient, uint256 amount) internal {
+        require(address(this).balance >= amount, "Address: insufficient balance");
+
+        (bool success, ) = recipient.call{value: amount}("");
+        require(success, "Address: unable to send value, recipient may have reverted");
+    }
 
     /**
-     * @dev Returns the decimals places of the token.
+     * @dev Performs a Solidity function call using a low level `call`. A
+     * plain `call` is an unsafe replacement for a function call: use this
+     * function instead.
+     *
+     * If `target` reverts with a revert reason, it is bubbled up by this
+     * function (like regular Solidity function calls).
+     *
+     * Returns the raw returned data. To convert to the expected return value,
+     * use https://solidity.readthedocs.io/en/latest/units-and-global-variables.html?highlight=abi.decode#abi-encoding-and-decoding-functions[`abi.decode`].
+     *
+     * Requirements:
+     *
+     * - `target` must be a contract.
+     * - calling `target` with `data` must not revert.
+     *
+     * _Available since v3.1._
      */
-    function decimals() external view returns (uint8);
+    function functionCall(address target, bytes memory data) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, 0, "Address: low-level call failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`], but with
+     * `errorMessage` as a fallback revert reason when `target` reverts.
+     *
+     * _Available since v3.1._
+     */
+    function functionCall(
+        address target,
+        bytes memory data,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, 0, errorMessage);
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],
+     * but also transferring `value` wei to `target`.
+     *
+     * Requirements:
+     *
+     * - the calling contract must have an ETH balance of at least `value`.
+     * - the called Solidity function must be `payable`.
+     *
+     * _Available since v3.1._
+     */
+    function functionCallWithValue(
+        address target,
+        bytes memory data,
+        uint256 value
+    ) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, value, "Address: low-level call with value failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCallWithValue-address-bytes-uint256-}[`functionCallWithValue`], but
+     * with `errorMessage` as a fallback revert reason when `target` reverts.
+     *
+     * _Available since v3.1._
+     */
+    function functionCallWithValue(
+        address target,
+        bytes memory data,
+        uint256 value,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
+        require(address(this).balance >= value, "Address: insufficient balance for call");
+        (bool success, bytes memory returndata) = target.call{value: value}(data);
+        return verifyCallResultFromTarget(target, success, returndata, errorMessage);
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],
+     * but performing a static call.
+     *
+     * _Available since v3.3._
+     */
+    function functionStaticCall(address target, bytes memory data) internal view returns (bytes memory) {
+        return functionStaticCall(target, data, "Address: low-level static call failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`],
+     * but performing a static call.
+     *
+     * _Available since v3.3._
+     */
+    function functionStaticCall(
+        address target,
+        bytes memory data,
+        string memory errorMessage
+    ) internal view returns (bytes memory) {
+        (bool success, bytes memory returndata) = target.staticcall(data);
+        return verifyCallResultFromTarget(target, success, returndata, errorMessage);
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],
+     * but performing a delegate call.
+     *
+     * _Available since v3.4._
+     */
+    function functionDelegateCall(address target, bytes memory data) internal returns (bytes memory) {
+        return functionDelegateCall(target, data, "Address: low-level delegate call failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`],
+     * but performing a delegate call.
+     *
+     * _Available since v3.4._
+     */
+    function functionDelegateCall(
+        address target,
+        bytes memory data,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
+        (bool success, bytes memory returndata) = target.delegatecall(data);
+        return verifyCallResultFromTarget(target, success, returndata, errorMessage);
+    }
+
+    /**
+     * @dev Tool to verify that a low level call to smart-contract was successful, and revert (either by bubbling
+     * the revert reason or using the provided one) in case of unsuccessful call or if target was not a contract.
+     *
+     * _Available since v4.8._
+     */
+    function verifyCallResultFromTarget(
+        address target,
+        bool success,
+        bytes memory returndata,
+        string memory errorMessage
+    ) internal view returns (bytes memory) {
+        if (success) {
+            if (returndata.length == 0) {
+                // only check isContract if the call was successful and the return data is empty
+                // otherwise we already know that it was a contract
+                require(isContract(target), "Address: call to non-contract");
+            }
+            return returndata;
+        } else {
+            _revert(returndata, errorMessage);
+        }
+    }
+
+    /**
+     * @dev Tool to verify that a low level call was successful, and revert if it wasn't, either by bubbling the
+     * revert reason or using the provided one.
+     *
+     * _Available since v4.3._
+     */
+    function verifyCallResult(
+        bool success,
+        bytes memory returndata,
+        string memory errorMessage
+    ) internal pure returns (bytes memory) {
+        if (success) {
+            return returndata;
+        } else {
+            _revert(returndata, errorMessage);
+        }
+    }
+
+    function _revert(bytes memory returndata, string memory errorMessage) private pure {
+        // Look for revert reason and bubble it up if present
+        if (returndata.length > 0) {
+            // The easiest way to bubble the revert reason is using memory via assembly
+            /// @solidity memory-safe-assembly
+            assembly {
+                let returndata_size := mload(returndata)
+                revert(add(32, returndata), returndata_size)
+            }
+        } else {
+            revert(errorMessage);
+        }
+    }
 }
 
 
-// File @openzeppelin/contracts/token/ERC20/ERC20.sol@v4.8.2
+// File @openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol@v4.8.2
 
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v4.8.0) (token/ERC20/ERC20.sol)
+// OpenZeppelin Contracts (last updated v4.8.0) (token/ERC20/utils/SafeERC20.sol)
 
 pragma solidity ^0.8.0;
 
 
 
 /**
- * @dev Implementation of the {IERC20} interface.
- *
- * This implementation is agnostic to the way tokens are created. This means
- * that a supply mechanism has to be added in a derived contract using {_mint}.
- * For a generic mechanism see {ERC20PresetMinterPauser}.
- *
- * TIP: For a detailed writeup see our guide
- * https://forum.openzeppelin.com/t/how-to-implement-erc20-supply-mechanisms/226[How
- * to implement supply mechanisms].
- *
- * We have followed general OpenZeppelin Contracts guidelines: functions revert
- * instead returning `false` on failure. This behavior is nonetheless
- * conventional and does not conflict with the expectations of ERC20
- * applications.
- *
- * Additionally, an {Approval} event is emitted on calls to {transferFrom}.
- * This allows applications to reconstruct the allowance for all accounts just
- * by listening to said events. Other implementations of the EIP may not emit
- * these events, as it isn't required by the specification.
- *
- * Finally, the non-standard {decreaseAllowance} and {increaseAllowance}
- * functions have been added to mitigate the well-known issues around setting
- * allowances. See {IERC20-approve}.
+ * @title SafeERC20
+ * @dev Wrappers around ERC20 operations that throw on failure (when the token
+ * contract returns false). Tokens that return no value (and instead revert or
+ * throw on failure) are also supported, non-reverting calls are assumed to be
+ * successful.
+ * To use this library you can add a `using SafeERC20 for IERC20;` statement to your contract,
+ * which allows you to call the safe operations as `token.safeTransfer(...)`, etc.
  */
-contract ERC20 is Context, IERC20, IERC20Metadata {
-    mapping(address => uint256) private _balances;
+library SafeERC20 {
+    using Address for address;
 
-    mapping(address => mapping(address => uint256)) private _allowances;
-
-    uint256 private _totalSupply;
-
-    string private _name;
-    string private _symbol;
-
-    /**
-     * @dev Sets the values for {name} and {symbol}.
-     *
-     * The default value of {decimals} is 18. To select a different value for
-     * {decimals} you should overload it.
-     *
-     * All two of these values are immutable: they can only be set once during
-     * construction.
-     */
-    constructor(string memory name_, string memory symbol_) {
-        _name = name_;
-        _symbol = symbol_;
+    function safeTransfer(
+        IERC20 token,
+        address to,
+        uint256 value
+    ) internal {
+        _callOptionalReturn(token, abi.encodeWithSelector(token.transfer.selector, to, value));
     }
 
-    /**
-     * @dev Returns the name of the token.
-     */
-    function name() public view virtual override returns (string memory) {
-        return _name;
-    }
-
-    /**
-     * @dev Returns the symbol of the token, usually a shorter version of the
-     * name.
-     */
-    function symbol() public view virtual override returns (string memory) {
-        return _symbol;
-    }
-
-    /**
-     * @dev Returns the number of decimals used to get its user representation.
-     * For example, if `decimals` equals `2`, a balance of `505` tokens should
-     * be displayed to a user as `5.05` (`505 / 10 ** 2`).
-     *
-     * Tokens usually opt for a value of 18, imitating the relationship between
-     * Ether and Wei. This is the value {ERC20} uses, unless this function is
-     * overridden;
-     *
-     * NOTE: This information is only used for _display_ purposes: it in
-     * no way affects any of the arithmetic of the contract, including
-     * {IERC20-balanceOf} and {IERC20-transfer}.
-     */
-    function decimals() public view virtual override returns (uint8) {
-        return 18;
-    }
-
-    /**
-     * @dev See {IERC20-totalSupply}.
-     */
-    function totalSupply() public view virtual override returns (uint256) {
-        return _totalSupply;
-    }
-
-    /**
-     * @dev See {IERC20-balanceOf}.
-     */
-    function balanceOf(address account) public view virtual override returns (uint256) {
-        return _balances[account];
-    }
-
-    /**
-     * @dev See {IERC20-transfer}.
-     *
-     * Requirements:
-     *
-     * - `to` cannot be the zero address.
-     * - the caller must have a balance of at least `amount`.
-     */
-    function transfer(address to, uint256 amount) public virtual override returns (bool) {
-        address owner = _msgSender();
-        _transfer(owner, to, amount);
-        return true;
-    }
-
-    /**
-     * @dev See {IERC20-allowance}.
-     */
-    function allowance(address owner, address spender) public view virtual override returns (uint256) {
-        return _allowances[owner][spender];
-    }
-
-    /**
-     * @dev See {IERC20-approve}.
-     *
-     * NOTE: If `amount` is the maximum `uint256`, the allowance is not updated on
-     * `transferFrom`. This is semantically equivalent to an infinite approval.
-     *
-     * Requirements:
-     *
-     * - `spender` cannot be the zero address.
-     */
-    function approve(address spender, uint256 amount) public virtual override returns (bool) {
-        address owner = _msgSender();
-        _approve(owner, spender, amount);
-        return true;
-    }
-
-    /**
-     * @dev See {IERC20-transferFrom}.
-     *
-     * Emits an {Approval} event indicating the updated allowance. This is not
-     * required by the EIP. See the note at the beginning of {ERC20}.
-     *
-     * NOTE: Does not update the allowance if the current allowance
-     * is the maximum `uint256`.
-     *
-     * Requirements:
-     *
-     * - `from` and `to` cannot be the zero address.
-     * - `from` must have a balance of at least `amount`.
-     * - the caller must have allowance for ``from``'s tokens of at least
-     * `amount`.
-     */
-    function transferFrom(
+    function safeTransferFrom(
+        IERC20 token,
         address from,
         address to,
-        uint256 amount
-    ) public virtual override returns (bool) {
-        address spender = _msgSender();
-        _spendAllowance(from, spender, amount);
-        _transfer(from, to, amount);
-        return true;
+        uint256 value
+    ) internal {
+        _callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));
     }
 
     /**
-     * @dev Atomically increases the allowance granted to `spender` by the caller.
+     * @dev Deprecated. This function has issues similar to the ones found in
+     * {IERC20-approve}, and its usage is discouraged.
      *
-     * This is an alternative to {approve} that can be used as a mitigation for
-     * problems described in {IERC20-approve}.
-     *
-     * Emits an {Approval} event indicating the updated allowance.
-     *
-     * Requirements:
-     *
-     * - `spender` cannot be the zero address.
+     * Whenever possible, use {safeIncreaseAllowance} and
+     * {safeDecreaseAllowance} instead.
      */
-    function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
-        address owner = _msgSender();
-        _approve(owner, spender, allowance(owner, spender) + addedValue);
-        return true;
+    function safeApprove(
+        IERC20 token,
+        address spender,
+        uint256 value
+    ) internal {
+        // safeApprove should only be called when setting an initial allowance,
+        // or when resetting it to zero. To increase and decrease it, use
+        // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'
+        require(
+            (value == 0) || (token.allowance(address(this), spender) == 0),
+            "SafeERC20: approve from non-zero to non-zero allowance"
+        );
+        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));
     }
 
-    /**
-     * @dev Atomically decreases the allowance granted to `spender` by the caller.
-     *
-     * This is an alternative to {approve} that can be used as a mitigation for
-     * problems described in {IERC20-approve}.
-     *
-     * Emits an {Approval} event indicating the updated allowance.
-     *
-     * Requirements:
-     *
-     * - `spender` cannot be the zero address.
-     * - `spender` must have allowance for the caller of at least
-     * `subtractedValue`.
-     */
-    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
-        address owner = _msgSender();
-        uint256 currentAllowance = allowance(owner, spender);
-        require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
+    function safeIncreaseAllowance(
+        IERC20 token,
+        address spender,
+        uint256 value
+    ) internal {
+        uint256 newAllowance = token.allowance(address(this), spender) + value;
+        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));
+    }
+
+    function safeDecreaseAllowance(
+        IERC20 token,
+        address spender,
+        uint256 value
+    ) internal {
         unchecked {
-            _approve(owner, spender, currentAllowance - subtractedValue);
+            uint256 oldAllowance = token.allowance(address(this), spender);
+            require(oldAllowance >= value, "SafeERC20: decreased allowance below zero");
+            uint256 newAllowance = oldAllowance - value;
+            _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));
         }
+    }
 
-        return true;
+    function safePermit(
+        IERC20Permit token,
+        address owner,
+        address spender,
+        uint256 value,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) internal {
+        uint256 nonceBefore = token.nonces(owner);
+        token.permit(owner, spender, value, deadline, v, r, s);
+        uint256 nonceAfter = token.nonces(owner);
+        require(nonceAfter == nonceBefore + 1, "SafeERC20: permit did not succeed");
     }
 
     /**
-     * @dev Moves `amount` of tokens from `from` to `to`.
+     * @dev Imitates a Solidity high-level call (i.e. a regular function call to a contract), relaxing the requirement
+     * on the return value: the return value is optional (but if data is returned, it must not be false).
+     * @param token The token targeted by the call.
+     * @param data The call data (encoded using abi.encode or one of its variants).
+     */
+    function _callOptionalReturn(IERC20 token, bytes memory data) private {
+        // We need to perform a low level call here, to bypass Solidity's return data size checking mechanism, since
+        // we're implementing it ourselves. We use {Address-functionCall} to perform this call, which verifies that
+        // the target address contains contract code and also asserts for success in the low-level call.
+
+        bytes memory returndata = address(token).functionCall(data, "SafeERC20: low-level call failed");
+        if (returndata.length > 0) {
+            // Return data is optional
+            require(abi.decode(returndata, (bool)), "SafeERC20: ERC20 operation did not succeed");
+        }
+    }
+}
+
+
+// File @openzeppelin/contracts/utils/introspection/IERC165.sol@v4.8.2
+
+// SPDX-License-Identifier: MIT
+// OpenZeppelin Contracts v4.4.1 (utils/introspection/IERC165.sol)
+
+pragma solidity ^0.8.0;
+
+/**
+ * @dev Interface of the ERC165 standard, as defined in the
+ * https://eips.ethereum.org/EIPS/eip-165[EIP].
+ *
+ * Implementers can declare support of contract interfaces, which can then be
+ * queried by others ({ERC165Checker}).
+ *
+ * For an implementation, see {ERC165}.
+ */
+interface IERC165 {
+    /**
+     * @dev Returns true if this contract implements the interface defined by
+     * `interfaceId`. See the corresponding
+     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+     * to learn more about how these ids are created.
      *
-     * This internal function is equivalent to {transfer}, and can be used to
-     * e.g. implement automatic token fees, slashing mechanisms, etc.
+     * This function call must use less than 30 000 gas.
+     */
+    function supportsInterface(bytes4 interfaceId) external view returns (bool);
+}
+
+
+// File @openzeppelin/contracts/token/ERC721/IERC721.sol@v4.8.2
+
+// SPDX-License-Identifier: MIT
+// OpenZeppelin Contracts (last updated v4.8.0) (token/ERC721/IERC721.sol)
+
+pragma solidity ^0.8.0;
+
+/**
+ * @dev Required interface of an ERC721 compliant contract.
+ */
+interface IERC721 is IERC165 {
+    /**
+     * @dev Emitted when `tokenId` token is transferred from `from` to `to`.
+     */
+    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+
+    /**
+     * @dev Emitted when `owner` enables `approved` to manage the `tokenId` token.
+     */
+    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
+
+    /**
+     * @dev Emitted when `owner` enables or disables (`approved`) `operator` to manage all of its assets.
+     */
+    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
+
+    /**
+     * @dev Returns the number of tokens in ``owner``'s account.
+     */
+    function balanceOf(address owner) external view returns (uint256 balance);
+
+    /**
+     * @dev Returns the owner of the `tokenId` token.
      *
-     * Emits a {Transfer} event.
+     * Requirements:
+     *
+     * - `tokenId` must exist.
+     */
+    function ownerOf(uint256 tokenId) external view returns (address owner);
+
+    /**
+     * @dev Safely transfers `tokenId` token from `from` to `to`.
      *
      * Requirements:
      *
      * - `from` cannot be the zero address.
      * - `to` cannot be the zero address.
-     * - `from` must have a balance of at least `amount`.
+     * - `tokenId` token must exist and be owned by `from`.
+     * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.
+     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
+     *
+     * Emits a {Transfer} event.
      */
-    function _transfer(
+    function safeTransferFrom(
         address from,
         address to,
-        uint256 amount
-    ) internal virtual {
-        require(from != address(0), "ERC20: transfer from the zero address");
-        require(to != address(0), "ERC20: transfer to the zero address");
+        uint256 tokenId,
+        bytes calldata data
+    ) external;
 
-        _beforeTokenTransfer(from, to, amount);
-
-        uint256 fromBalance = _balances[from];
-        require(fromBalance >= amount, "ERC20: transfer amount exceeds balance");
-        unchecked {
-            _balances[from] = fromBalance - amount;
-            // Overflow not possible: the sum of all balances is capped by totalSupply, and the sum is preserved by
-            // decrementing then incrementing.
-            _balances[to] += amount;
-        }
-
-        emit Transfer(from, to, amount);
-
-        _afterTokenTransfer(from, to, amount);
-    }
-
-    /** @dev Creates `amount` tokens and assigns them to `account`, increasing
-     * the total supply.
-     *
-     * Emits a {Transfer} event with `from` set to the zero address.
+    /**
+     * @dev Safely transfers `tokenId` token from `from` to `to`, checking first that contract recipients
+     * are aware of the ERC721 protocol to prevent tokens from being forever locked.
      *
      * Requirements:
      *
-     * - `account` cannot be the zero address.
+     * - `from` cannot be the zero address.
+     * - `to` cannot be the zero address.
+     * - `tokenId` token must exist and be owned by `from`.
+     * - If the caller is not `from`, it must have been allowed to move this token by either {approve} or {setApprovalForAll}.
+     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
+     *
+     * Emits a {Transfer} event.
      */
-    function _mint(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: mint to the zero address");
-
-        _beforeTokenTransfer(address(0), account, amount);
-
-        _totalSupply += amount;
-        unchecked {
-            // Overflow not possible: balance + amount is at most totalSupply + amount, which is checked above.
-            _balances[account] += amount;
-        }
-        emit Transfer(address(0), account, amount);
-
-        _afterTokenTransfer(address(0), account, amount);
-    }
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external;
 
     /**
-     * @dev Destroys `amount` tokens from `account`, reducing the
-     * total supply.
+     * @dev Transfers `tokenId` token from `from` to `to`.
      *
-     * Emits a {Transfer} event with `to` set to the zero address.
+     * WARNING: Note that the caller is responsible to confirm that the recipient is capable of receiving ERC721
+     * or else they may be permanently lost. Usage of {safeTransferFrom} prevents loss, though the caller must
+     * understand this adds an external call which potentially creates a reentrancy vulnerability.
      *
      * Requirements:
      *
-     * - `account` cannot be the zero address.
-     * - `account` must have at least `amount` tokens.
+     * - `from` cannot be the zero address.
+     * - `to` cannot be the zero address.
+     * - `tokenId` token must be owned by `from`.
+     * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.
+     *
+     * Emits a {Transfer} event.
      */
-    function _burn(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: burn from the zero address");
-
-        _beforeTokenTransfer(account, address(0), amount);
-
-        uint256 accountBalance = _balances[account];
-        require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
-        unchecked {
-            _balances[account] = accountBalance - amount;
-            // Overflow not possible: amount <= accountBalance <= totalSupply.
-            _totalSupply -= amount;
-        }
-
-        emit Transfer(account, address(0), amount);
-
-        _afterTokenTransfer(account, address(0), amount);
-    }
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external;
 
     /**
-     * @dev Sets `amount` as the allowance of `spender` over the `owner` s tokens.
+     * @dev Gives permission to `to` to transfer `tokenId` token to another account.
+     * The approval is cleared when the token is transferred.
      *
-     * This internal function is equivalent to `approve`, and can be used to
-     * e.g. set automatic allowances for certain subsystems, etc.
+     * Only a single account can be approved at a time, so approving the zero address clears previous approvals.
+     *
+     * Requirements:
+     *
+     * - The caller must own the token or be an approved operator.
+     * - `tokenId` must exist.
      *
      * Emits an {Approval} event.
+     */
+    function approve(address to, uint256 tokenId) external;
+
+    /**
+     * @dev Approve or remove `operator` as an operator for the caller.
+     * Operators can call {transferFrom} or {safeTransferFrom} for any token owned by the caller.
      *
      * Requirements:
      *
-     * - `owner` cannot be the zero address.
-     * - `spender` cannot be the zero address.
+     * - The `operator` cannot be the caller.
+     *
+     * Emits an {ApprovalForAll} event.
      */
-    function _approve(
-        address owner,
-        address spender,
-        uint256 amount
-    ) internal virtual {
-        require(owner != address(0), "ERC20: approve from the zero address");
-        require(spender != address(0), "ERC20: approve to the zero address");
+    function setApprovalForAll(address operator, bool _approved) external;
 
-        _allowances[owner][spender] = amount;
-        emit Approval(owner, spender, amount);
+    /**
+     * @dev Returns the account approved for `tokenId` token.
+     *
+     * Requirements:
+     *
+     * - `tokenId` must exist.
+     */
+    function getApproved(uint256 tokenId) external view returns (address operator);
+
+    /**
+     * @dev Returns if the `operator` is allowed to manage all of the assets of `owner`.
+     *
+     * See {setApprovalForAll}
+     */
+    function isApprovedForAll(address owner, address operator) external view returns (bool);
+}
+
+
+// File @openzeppelin/contracts/utils/structs/EnumerableSet.sol@v4.8.2
+
+// SPDX-License-Identifier: MIT
+// OpenZeppelin Contracts (last updated v4.8.0) (utils/structs/EnumerableSet.sol)
+// This file was procedurally generated from scripts/generate/templates/EnumerableSet.js.
+
+pragma solidity ^0.8.0;
+
+/**
+ * @dev Library for managing
+ * https://en.wikipedia.org/wiki/Set_(abstract_data_type)[sets] of primitive
+ * types.
+ *
+ * Sets have the following properties:
+ *
+ * - Elements are added, removed, and checked for existence in constant time
+ * (O(1)).
+ * - Elements are enumerated in O(n). No guarantees are made on the ordering.
+ *
+ * ```
+ * contract Example {
+ *     // Add the library methods
+ *     using EnumerableSet for EnumerableSet.AddressSet;
+ *
+ *     // Declare a set state variable
+ *     EnumerableSet.AddressSet private mySet;
+ * }
+ * ```
+ *
+ * As of v3.3.0, sets of type `bytes32` (`Bytes32Set`), `address` (`AddressSet`)
+ * and `uint256` (`UintSet`) are supported.
+ *
+ * [WARNING]
+ * ====
+ * Trying to delete such a structure from storage will likely result in data corruption, rendering the structure
+ * unusable.
+ * See https://github.com/ethereum/solidity/pull/11843[ethereum/solidity#11843] for more info.
+ *
+ * In order to clean an EnumerableSet, you can either remove all elements one by one or create a fresh instance using an
+ * array of EnumerableSet.
+ * ====
+ */
+library EnumerableSet {
+    // To implement this library for multiple types with as little code
+    // repetition as possible, we write it in terms of a generic Set type with
+    // bytes32 values.
+    // The Set implementation uses private functions, and user-facing
+    // implementations (such as AddressSet) are just wrappers around the
+    // underlying Set.
+    // This means that we can only create new EnumerableSets for types that fit
+    // in bytes32.
+
+    struct Set {
+        // Storage of set values
+        bytes32[] _values;
+        // Position of the value in the `values` array, plus 1 because index 0
+        // means a value is not in the set.
+        mapping(bytes32 => uint256) _indexes;
     }
 
     /**
-     * @dev Updates `owner` s allowance for `spender` based on spent `amount`.
+     * @dev Add a value to a set. O(1).
      *
-     * Does not update the allowance amount in case of infinite allowance.
-     * Revert if not enough allowance is available.
-     *
-     * Might emit an {Approval} event.
+     * Returns true if the value was added to the set, that is if it was not
+     * already present.
      */
-    function _spendAllowance(
-        address owner,
-        address spender,
-        uint256 amount
-    ) internal virtual {
-        uint256 currentAllowance = allowance(owner, spender);
-        if (currentAllowance != type(uint256).max) {
-            require(currentAllowance >= amount, "ERC20: insufficient allowance");
-            unchecked {
-                _approve(owner, spender, currentAllowance - amount);
+    function _add(Set storage set, bytes32 value) private returns (bool) {
+        if (!_contains(set, value)) {
+            set._values.push(value);
+            // The value is stored at length-1, but we add 1 to all indexes
+            // and use 0 as a sentinel value
+            set._indexes[value] = set._values.length;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @dev Removes a value from a set. O(1).
+     *
+     * Returns true if the value was removed from the set, that is if it was
+     * present.
+     */
+    function _remove(Set storage set, bytes32 value) private returns (bool) {
+        // We read and store the value's index to prevent multiple reads from the same storage slot
+        uint256 valueIndex = set._indexes[value];
+
+        if (valueIndex != 0) {
+            // Equivalent to contains(set, value)
+            // To delete an element from the _values array in O(1), we swap the element to delete with the last one in
+            // the array, and then remove the last element (sometimes called as 'swap and pop').
+            // This modifies the order of the array, as noted in {at}.
+
+            uint256 toDeleteIndex = valueIndex - 1;
+            uint256 lastIndex = set._values.length - 1;
+
+            if (lastIndex != toDeleteIndex) {
+                bytes32 lastValue = set._values[lastIndex];
+
+                // Move the last value to the index where the value to delete is
+                set._values[toDeleteIndex] = lastValue;
+                // Update the index for the moved value
+                set._indexes[lastValue] = valueIndex; // Replace lastValue's index to valueIndex
+            }
+
+            // Delete the slot where the moved value was stored
+            set._values.pop();
+
+            // Delete the index for the deleted slot
+            delete set._indexes[value];
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @dev Returns true if the value is in the set. O(1).
+     */
+    function _contains(Set storage set, bytes32 value) private view returns (bool) {
+        return set._indexes[value] != 0;
+    }
+
+    /**
+     * @dev Returns the number of values on the set. O(1).
+     */
+    function _length(Set storage set) private view returns (uint256) {
+        return set._values.length;
+    }
+
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
+     *
+     * Note that there are no guarantees on the ordering of values inside the
+     * array, and it may change when more values are added or removed.
+     *
+     * Requirements:
+     *
+     * - `index` must be strictly less than {length}.
+     */
+    function _at(Set storage set, uint256 index) private view returns (bytes32) {
+        return set._values[index];
+    }
+
+    /**
+     * @dev Return the entire set in an array
+     *
+     * WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed
+     * to mostly be used by view accessors that are queried without any gas fees. Developers should keep in mind that
+     * this function has an unbounded cost, and using it as part of a state-changing function may render the function
+     * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.
+     */
+    function _values(Set storage set) private view returns (bytes32[] memory) {
+        return set._values;
+    }
+
+    // Bytes32Set
+
+    struct Bytes32Set {
+        Set _inner;
+    }
+
+    /**
+     * @dev Add a value to a set. O(1).
+     *
+     * Returns true if the value was added to the set, that is if it was not
+     * already present.
+     */
+    function add(Bytes32Set storage set, bytes32 value) internal returns (bool) {
+        return _add(set._inner, value);
+    }
+
+    /**
+     * @dev Removes a value from a set. O(1).
+     *
+     * Returns true if the value was removed from the set, that is if it was
+     * present.
+     */
+    function remove(Bytes32Set storage set, bytes32 value) internal returns (bool) {
+        return _remove(set._inner, value);
+    }
+
+    /**
+     * @dev Returns true if the value is in the set. O(1).
+     */
+    function contains(Bytes32Set storage set, bytes32 value) internal view returns (bool) {
+        return _contains(set._inner, value);
+    }
+
+    /**
+     * @dev Returns the number of values in the set. O(1).
+     */
+    function length(Bytes32Set storage set) internal view returns (uint256) {
+        return _length(set._inner);
+    }
+
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
+     *
+     * Note that there are no guarantees on the ordering of values inside the
+     * array, and it may change when more values are added or removed.
+     *
+     * Requirements:
+     *
+     * - `index` must be strictly less than {length}.
+     */
+    function at(Bytes32Set storage set, uint256 index) internal view returns (bytes32) {
+        return _at(set._inner, index);
+    }
+
+    /**
+     * @dev Return the entire set in an array
+     *
+     * WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed
+     * to mostly be used by view accessors that are queried without any gas fees. Developers should keep in mind that
+     * this function has an unbounded cost, and using it as part of a state-changing function may render the function
+     * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.
+     */
+    function values(Bytes32Set storage set) internal view returns (bytes32[] memory) {
+        bytes32[] memory store = _values(set._inner);
+        bytes32[] memory result;
+
+        /// @solidity memory-safe-assembly
+        assembly {
+            result := store
+        }
+
+        return result;
+    }
+
+    // AddressSet
+
+    struct AddressSet {
+        Set _inner;
+    }
+
+    /**
+     * @dev Add a value to a set. O(1).
+     *
+     * Returns true if the value was added to the set, that is if it was not
+     * already present.
+     */
+    function add(AddressSet storage set, address value) internal returns (bool) {
+        return _add(set._inner, bytes32(uint256(uint160(value))));
+    }
+
+    /**
+     * @dev Removes a value from a set. O(1).
+     *
+     * Returns true if the value was removed from the set, that is if it was
+     * present.
+     */
+    function remove(AddressSet storage set, address value) internal returns (bool) {
+        return _remove(set._inner, bytes32(uint256(uint160(value))));
+    }
+
+    /**
+     * @dev Returns true if the value is in the set. O(1).
+     */
+    function contains(AddressSet storage set, address value) internal view returns (bool) {
+        return _contains(set._inner, bytes32(uint256(uint160(value))));
+    }
+
+    /**
+     * @dev Returns the number of values in the set. O(1).
+     */
+    function length(AddressSet storage set) internal view returns (uint256) {
+        return _length(set._inner);
+    }
+
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
+     *
+     * Note that there are no guarantees on the ordering of values inside the
+     * array, and it may change when more values are added or removed.
+     *
+     * Requirements:
+     *
+     * - `index` must be strictly less than {length}.
+     */
+    function at(AddressSet storage set, uint256 index) internal view returns (address) {
+        return address(uint160(uint256(_at(set._inner, index))));
+    }
+
+    /**
+     * @dev Return the entire set in an array
+     *
+     * WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed
+     * to mostly be used by view accessors that are queried without any gas fees. Developers should keep in mind that
+     * this function has an unbounded cost, and using it as part of a state-changing function may render the function
+     * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.
+     */
+    function values(AddressSet storage set) internal view returns (address[] memory) {
+        bytes32[] memory store = _values(set._inner);
+        address[] memory result;
+
+        /// @solidity memory-safe-assembly
+        assembly {
+            result := store
+        }
+
+        return result;
+    }
+
+    // UintSet
+
+    struct UintSet {
+        Set _inner;
+    }
+
+    /**
+     * @dev Add a value to a set. O(1).
+     *
+     * Returns true if the value was added to the set, that is if it was not
+     * already present.
+     */
+    function add(UintSet storage set, uint256 value) internal returns (bool) {
+        return _add(set._inner, bytes32(value));
+    }
+
+    /**
+     * @dev Removes a value from a set. O(1).
+     *
+     * Returns true if the value was removed from the set, that is if it was
+     * present.
+     */
+    function remove(UintSet storage set, uint256 value) internal returns (bool) {
+        return _remove(set._inner, bytes32(value));
+    }
+
+    /**
+     * @dev Returns true if the value is in the set. O(1).
+     */
+    function contains(UintSet storage set, uint256 value) internal view returns (bool) {
+        return _contains(set._inner, bytes32(value));
+    }
+
+    /**
+     * @dev Returns the number of values in the set. O(1).
+     */
+    function length(UintSet storage set) internal view returns (uint256) {
+        return _length(set._inner);
+    }
+
+    /**
+     * @dev Returns the value stored at position `index` in the set. O(1).
+     *
+     * Note that there are no guarantees on the ordering of values inside the
+     * array, and it may change when more values are added or removed.
+     *
+     * Requirements:
+     *
+     * - `index` must be strictly less than {length}.
+     */
+    function at(UintSet storage set, uint256 index) internal view returns (uint256) {
+        return uint256(_at(set._inner, index));
+    }
+
+    /**
+     * @dev Return the entire set in an array
+     *
+     * WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed
+     * to mostly be used by view accessors that are queried without any gas fees. Developers should keep in mind that
+     * this function has an unbounded cost, and using it as part of a state-changing function may render the function
+     * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.
+     */
+    function values(UintSet storage set) internal view returns (uint256[] memory) {
+        bytes32[] memory store = _values(set._inner);
+        uint256[] memory result;
+
+        /// @solidity memory-safe-assembly
+        assembly {
+            result := store
+        }
+
+        return result;
+    }
+}
+
+
+// File contracts/interfaces/IOriginMarketplaceV2.sol
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+pragma solidity =0.8.9;
+pragma abicoder v2;
+
+interface IOriginMarketplaceV2 {
+    struct Listing {
+        uint256 tokenId;
+        uint256 value;
+        address seller;
+        uint256 expireTimestamp;
+    }
+
+    struct Bid {
+        uint256 tokenId;
+        uint256 value;
+        address bidder;
+        uint256 expireTimestamp;
+    }
+
+    struct TokenBids {
+        EnumerableSet.AddressSet bidders;
+        mapping(address => Bid) bids;
+    }
+
+    struct ERC721Market {
+        EnumerableSet.UintSet tokenIdWithListing;
+        mapping(uint256 => Listing) listings;
+        EnumerableSet.UintSet tokenIdWithBid;
+        mapping(uint256 => TokenBids) bids;
+    }
+
+    event TokenListed(
+        address indexed erc721Address,
+        uint256 indexed tokenId,
+        Listing listing
+    );
+    event TokenDelisted(
+        address indexed erc721Address,
+        uint256 indexed tokenId,
+        Listing listing
+    );
+    event TokenBidEntered(
+        address indexed erc721Address,
+        uint256 indexed tokenId,
+        Bid bid
+    );
+    event TokenBidWithdrawn(
+        address indexed erc721Address,
+        uint256 indexed tokenId,
+        Bid bid
+    );
+    event TokenBought(
+        address indexed erc721Address,
+        uint256 indexed tokenId,
+        address indexed buyer,
+        Listing listing,
+        uint256 serviceFee,
+        uint256 royaltyFee
+    );
+    event TokenBidAccepted(
+        address indexed erc721Address,
+        uint256 indexed tokenId,
+        address indexed seller,
+        Bid bid,
+        uint256 serviceFee,
+        uint256 royaltyFee
+    );
+
+    /**
+     * @dev List token for sale
+     * @param tokenId erc721 token Id
+     * @param value min price to sell the token
+     * @param expireTimestamp when would this listing expire
+     */
+    function listToken(
+        address erc721Address,
+        uint256 tokenId,
+        uint256 value,
+        uint256 expireTimestamp
+    ) external;
+
+    /**
+     * @dev Delist token for sale
+     * @param tokenId erc721 token Id
+     */
+    function delistToken(address erc721Address, uint256 tokenId) external;
+
+    /**
+     * @dev Buy token
+     * @param tokenId erc721 token Id
+     */
+    function buyToken(address erc721Address, uint256 tokenId) external payable;
+
+    /**
+     * @dev Enter bid for token
+     * @param tokenId erc721 token Id
+     * @param value price in payment token
+     * @param expireTimestamp when would this bid expire
+     */
+    function enterBidForToken(
+        address erc721Address,
+        uint256 tokenId,
+        uint256 value,
+        uint256 expireTimestamp
+    ) external;
+
+    /**
+     * @dev Withdraw bid for token
+     * @param tokenId erc721 token Id
+     */
+    function withdrawBidForToken(address erc721Address, uint256 tokenId)
+        external;
+
+    /**
+     * @dev Accept a bid of token from a bidder
+     * @param tokenId erc721 token Id
+     * @param bidder bidder address
+     * @param value value of a bid to avoid frontrun attack
+     */
+    function acceptBidForToken(
+        address erc721Address,
+        uint256 tokenId,
+        address bidder,
+        uint256 value
+    ) external;
+
+    /**
+     * @dev Show if listing and bid are enabled
+     */
+    function isTradingEnabled() external view returns (bool);
+
+    /**
+     * @dev get current listing of a token
+     * @param tokenId erc721 token Id
+     * @return current valid listing or empty listing struct
+     */
+    function getTokenListing(address erc721Address, uint256 tokenId)
+        external
+        view
+        returns (Listing memory);
+
+    /**
+     * @dev get count of listings
+     */
+    function numTokenListings(address erc721Address)
+        external
+        view
+        returns (uint256);
+
+    /**
+     * @dev get current valid listings by size
+     * @param from index to start
+     * @param size size to query
+     * @return current valid listings
+     * This to help batch query when list gets big
+     */
+    function getTokenListings(
+        address erc721Address,
+        uint256 from,
+        uint256 size
+    ) external view returns (Listing[] memory);
+
+    /**
+     * @dev get bidder's bid on a token
+     * @param tokenId erc721 token Id
+     * @param bidder address of a bidder
+     * @return Valid bid or empty bid
+     */
+    function getBidderTokenBid(
+        address erc721Address,
+        uint256 tokenId,
+        address bidder
+    ) external view returns (Bid memory);
+
+    /**
+     * @dev get all valid bids of a token
+     * @param tokenId erc721 token Id
+     * @return Valid bids of a token
+     */
+    function getTokenBids(address erc721Address, uint256 tokenId)
+        external
+        view
+        returns (Bid[] memory);
+
+    /**
+     * @dev get count of tokens with bid(s)
+     */
+    function numTokenWithBids(address erc721Address)
+        external
+        view
+        returns (uint256);
+
+    /**
+     * @dev get highest bid of a token
+     * @param tokenId erc721 token Id
+     * @return Valid highest bid or empty bid
+     */
+    function getTokenHighestBid(address erc721Address, uint256 tokenId)
+        external
+        view
+        returns (Bid memory);
+
+    /**
+     * @dev get current highest bids
+     * @param from index to start
+     * @param size size to query
+     * @return current highest bids
+     * This to help batch query when list gets big
+     */
+    function getTokenHighestBids(
+        address erc721Address,
+        uint256 from,
+        uint256 size
+    ) external view returns (Bid[] memory);
+
+    /**
+     * @dev get all bids of a bidder address
+     * @return All valid bids of a bidder
+     */
+    function getBidderBids(
+        address erc721Address,
+        address bidder,
+        uint256 from,
+        uint256 size
+    ) external view returns (Bid[] memory);
+
+    /**
+     * @dev Surface minimum listing and bid time range
+     */
+    function actionTimeOutRangeMin() external view returns (uint256);
+
+    /**
+     * @dev Surface maximum listing and bid time range
+     */
+    function actionTimeOutRangeMax() external view returns (uint256);
+
+    /**
+     * @dev Payment token address
+     */
+    function paymentToken() external view returns (address);
+
+    /**
+     * @dev Service fee
+     * @return fee fraction based on 1000
+     */
+    function serviceFee() external view returns (uint8);
+}
+
+
+// File contracts/interfaces/IOriginMarketplaceRoyalty.sol
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+pragma solidity =0.8.9;
+pragma abicoder v2;
+
+interface IOriginMarketplaceRoyalty {
+    struct ERC721CollectionRoyalty {
+        address recipient;
+        uint256 feeFraction;
+        address setBy;
+    }
+
+    // Who can set: ERC721 owner and NFTKEY owner
+    event SetRoyalty(
+        address indexed erc721Address,
+        address indexed recipient,
+        uint256 feeFraction
+    );
+
+    /**
+     * @dev Royalty fee
+     * @param erc721Address to read royalty
+     * @return royalty information
+     */
+    function royalty(address erc721Address)
+        external
+        view
+        returns (ERC721CollectionRoyalty memory);
+
+    /**
+     * @dev Royalty fee
+     * @param erc721Address to read royalty
+     */
+    function setRoyalty(
+        address erc721Address,
+        address recipient,
+        uint256 feeFraction
+    ) external;
+}
+
+
+// File contracts/lib/OriginMarketplaceRoyalty.sol
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+pragma solidity =0.8.9;
+pragma abicoder v2;
+
+
+contract OriginMarketplaceRoyalty is IOriginMarketplaceRoyalty, Ownable {
+    uint256 public defaultRoyaltyFraction = 20; // By the factor of 1000, 2%
+    uint256 public royaltyUpperLimit = 80; // By the factor of 1000, 8%
+
+    mapping(address => ERC721CollectionRoyalty) private _collectionRoyalty;
+
+    function _erc721Owner(address erc721Address)
+        private
+        view
+        returns (address)
+    {
+        try Ownable(erc721Address).owner() returns (address _contractOwner) {
+            return _contractOwner;
+        } catch {
+            return address(0);
+        }
+    }
+
+    function royalty(address erc721Address)
+        public
+        view
+        override
+        returns (ERC721CollectionRoyalty memory)
+    {
+        if (_collectionRoyalty[erc721Address].setBy != address(0)) {
+            return _collectionRoyalty[erc721Address];
+        }
+
+        address erc721Owner = _erc721Owner(erc721Address);
+        if (erc721Owner != address(0)) {
+            return
+                ERC721CollectionRoyalty({
+                    recipient: erc721Owner,
+                    feeFraction: defaultRoyaltyFraction,
+                    setBy: address(0)
+                });
+        }
+
+        return
+            ERC721CollectionRoyalty({
+                recipient: address(0),
+                feeFraction: 0,
+                setBy: address(0)
+            });
+    }
+
+    function setRoyalty(
+        address erc721Address,
+        address newRecipient,
+        uint256 feeFraction
+    ) external override {
+        require(
+            feeFraction <= royaltyUpperLimit,
+            "Please set the royalty percentange below allowed range"
+        );
+
+        require(
+            msg.sender == royalty(erc721Address).recipient,
+            "Only ERC721 royalty recipient is allowed to set Royalty"
+        );
+
+        _collectionRoyalty[erc721Address] = ERC721CollectionRoyalty({
+            recipient: newRecipient,
+            feeFraction: feeFraction,
+            setBy: msg.sender
+        });
+
+        emit SetRoyalty({
+            erc721Address: erc721Address,
+            recipient: newRecipient,
+            feeFraction: feeFraction
+        });
+    }
+
+    function setRoyaltyForCollection(
+        address erc721Address,
+        address newRecipient,
+        uint256 feeFraction
+    ) external onlyOwner {
+        require(
+            feeFraction <= royaltyUpperLimit,
+            "Please set the royalty percentange below allowed range"
+        );
+
+        require(
+            royalty(erc721Address).setBy == address(0),
+            "Collection royalty recipient already set"
+        );
+
+        _collectionRoyalty[erc721Address] = ERC721CollectionRoyalty({
+            recipient: newRecipient,
+            feeFraction: feeFraction,
+            setBy: msg.sender
+        });
+
+        emit SetRoyalty({
+            erc721Address: erc721Address,
+            recipient: newRecipient,
+            feeFraction: feeFraction
+        });
+    }
+
+    function updateRoyaltyUpperLimit(uint256 _newUpperLimit)
+        external
+        onlyOwner
+    {
+        royaltyUpperLimit = _newUpperLimit;
+    }
+}
+
+
+// File @openzeppelin/contracts/security/ReentrancyGuard.sol@v4.8.2
+
+// SPDX-License-Identifier: MIT
+// OpenZeppelin Contracts (last updated v4.8.0) (security/ReentrancyGuard.sol)
+
+pragma solidity ^0.8.0;
+
+/**
+ * @dev Contract module that helps prevent reentrant calls to a function.
+ *
+ * Inheriting from `ReentrancyGuard` will make the {nonReentrant} modifier
+ * available, which can be applied to functions to make sure there are no nested
+ * (reentrant) calls to them.
+ *
+ * Note that because there is a single `nonReentrant` guard, functions marked as
+ * `nonReentrant` may not call one another. This can be worked around by making
+ * those functions `private`, and then adding `external` `nonReentrant` entry
+ * points to them.
+ *
+ * TIP: If you would like to learn more about reentrancy and alternative ways
+ * to protect against it, check out our blog post
+ * https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy After Istanbul].
+ */
+abstract contract ReentrancyGuard {
+    // Booleans are more expensive than uint256 or any type that takes up a full
+    // word because each write operation emits an extra SLOAD to first read the
+    // slot's contents, replace the bits taken up by the boolean, and then write
+    // back. This is the compiler's defense against contract upgrades and
+    // pointer aliasing, and it cannot be disabled.
+
+    // The values being non-zero value makes deployment a bit more expensive,
+    // but in exchange the refund on every call to nonReentrant will be lower in
+    // amount. Since refunds are capped to a percentage of the total
+    // transaction's gas, it is best to keep them low in cases like this one, to
+    // increase the likelihood of the full refund coming into effect.
+    uint256 private constant _NOT_ENTERED = 1;
+    uint256 private constant _ENTERED = 2;
+
+    uint256 private _status;
+
+    constructor() {
+        _status = _NOT_ENTERED;
+    }
+
+    /**
+     * @dev Prevents a contract from calling itself, directly or indirectly.
+     * Calling a `nonReentrant` function from another `nonReentrant`
+     * function is not supported. It is possible to prevent this from happening
+     * by making the `nonReentrant` function external, and making it call a
+     * `private` function that does the actual work.
+     */
+    modifier nonReentrant() {
+        _nonReentrantBefore();
+        _;
+        _nonReentrantAfter();
+    }
+
+    function _nonReentrantBefore() private {
+        // On the first call to nonReentrant, _status will be _NOT_ENTERED
+        require(_status != _ENTERED, "ReentrancyGuard: reentrant call");
+
+        // Any calls to nonReentrant after this point will fail
+        _status = _ENTERED;
+    }
+
+    function _nonReentrantAfter() private {
+        // By storing the original value once again, a refund is triggered (see
+        // https://eips.ethereum.org/EIPS/eip-2200)
+        _status = _NOT_ENTERED;
+    }
+}
+
+
+// File contracts/OriginMarketplaceV2.sol
+
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+pragma solidity >= 0.8.9;
+pragma abicoder v2;
+
+
+
+
+
+
+
+
+/**
+ * @title ORIGIN Marketplace contract V2
+ * Note: Payment tokens usually is the chain native coin's wrapped token, e.g. WETH, WBNB
+ */
+contract OriginMarketplaceV2 is IOriginMarketplaceV2, Ownable, OriginMarketplaceRoyalty, ReentrancyGuard {
+    using Address for address;
+    using EnumerableSet for EnumerableSet.UintSet;
+    using EnumerableSet for EnumerableSet.AddressSet;
+    using SafeERC20 for IERC20;
+
+    IERC20 private immutable _paymentToken;
+
+    constructor(address _paymentTokenAddress) {
+        _paymentToken = IERC20(_paymentTokenAddress);
+    }
+
+    bool private _isTradingEnabled = true;
+    uint8 private _serviceFeeFraction = 20;
+    uint256 private _actionTimeOutRangeMin = 1800; // 30 mins
+    uint256 private _actionTimeOutRangeMax = 31536000; // One year - This can be extend by owner if contract is working smoothly
+
+    mapping(address => ERC721Market) private _erc721Market;
+
+    /**
+     * @dev only if listing and bid is enabled
+     * This is to help contract migration in case of upgrading contract
+     */
+    modifier onlyTradingOpen() {
+        require(_isTradingEnabled, "Listing and bid are not enabled");
+        _;
+    }
+
+    /**
+     * @dev only if the entered timestamp is within the allowed range
+     * This helps to not list or bid for too short or too long period of time
+     */
+    modifier onlyAllowedExpireTimestamp(uint256 expireTimestamp) {
+        require(
+            expireTimestamp - block.timestamp >= _actionTimeOutRangeMin,
+            "Please enter a longer period of time"
+        );
+        require(
+            expireTimestamp - block.timestamp <= _actionTimeOutRangeMax,
+            "Please enter a shorter period of time"
+        );
+        _;
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-listToken}.
+     * The timestamp set needs to be in the allowed range
+     * Listing must be valid
+     */
+    function listToken(address erc721Address, uint256 tokenId, uint256 value, uint256 expireTimestamp)
+     external override onlyTradingOpen onlyAllowedExpireTimestamp(expireTimestamp) {
+        Listing memory listing = Listing({
+            tokenId: tokenId,
+            value: value,
+            seller: msg.sender,
+            expireTimestamp: expireTimestamp
+        });
+
+        require(
+            _isListingValid(erc721Address, listing),
+            "Listing is not valid"
+        );
+
+        _erc721Market[erc721Address].listings[tokenId] = listing;
+        _erc721Market[erc721Address].tokenIdWithListing.add(tokenId);
+
+        emit TokenListed(erc721Address, tokenId, listing);
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-delistToken}.
+     * msg.sender must be the seller of the listing record
+     */
+    function delistToken(address erc721Address, uint256 tokenId) external override {
+        require(
+            _erc721Market[erc721Address].listings[tokenId].seller == msg.sender,
+            "Only token seller can delist token"
+        );
+
+        emit TokenDelisted(
+            erc721Address,
+            tokenId,
+            _erc721Market[erc721Address].listings[tokenId]
+        );
+
+        _delistToken(erc721Address, tokenId);
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-buyToken}.
+     * Must have a valid listing
+     * msg.sender must not the owner of token
+     * msg.value must be at least sell price plus fees
+     */
+    function buyToken(address erc721Address, uint256 tokenId) external payable override nonReentrant {
+        Listing memory listing = _erc721Market[erc721Address].listings[tokenId];
+        require(
+            _isListingValid(erc721Address, listing),
+            "Token is not for sale"
+        );
+        require(
+            !_isTokenOwner(erc721Address, tokenId, msg.sender),
+            "Token owner can't buy their own token"
+        );
+        require(
+            msg.value >= listing.value,
+            "The value send is below sale price"
+        );
+
+        (uint256 _serviceFee, uint256 _royaltyFee) = _calculateFees(
+            erc721Address,
+            listing.value
+        );
+
+        Address.sendValue(
+            payable(listing.seller),
+            msg.value - _serviceFee - _royaltyFee
+        );
+        Address.sendValue(payable(owner()), _serviceFee);
+
+        address _royaltyRecipient = royalty(erc721Address).recipient;
+        if (_royaltyRecipient != address(0) && _royaltyFee > 0) {
+            Address.sendValue(payable(_royaltyRecipient), _royaltyFee);
+        }
+
+        // Send token to buyer
+        emit TokenBought({
+            erc721Address: erc721Address,
+            tokenId: tokenId,
+            buyer: msg.sender,
+            listing: listing,
+            serviceFee: _serviceFee,
+            royaltyFee: _royaltyFee
+        });
+
+        IERC721(erc721Address).safeTransferFrom(
+            listing.seller,
+            msg.sender,
+            tokenId
+        );
+
+        // Remove token listing
+        _delistToken(erc721Address, tokenId);
+        _removeBidOfBidder(erc721Address, tokenId, msg.sender);
+    }
+
+    /**
+     * @dev See {ORIGINMarketplaceV2-enterBidForToken}.
+     * People can only enter bid if bid is valid
+     */
+    function enterBidForToken(address erc721Address, uint256 tokenId, uint256 value, uint256 expireTimestamp)
+     external override onlyTradingOpen onlyAllowedExpireTimestamp(expireTimestamp) {
+        Bid memory bid = Bid(tokenId, value, msg.sender, expireTimestamp);
+
+        require(_isBidValid(erc721Address, bid), "Bid is not valid");
+
+        _erc721Market[erc721Address].tokenIdWithBid.add(tokenId);
+        _erc721Market[erc721Address].bids[tokenId].bidders.add(msg.sender);
+        _erc721Market[erc721Address].bids[tokenId].bids[msg.sender] = bid;
+
+        emit TokenBidEntered(erc721Address, tokenId, bid);
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-withdrawBidForToken}.
+     * There must be a bid exists
+     * remove this bid record
+     */
+    function withdrawBidForToken(address erc721Address, uint256 tokenId) external override {
+         Bid memory bid = _erc721Market[erc721Address].bids[tokenId].bids[
+            msg.sender
+        ];
+        require(
+            bid.bidder == msg.sender,
+            "This address doesn't have bid on this token"
+        );
+
+        emit TokenBidWithdrawn(erc721Address, tokenId, bid);
+        _removeBidOfBidder(erc721Address, tokenId, msg.sender);
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-acceptBidForToken}.
+     * Must be owner of this token
+     * Must have approved this contract to transfer token
+     * Must have a valid existing bid that matches
+     */
+    function acceptBidForToken(address erc721Address, uint256 tokenId, address bidder, uint256 value)
+     external override nonReentrant {
+        require(
+            _isTokenOwner(erc721Address, tokenId, msg.sender),
+            "Only token owner can accept bid of token"
+        );
+        require(
+            _isTokenApproved(erc721Address, tokenId) ||
+                _isAllTokenApproved(erc721Address, msg.sender),
+            "The token is not approved to transfer by the contract"
+        );
+
+        Bid memory existingBid = getBidderTokenBid(
+            erc721Address,
+            tokenId,
+            bidder
+        );
+        require(
+            existingBid.tokenId == tokenId &&
+                existingBid.value == value &&
+                existingBid.bidder == bidder,
+            "This token doesn't have a matching bid"
+        );
+
+        address _royaltyRecipient = royalty(erc721Address).recipient;
+        (uint256 _serviceFee, uint256 _royaltyFee) = _calculateFees(
+            erc721Address,
+            existingBid.value
+        );
+
+        _paymentToken.safeTransferFrom({
+            from: existingBid.bidder,
+            to: msg.sender,
+            value: existingBid.value - _serviceFee - _royaltyFee
+        });
+        _paymentToken.safeTransferFrom({
+            from: existingBid.bidder,
+            to: owner(),
+            value: _serviceFee
+        });
+        if (_royaltyRecipient != address(0) && _royaltyFee > 0) {
+            _paymentToken.safeTransferFrom({
+                from: existingBid.bidder,
+                to: _royaltyRecipient,
+                value: _royaltyFee
+            });
+        }
+
+        IERC721(erc721Address).safeTransferFrom({
+            from: msg.sender,
+            to: existingBid.bidder,
+            tokenId: tokenId
+        });
+
+        emit TokenBidAccepted({
+            erc721Address: erc721Address,
+            tokenId: tokenId,
+            seller: msg.sender,
+            bid: existingBid,
+            serviceFee: _serviceFee,
+            royaltyFee: _royaltyFee
+        });
+
+        // Remove token listing
+        _delistToken(erc721Address, tokenId);
+        _removeBidOfBidder(erc721Address, tokenId, existingBid.bidder);
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-isTradingEnabled}.
+     */
+    function isTradingEnabled() external view override returns (bool) {
+        return _isTradingEnabled;
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-getTokenListing}.
+     */
+    function getTokenListing(address erc721Address, uint256 tokenId) public view override returns (Listing memory validListing) {
+        Listing memory listing = _erc721Market[erc721Address].listings[tokenId];
+        if (_isListingValid(erc721Address, listing)) {
+            validListing = listing;
+        }
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-numTokenListings}.
+     */
+    function numTokenListings(address erc721Address) public view override returns (uint256) {
+        return _erc721Market[erc721Address].tokenIdWithListing.length();
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-getTokenListings}.
+     */
+    function getTokenListings(address erc721Address, uint256 from, uint256 size) 
+     public view override returns (Listing[] memory listings) {
+        uint256 listingsCount = numTokenListings(erc721Address);
+
+        if (from < listingsCount && size > 0) {
+            uint256 querySize = size;
+            if ((from + size) > listingsCount) {
+                querySize = listingsCount - from;
+            }
+            listings = new Listing[](querySize);
+            for (uint256 i = 0; i < querySize; i++) {
+                uint256 tokenId = _erc721Market[erc721Address]
+                    .tokenIdWithListing
+                    .at(i + from);
+                Listing memory listing = _erc721Market[erc721Address].listings[
+                    tokenId
+                ];
+                if (_isListingValid(erc721Address, listing)) {
+                    listings[i] = listing;
+                }
             }
         }
     }
 
     /**
-     * @dev Hook that is called before any transfer of tokens. This includes
-     * minting and burning.
-     *
-     * Calling conditions:
-     *
-     * - when `from` and `to` are both non-zero, `amount` of ``from``'s tokens
-     * will be transferred to `to`.
-     * - when `from` is zero, `amount` tokens will be minted for `to`.
-     * - when `to` is zero, `amount` of ``from``'s tokens will be burned.
-     * - `from` and `to` are never both zero.
-     *
-     * To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks].
+     * @dev See {IORIGINMarketplaceV2-getBidderTokenBid}.
      */
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal virtual {}
-
-    /**
-     * @dev Hook that is called after any transfer of tokens. This includes
-     * minting and burning.
-     *
-     * Calling conditions:
-     *
-     * - when `from` and `to` are both non-zero, `amount` of ``from``'s tokens
-     * has been transferred to `to`.
-     * - when `from` is zero, `amount` tokens have been minted for `to`.
-     * - when `to` is zero, `amount` of ``from``'s tokens have been burned.
-     * - `from` and `to` are never both zero.
-     *
-     * To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks].
-     */
-    function _afterTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal virtual {}
-}
-
-
-// File @openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol@v4.8.2
-
-// SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v4.5.0) (token/ERC20/extensions/ERC20Burnable.sol)
-
-pragma solidity ^0.8.0;
-
-
-/**
- * @dev Extension of {ERC20} that allows token holders to destroy both their own
- * tokens and those that they have an allowance for, in a way that can be
- * recognized off-chain (via event analysis).
- */
-abstract contract ERC20Burnable is Context, ERC20 {
-    /**
-     * @dev Destroys `amount` tokens from the caller.
-     *
-     * See {ERC20-_burn}.
-     */
-    function burn(uint256 amount) public virtual {
-        _burn(_msgSender(), amount);
+    function getBidderTokenBid(address erc721Address, uint256 tokenId, address bidder) 
+     public view override returns (Bid memory validBid) {
+        Bid memory bid = _erc721Market[erc721Address].bids[tokenId].bids[
+            bidder
+        ];
+        if (_isBidValid(erc721Address, bid)) {
+            validBid = bid;
+        }
     }
 
     /**
-     * @dev Destroys `amount` tokens from `account`, deducting from the caller's
-     * allowance.
-     *
-     * See {ERC20-_burn} and {ERC20-allowance}.
-     *
-     * Requirements:
-     *
-     * - the caller must have allowance for ``accounts``'s tokens of at least
-     * `amount`.
+     * @dev See {IORIGINMarketplaceV2-getTokenBids}.
      */
-    function burnFrom(address account, uint256 amount) public virtual {
-        _spendAllowance(account, _msgSender(), amount);
-        _burn(account, amount);
+    function getTokenBids(address erc721Address, uint256 tokenId) external view override returns (Bid[] memory bids) {
+        uint256 bidderCount = _erc721Market[erc721Address]
+            .bids[tokenId]
+            .bidders
+            .length();
+
+        bids = new Bid[](bidderCount);
+        for (uint256 i; i < bidderCount; i++) {
+            address bidder = _erc721Market[erc721Address]
+                .bids[tokenId]
+                .bidders
+                .at(i);
+            Bid memory bid = _erc721Market[erc721Address].bids[tokenId].bids[
+                bidder
+            ];
+            if (_isBidValid(erc721Address, bid)) {
+                bids[i] = bid;
+            }
+        }
     }
-}
 
+    /**
+     * @dev See {IORIGINMarketplaceV2-getTokenHighestBid}.
+     */
+    function getTokenHighestBid(address erc721Address, uint256 tokenId) public view override returns (Bid memory highestBid) {
+        highestBid = Bid(tokenId, 0, address(0), 0);
+        uint256 bidderCount = _erc721Market[erc721Address]
+            .bids[tokenId]
+            .bidders
+            .length();
+        for (uint256 i; i < bidderCount; i++) {
+            address bidder = _erc721Market[erc721Address]
+                .bids[tokenId]
+                .bidders
+                .at(i);
+            Bid memory bid = _erc721Market[erc721Address].bids[tokenId].bids[
+                bidder
+            ];
+            if (
+                _isBidValid(erc721Address, bid) && bid.value > highestBid.value
+            ) {
+                highestBid = bid;
+            }
+        }
+    }
 
-// File contracts/PayToken.sol
+    /**
+     * @dev See {IORIGINMarketplaceV2-numTokenWithBids}.
+     */
+    function numTokenWithBids(address erc721Address) public view override returns (uint256) {
+        return _erc721Market[erc721Address].tokenIdWithBid.length();
+    }
 
-// SPDX-License-Identifier: MIT
+    /**
+     * @dev See {IORIGINMarketplaceV2-getTokenHighestBids}.
+     */
+    function getTokenHighestBids( address erc721Address, uint256 from, uint256 size) 
+      public view override returns (Bid[] memory highestBids) {
+        uint256 tokenCount = numTokenWithBids(erc721Address);
 
-pragma solidity ^0.8.4;
+        if (from < tokenCount && size > 0) {
+            uint256 querySize = size;
+            if ((from + size) > tokenCount) {
+                querySize = tokenCount - from;
+            }
+            highestBids = new Bid[](querySize);
+            for (uint256 i = 0; i < querySize; i++) {
+                highestBids[i] = getTokenHighestBid({
+                    erc721Address: erc721Address,
+                    tokenId: _erc721Market[erc721Address].tokenIdWithBid.at(
+                        i + from
+                    )
+                });
+            }
+        }
+    }
 
+    function getBidderBids(address erc721Address, address bidder, uint256 from, uint256 size) external view override returns (Bid[] memory bidderBids) {
+        uint256 tokenCount = numTokenWithBids(erc721Address);
 
+        if (from < tokenCount && size > 0) {
+            uint256 querySize = size;
+            if ((from + size) > tokenCount) {
+                querySize = tokenCount - from;
+            }
+            bidderBids = new Bid[](querySize);
+            for (uint256 i = 0; i < querySize; i++) {
+                bidderBids[i] = getBidderTokenBid({
+                    erc721Address: erc721Address,
+                    tokenId: _erc721Market[erc721Address].tokenIdWithBid.at(
+                        i + from
+                    ),
+                    bidder: bidder
+                });
+            }
+        }
+    }
 
-contract PayToken is ERC20, ERC20Burnable, Ownable {
+    /**
+     * @dev check if the account is the owner of this erc721 token
+     */
+    function _isTokenOwner(address erc721Address, uint256 tokenId, address account) private view returns (bool) {
+        IERC721 _erc721 = IERC721(erc721Address);
+        try _erc721.ownerOf(tokenId) returns (address tokenOwner) {
+            return tokenOwner == account;
+        } catch {
+            return false;
+        }
+    }
 
-  mapping(address => bool) controllers;
-  
-  constructor(string memory _name) ERC20(_name, _name) { }
+    /**
+     * @dev check if this contract has approved to transfer this erc721 token
+     */
+    function _isTokenApproved(address erc721Address, uint256 tokenId) private view returns (bool) {
+        IERC721 _erc721 = IERC721(erc721Address);
+        try _erc721.getApproved(tokenId) returns (address tokenOperator) {
+            return tokenOperator == address(this);
+        } catch {
+            return false;
+        }
+    }
 
-  function mint(address to, uint256 amount) external {
-    require(controllers[msg.sender], "Only controllers can mint");
-    _mint(to, amount);
-  }
+    /**
+     * @dev check if this contract has approved to all of this owner's erc721 tokens
+     */
+    function _isAllTokenApproved(address erc721Address, address owner) private view returns (bool) {
+        IERC721 _erc721 = IERC721(erc721Address);
+        return _erc721.isApprovedForAll(owner, address(this));
+    }
 
-  function burnFrom(address account, uint256 amount) public override {
-      if (controllers[msg.sender]) {
-          _burn(account, amount);
-      }
-      else {
-          super.burnFrom(account, amount);
-      }
-  }
+    /**
+     * @dev Check if a listing is valid or not
+     * The seller must be the owner
+     * The seller must have give this contract allowance
+     * The sell price must be more than 0
+     * The listing mustn't be expired
+     */
+    function _isListingValid(address erc721Address, Listing memory listing) private view returns (bool isValid) {
+        if (
+            _isTokenOwner(erc721Address, listing.tokenId, listing.seller) &&
+            (_isTokenApproved(erc721Address, listing.tokenId) ||
+                _isAllTokenApproved(erc721Address, listing.seller)) &&
+            listing.value > 0 &&
+            listing.expireTimestamp > block.timestamp
+        ) {
+            isValid = true;
+        }
+    }
 
-  function addController(address controller) external onlyOwner {
-    controllers[controller] = true;
-  }
+    /**
+     * @dev Check if an bid is valid or not
+     * Bidder must not be the owner
+     * Bidder must have enough balance same or more than bid price
+     * Bidder must give the contract allowance same or more than bid price
+     * Bid price must > 0
+     * Bid mustn't been expired
+     */
+    function _isBidValid(address erc721Address, Bid memory bid) private view returns (bool isValid) {
+        if (
+            !_isTokenOwner(erc721Address, bid.tokenId, bid.bidder) &&
+            _paymentToken.allowance(bid.bidder, address(this)) >= bid.value &&
+            _paymentToken.balanceOf(bid.bidder) >= bid.value &&
+            bid.value > 0 &&
+            bid.expireTimestamp > block.timestamp
+        ) {
+            isValid = true;
+        }
+    }
 
-  function removeController(address controller) external onlyOwner {
-    controllers[controller] = false;
-  }
+    /**
+     * @dev delist a token - remove token id record and remove listing from mapping
+     * @param tokenId erc721 token Id
+     */
+    function _delistToken(address erc721Address, uint256 tokenId) private {
+        if (_erc721Market[erc721Address].tokenIdWithListing.contains(tokenId)) {
+            delete _erc721Market[erc721Address].listings[tokenId];
+            _erc721Market[erc721Address].tokenIdWithListing.remove(tokenId);
+        }
+    }
+
+    /**
+     * @dev remove a bid of a bidder
+     * @param tokenId erc721 token Id
+     * @param bidder bidder address
+     */
+    function _removeBidOfBidder(address erc721Address, uint256 tokenId, address bidder) private {
+        if (
+            _erc721Market[erc721Address].bids[tokenId].bidders.contains(bidder)
+        ) {
+            // Step 1: delete the bid and the address
+            delete _erc721Market[erc721Address].bids[tokenId].bids[bidder];
+            _erc721Market[erc721Address].bids[tokenId].bidders.remove(bidder);
+
+            // Step 2: if no bid left
+            if (
+                _erc721Market[erc721Address].bids[tokenId].bidders.length() == 0
+            ) {
+                _erc721Market[erc721Address].tokenIdWithBid.remove(tokenId);
+            }
+        }
+    }
+
+    /**
+     * @dev Calculate service fee, royalty fee and left value
+     * @param value bidder address
+     */
+    function _calculateFees(address erc721Address, uint256 value) private view returns (uint256 _serviceFee, uint256 _royaltyFee) {
+        uint256 _royaltyFeeFraction = royalty(erc721Address).feeFraction;
+        uint256 _baseFractions = 1000 +
+            _serviceFeeFraction +
+            _royaltyFeeFraction;
+
+        _serviceFee = (value * _serviceFeeFraction) / _baseFractions;
+        _royaltyFee = (value * _royaltyFeeFraction) / _baseFractions;
+    }
+
+    /**
+     * @dev Enable to disable Bids and Listing
+     */
+    function changeMarketplaceStatus(bool enabled) external onlyOwner {
+        _isTradingEnabled = enabled;
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-actionTimeOutRangeMin}.
+     */
+    function actionTimeOutRangeMin() external view override returns (uint256) {
+        return _actionTimeOutRangeMin;
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-actionTimeOutRangeMax}.
+     */
+    function actionTimeOutRangeMax() external view override returns (uint256) {
+        return _actionTimeOutRangeMax;
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-paymentToken}.
+     */
+    function paymentToken() external view override returns (address) {
+        return address(_paymentToken);
+    }
+
+    /**
+     * @dev Change minimum listing and bid time range
+     */
+    function changeMinActionTimeLimit(uint256 timeInSec) external onlyOwner {
+        _actionTimeOutRangeMin = timeInSec;
+    }
+
+    /**
+     * @dev Change maximum listing and bid time range
+     */
+    function changeMaxActionTimeLimit(uint256 timeInSec) external onlyOwner {
+        _actionTimeOutRangeMax = timeInSec;
+    }
+
+    /**
+     * @dev See {IORIGINMarketplaceV2-serviceFee}.
+     */
+    function serviceFee() external view override returns (uint8) {
+        return _serviceFeeFraction;
+    }
+
+    /**
+     * @dev Change withdrawal fee percentage.
+     * @param serviceFeeFraction_ Fraction of withdrawal fee based on 1000
+     */
+    function changeSeriveFee(uint8 serviceFeeFraction_) external onlyOwner {
+        require(
+            serviceFeeFraction_ <= 25,
+            "Attempt to set percentage higher than 2.5%."
+        );
+
+        _serviceFeeFraction = serviceFeeFraction_;
+    }
 }

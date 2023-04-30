@@ -9,9 +9,9 @@ import { useAccount, useWaitForTransaction } from "wagmi";
 import SellForm from "../Forms/SellForm";
 import useCreateSell from "@/hooks/sells/useCreateSell";
 import useApprove from "@/hooks/useApprove";
-import { MarketContext } from "@/context/marketplaceContext";
 import fetch from "@/helpers/fetch";
 import { ethers } from "ethers";
+import { Loader2 } from "lucide-react"
 
 export default function SellModal({
   isOpen,
@@ -27,8 +27,6 @@ export default function SellModal({
   const [payT, setPayT] = useState("");
   const [sPrice, setSPrice] = useState("");
 
-  const { collAddress } = MarketContext();
-
   const { callCreate, data } = useCreateSell(
     colAddress!,
     nftId!,
@@ -37,15 +35,16 @@ export default function SellModal({
   );
 
   const { address } = useAccount();
-  const { isApproved, callApprove, data: apprData } = useApprove(collAddress!);
+  const { isApproved, callApprove, data: apprData } = useApprove(colAddress!);console.log(isApproved)
 
   const router = useRouter();
+
 
   const addSell = useCallback(async () => {
     const response = await fetch("POST", "/api/updatenft", {
       address,
       nftId,
-      collectionAddress: collAddress,
+      collectionAddress: colAddress,
       category: "",
       isAuctioned: false,
       isOffered: false,
@@ -59,7 +58,7 @@ export default function SellModal({
       price: Number(ethers.utils.formatUnits(sPrice)),
       currency: payT,
     });
-  }, [fileUrl, nftId, collAddress, address, payT, sPrice]);
+  }, [fileUrl, nftId, colAddress, address, payT, sPrice]);
 
   function closeModal() {
     setIsOpen(false);
@@ -97,6 +96,7 @@ export default function SellModal({
         setLoading(false);
         setIsOpen(true);
         toast.success("NFT Approved successfully");
+        setTimeout(() => router.reload(), 3000)
       } else {
         console.log(error);
         setLoading(false);
@@ -164,13 +164,13 @@ export default function SellModal({
                       <button
                         disabled={!callCreate}
                         type="button"
-                        className="inline-flex justify-center rounded-md border border-[#feb019] px-4
+                        className="inline-flex justify-center rounded-md border border-[#feb019] px-4 items-center
                         disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none
                                          py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
                                       from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
                         onClick={callMint}
                       >
-                        Sell NFT
+                        Sell NFT {!callMint && <Loader2 className="w-4 h-4 mx-1 animate-spin" />}
                       </button>
                     ) : (
                       <button

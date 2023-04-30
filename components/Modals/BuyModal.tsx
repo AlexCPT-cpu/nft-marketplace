@@ -58,12 +58,12 @@ export default function BuyModal({
       if (data) {
         setLoading(false);
         setIsOpen(true);
-        toast.success("Sell Created successfuly");
+        toast.success("Bought successfuly");
         router.push(`/user/${address}`);
       } else {
         console.log(error);
         setLoading(false);
-        toast.error("error Listing for cell");
+        toast.error("error Buying");
       }
     },
   });

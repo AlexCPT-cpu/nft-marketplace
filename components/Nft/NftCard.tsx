@@ -42,7 +42,7 @@ const NftCard = ({
   const [loading, setLoading] = useState(false);
   const [isAuction, setIsAuction] = useState(false);
   const [isOffer, setIsOffer] = useState(false);
-  const [isSell, setIsSell] = useState(false);
+  const [isSell, setIsSell] = useState(true);
 
   const [Creator, setCreator] = useState("");
   const [Own, setOwn] = useState("");
@@ -86,7 +86,7 @@ const NftCard = ({
       getNFTs().then((data) => {
         data.ownedNfts.map((item: NftData) => {
           if (item.tokenId === fullData[0]?.tokenId) {
-            setIsOwner(true);
+            setIsOwner(false);
           }
         });
       });
@@ -149,12 +149,14 @@ const NftCard = ({
             setIsOpen={setIsModalOpen}
             fileUrl={image}
             nftId={nftId}
+            colAddress={nftAddress}
           />
           <BidModal
             isOpen={isBidModal}
             setIsOpen={setBidModal}
             fileUrl={image}
             nftId={nftId}
+            colAddress={nftAddress}
           />
 
           <BuyModal
@@ -162,6 +164,7 @@ const NftCard = ({
             setIsOpen={setBuyModal}
             fileUrl={image}
             nftId={nftId}
+            colAddress={nftAddress}
           />
 
           <div className="flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-4">

@@ -1,6 +1,8 @@
 import Marketplace from "@/config/Marketplace.json";
 import { marketPlace } from "@/config/config";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import blockTimestamp from "@/helpers/blockTimestamp";
+import { useEffect, useState } from "react";
 
 const useCreateSell = (
   collectionAddress: string,
@@ -8,13 +10,22 @@ const useCreateSell = (
   payToken: string,
   price: string
 ) => {
+  const [timestamp, setTimestamp] = useState(0);
+
+  useEffect(() => {
+    const x = async () => {
+      return await blockTimestamp();
+    };
+
+    x().then((time) => setTimestamp(time));
+  }, [price, collectionAddress, tokenId]);
 
   const { config: createConfig } = usePrepareContractWrite({
     // @ts-ignore
     address: marketPlace,
     abi: Marketplace,
     functionName: "listToken",
-    args: [collectionAddress, tokenId, price, 1800000],
+    args: [collectionAddress, tokenId, price, timestamp + 3000],
   });
 
   const { data, write: callCreate } = useContractWrite({

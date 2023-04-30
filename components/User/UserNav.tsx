@@ -82,7 +82,7 @@ const UserNav: React.FC<{ Nfts: any[] }> = ({ Nfts }) => {
           }}
           className="flex cursor-pointer transition hover:bg-white/10 py-1 px-5 lg:ml-56 ml-0 xl:ml-0 rounded-lg flex-col"
         >
-          <div className="flex flex-row">
+          <div className="flex flex-row ml-0 lg:ml-5">
             <Brush />
             Created 4
           </div>

@@ -1,15 +1,15 @@
 import { marketPlace } from "@/config/config";
 import NftAbi from "@/config/NftAbi.json";
-import { useContractWrite, useContractRead, usePrepareContractWrite, useWaitForTransaction, useAccount } from "wagmi";
+import { useContractWrite, useContractRead, usePrepareContractWrite, useAccount } from "wagmi";
 
 const useApprove = (collectionAddress: string) => {
 
 
   const { address: userAddress } = useAccount();
 
-  const { data: isApproved, isLoading: loadingApprove } = useContractRead({
+  const { data: isApproved } = useContractRead({
     // @ts-ignore
-    address: collectionAddress ?? '',
+    address: collectionAddress,
     abi: NftAbi,
     functionName: "isApprovedForAll",
     args: [userAddress, marketPlace],
@@ -17,7 +17,7 @@ const useApprove = (collectionAddress: string) => {
 
   const { config: approveConfig } = usePrepareContractWrite({
     // @ts-ignore
-    address: collectionAddress ?? '',
+    address: collectionAddress,
     abi: NftAbi,
     functionName: "setApprovalForAll",
     args: [marketPlace, true],

@@ -3,6 +3,7 @@ import React from 'react'
 import CreatorCard from '../Cards/CreatorCard'
 
 const CreatorsGrid = () => {
+  
   return (
     <div className="mx-auto mt-32 text-center justify-center items-center">
     <div className="flex flex-col md:flex-row justify-between px-3 lg:px-10 mb-6">

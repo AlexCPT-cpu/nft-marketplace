@@ -1,8 +1,0 @@
-IERC20
-Reentrancy Guard,
-Ownable
-counters
-strings
-contract UnikNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable
-IERC721
-IUNIKNFT

@@ -21,7 +21,7 @@ const BuyForm = ({
 }) => {
   const router = useRouter();
   const { address } = useAccount();
-  const [price, setPrice] = useState("1");
+  const [price, setPrice] = useState("0");
   const [active, setActive] = useState({
     eth: true,
     busd: false,

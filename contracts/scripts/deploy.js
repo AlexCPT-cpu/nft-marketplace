@@ -20,9 +20,9 @@ async function main() {
   const factory = await Factory.deploy(marketPlace.address);
   await factory.deployed();
 
-  console.log(` Factory Deployed to ${marketPlace.address}`);
+  console.log(` Factory Deployed to ${factory.address}`);
 
-  console.log(` MarketPlace Deployed to ${factory.address}`);
+  console.log(` MarketPlace Deployed to ${marketPlace.address}`);
 
   // await hre.run(`verify:verify`, {
   //   address: marketPlace.address,
@@ -49,4 +49,5 @@ main().catch((error) => {
  Factory Deployed to 0x76F69BE8739b4B0D8A23c498b880614aA01bA91B
  MarketPlace Deployed to 0x9b16A72bECd3F3f9354F9EA71751ABC532229a28
  npx hardhat verify --network goerli 0x9b16A72bECd3F3f9354F9EA71751ABC532229a28 "0x7c13C3B93b6c80E5ff6D47B7ffFB7C599E9D960A"
+ npx hardhat run scripts/deploy.js --network goerli
 */

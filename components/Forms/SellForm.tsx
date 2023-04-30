@@ -1,13 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import FormInput from "./FormInput";
 import Image from "next/image";
 import useApproveTokens from "@/hooks/useApproveTokens";
 import useTokens from "@/hooks/useTokens";
 import { ethers } from "ethers";
 import Loader from "../Html/Loader";
-import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
-import toast from "react-hot-toast";
-import { useRouter } from "next/router";
 import { BUSD, USDT, BNB } from "@/config/config";
 
 const SellForm = ({
@@ -19,7 +16,7 @@ const SellForm = ({
   setP: (state: string) => void;
   setToken: (state: string) => void;
 }) => {
-  const [price, setPrice] = useState("1");
+  const [price, setPrice] = useState("");
   const [active, setActive] = useState({
     eth: true,
     busd: false,
