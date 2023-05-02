@@ -17,10 +17,13 @@ import BidModal from "../Modals/BidModal";
 import useCancel from "@/hooks/cancels/useCancel";
 import Loader from "../Html/Loader";
 import BuyModal from "../Modals/BuyModal";
-import { MarketContext } from "@/context/marketplaceContext";
 import getCollectionName from "@/helpers/getCollectionName";
 import truncateEthAddress from "truncate-eth-address";
 import getOwner from "@/helpers/getOwner";
+import { useRouter } from "next/router";
+import isListed from "@/helpers/isListed";
+import { NFT } from "@prisma/client";
+import fetch from "@/helpers/fetch";
 
 const NftCard = ({
   image,
@@ -41,20 +44,33 @@ const NftCard = ({
   const [isBuyModal, setBuyModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isAuction, setIsAuction] = useState(false);
-  const [isOffer, setIsOffer] = useState(false);
-  const [isSell, setIsSell] = useState(true);
+  const [isSell, setIsSell] = useState(false);
+  const [listedP, setListedP] = useState("0");
+
+  const [nftData, setNftData] = useState<NFT>();
+
+  useEffect(() => {
+    const getNft = async () => {
+      const res = await fetch("POST", "/api/getNfts", {
+        collectionAddress: nftAddress,
+        nftId,
+      });
+      console.log(res);
+    };
+
+    getNft();
+  }, [nftAddress, nftId]);
 
   const [Creator, setCreator] = useState("");
   const [Own, setOwn] = useState("");
-
-  const { collAddress } = MarketContext();
+  const router = useRouter();
 
   const { chain } = useNetwork();
 
   const { address } = useAccount();
 
   const { callCancel, data } = useCancel(
-    collAddress as string,
+    nftAddress as string,
     fullData[0]?.tokenId
   );
 
@@ -65,12 +81,12 @@ const NftCard = ({
     onSuccess(data) {
       if (data) {
         setLoading(false);
-        toast.success("NFT minted successfuly");
-        setTimeout(() => window.location.reload(), 3000);
+        toast.success("Listing cancelled successfuly");
+        setTimeout(() => router.reload(), 3000);
       } else {
         console.log("error");
         setLoading(false);
-        toast.error("error minting NFT");
+        toast.error("error Cancelling NFT");
       }
     },
   });
@@ -86,7 +102,7 @@ const NftCard = ({
       getNFTs().then((data) => {
         data.ownedNfts.map((item: NftData) => {
           if (item.tokenId === fullData[0]?.tokenId) {
-            setIsOwner(false);
+            setIsOwner(true);
           }
         });
       });
@@ -95,21 +111,28 @@ const NftCard = ({
 
   useEffect(() => {
     const getNft = async () => {
-      const { data }: any = await getCollectionName(collAddress);
-      const { data: own }: any = await getOwner(collAddress, nftId!);
+      const { data }: any = await getCollectionName(nftAddress!);
+      const { data: listed } = await isListed(nftAddress!, nftId!);
+      const { data: own }: any = await getOwner(nftAddress!, nftId!);
+      //@ts-ignore
+      if (listed?.seller !== "0x0000000000000000000000000000000000000000") {
+        setIsSell(true);
+        //@ts-ignore
+        setListedP(String(parseInt(listed[1]._hex)));
+      }
       setCreator(data?.creator);
       setOwn(own);
     };
 
     getNft();
-  }, [collAddress, nftId]);
+  }, [nftAddress, nftId]);
 
   return (
     <div className="border dark:bg-[#041824] border-black dark:border-[#092940] p-4 rounded-md hover:shadow-xl">
-      <div className="flex flex-col lg:flex-row lg:justify-between w-full">
-        <div className="relative lg:mr-3 flex w-full justify-center">
+      <div className="flex flex-col lg:items-center lg:flex-row lg:justify-between w-full">
+        <div className="lg:mr-3 flex w-full justify-items-start items-start">
           <Image
-            className="xl:w-[400px] xl:h-[400px] w-[400px] h-[320px] rounded-lg mb-5 mx-auto flex object-cover"
+            className="xl:w-[400px] xl:h-[400px] w-[400px] h-[320px] rounded-lg mb-5  flex object-cover"
             src={image!}
             width={200}
             height={200}
@@ -117,7 +140,7 @@ const NftCard = ({
           />
         </div>
 
-        <div className="flex flex-col text-left space-y-2 dark:text-gray-500">
+        <div className="flex flex-col text-left whitespace-nowrap space-y-2 dark:text-gray-500">
           <div className="font-bold text-2xl">{name}</div>
           <div className="flex flex-row items-center">
             <Link className="flex flex-row items-center" href="/">
@@ -165,6 +188,7 @@ const NftCard = ({
             fileUrl={image}
             nftId={nftId}
             colAddress={nftAddress}
+            buyPrice={listedP}
           />
 
           <div className="flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-4">
@@ -182,7 +206,7 @@ const NftCard = ({
               </div>
             ) : (
               <>
-                {isSell ? (
+                {isSell && Own !== address ? (
                   <div
                     onClick={() => {
                       setBuyModal(true);
@@ -202,7 +226,7 @@ const NftCard = ({
 
             {isOwner ? (
               <>
-                {isSell ? (
+                {isSell && Own === address ? (
                   <div
                     onClick={() => {
                       setLoading(true);
@@ -241,7 +265,7 @@ const NftCard = ({
           <div className="flex items-center justify-start lg:justify-center mr-auto flex-row">
             <div className="ring-1 ring-gray-300 dark:ring-gray-300 bg-slate-500/5 p-1 rounded-full">
               <Image
-                className="w-10 cursor-pointer rounded-full"
+                className="lg:w-56 w-10 cursor-pointer rounded-full"
                 src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${creator}`}
                 alt="avatar"
                 width={50}
@@ -261,7 +285,7 @@ const NftCard = ({
           <div className="flex items-center justify-start mr-auto lg:justify-center flex-row">
             <div className="ring-1 ring-gray-300 dark:ring-gray-300 bg-slate-500/5 p-1 rounded-full">
               <Image
-                className="w-10 cursor-pointer rounded-full"
+                className="lg:w-56 w-10 cursor-pointer rounded-full"
                 src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${Own}`}
                 alt="avatar"
                 width={50}

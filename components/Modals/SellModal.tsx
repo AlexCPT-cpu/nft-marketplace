@@ -11,7 +11,7 @@ import useCreateSell from "@/hooks/sells/useCreateSell";
 import useApprove from "@/hooks/useApprove";
 import fetch from "@/helpers/fetch";
 import { ethers } from "ethers";
-import { Loader2 } from "lucide-react"
+import { Loader2 } from "lucide-react";
 
 export default function SellModal({
   isOpen,
@@ -35,30 +35,25 @@ export default function SellModal({
   );
 
   const { address } = useAccount();
-  const { isApproved, callApprove, data: apprData } = useApprove(colAddress!);console.log(isApproved)
+  const { isApproved, callApprove, data: apprData } = useApprove(colAddress!);
 
   const router = useRouter();
 
-
   const addSell = useCallback(async () => {
-    const response = await fetch("POST", "/api/updatenft", {
-      address,
+    const response = await fetch("POST", "/api/activity", {
       nftId,
       collectionAddress: colAddress,
-      category: "",
-      isAuctioned: false,
-      isOffered: false,
-      isSell: true,
-      latestBid: 0,
-      latestOffer: 0,
-      auctionTimer: 0,
-      likes: 0,
-      currentValue: 0,
-      image: fileUrl,
+      activityType: "Sell",
+      from: address,
+      fromAddress: address,
+      to: "",
+      toAddress: "",
+      time: "0",
       price: Number(ethers.utils.formatUnits(sPrice)),
       currency: payT,
     });
-  }, [fileUrl, nftId, colAddress, address, payT, sPrice]);
+    console.log(response);
+  }, [nftId, colAddress, address, payT, sPrice]);
 
   function closeModal() {
     setIsOpen(false);
@@ -72,16 +67,17 @@ export default function SellModal({
       if (data) {
         const run = async () => {
           setLoading(false);
-          setIsOpen(true);
+          setIsOpen(false);
           toast.success("Sell Created successfuly");
           await addSell();
-          router.push(`/user/${address}`);
+          setTimeout(() => router.push(`/user/${address}`), 5000);
         };
 
-        run();
+        (async () => await run())();
       } else {
         console.log(error);
         setLoading(false);
+        setIsOpen(false);
         toast.error("error Listing for sell");
       }
     },
@@ -96,7 +92,7 @@ export default function SellModal({
         setLoading(false);
         setIsOpen(true);
         toast.success("NFT Approved successfully");
-        setTimeout(() => router.reload(), 3000)
+        setTimeout(() => router.reload(), 3000);
       } else {
         console.log(error);
         setLoading(false);
@@ -162,7 +158,7 @@ export default function SellModal({
                   <div className="mt-4 flex justify-center items-center">
                     {isApproved ? (
                       <button
-                        disabled={!callCreate}
+                        //disabled={!callCreate}
                         type="button"
                         className="inline-flex justify-center rounded-md border border-[#feb019] px-4 items-center
                         disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none
@@ -170,7 +166,10 @@ export default function SellModal({
                                       from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
                         onClick={callMint}
                       >
-                        Sell NFT {!callMint && <Loader2 className="w-4 h-4 mx-1 animate-spin" />}
+                        Sell NFT{" "}
+                        {!callMint && (
+                          <Loader2 className="w-4 h-4 mx-1 animate-spin" />
+                        )}
                       </button>
                     ) : (
                       <button

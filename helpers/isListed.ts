@@ -2,19 +2,21 @@ import { ethers } from "ethers";
 import Marketplace from "@/config/Marketplace.json";
 import { marketPlace } from "@/config/config";
 
-const getListings = async (collectionAddress: string, from: number, size: number) => {
-  const getList = new Promise(async (resolve) => {
+const isListed = async (collectionAddress: string, nftId: string | number) => {
+  const getData = new Promise(async (resolve, reject) => {
     const provider = new ethers.providers.AlchemyProvider(
       "goerli",
       process.env.ALCHEMY_ID
     );
     const contract = new ethers.Contract(marketPlace, Marketplace, provider);
 
-    const list = await contract.getTokenListings(collectionAddress, from, size) 
-    resolve(list);
+    const listedData = await contract?.getTokenListing(collectionAddress, nftId);
+
+    resolve(listedData);
   });
-  const listings = await getList;
-  return { listings };
+  const data = await getData;
+
+  return { data };
 };
 
-export default getListings;
+export default isListed;

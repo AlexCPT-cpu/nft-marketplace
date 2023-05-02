@@ -25,7 +25,7 @@ const useCreateSell = (
     address: marketPlace,
     abi: Marketplace,
     functionName: "listToken",
-    args: [collectionAddress, tokenId, price, timestamp + 3000],
+    args: [collectionAddress, tokenId, price, timestamp + 7200],
   });
 
   const { data, write: callCreate } = useContractWrite({

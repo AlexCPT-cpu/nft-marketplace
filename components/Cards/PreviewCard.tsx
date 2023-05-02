@@ -19,7 +19,7 @@ const PreviewCard = ({ image, name, price, buttonTitle }: NftProps) => {
             {name} <span></span>
         </div>
         <div className="flex flex-row">
-            <CurrencyDollarIcon className="w-6 mr-2" /> <span className="text-slate-400 dark:text-neutral-600">{price} BTC ≈$26.69</span>
+            <CurrencyDollarIcon className="w-6 mr-2" /> <span className="text-slate-400 dark:text-neutral-600">{price} ETH</span>
         </div>
         <div className="flex group flex-row border rounded-full w-fit border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]">
             <Cart /> <span className="dark:text-neutral-300 text-black text-lg ml-3">{buttonTitle}</span>

@@ -19,7 +19,6 @@ model User {
   username         String?   @unique
   image            String?
   background       String?
-  email            String?   @unique
   emailVerified    DateTime?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
@@ -106,14 +105,15 @@ model OffersMade {
 }
 
 model Activity {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  activityType String?
-  item         String[]
-  price        Float?
-  from         String?
-  fromAddress  String?
-  to           String?
-  toAddress    String?
-  time         String?
-  nftId        String?
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  activityType      String?
+  collectionAddress String?
+  item              String[]
+  price             Float?
+  from              String?
+  fromAddress       String?
+  to                String?
+  toAddress         String?
+  time              String?
+  nftId             String?
 }

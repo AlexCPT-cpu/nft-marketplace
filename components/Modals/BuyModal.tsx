@@ -1,14 +1,15 @@
-import useCreate from "@/hooks/nfts/useCreate";
 import { ModalProps } from "@/types/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import PreviewCard from "../Cards/PreviewCard";
 import Loader from "../Html/Loader";
 import toast from "react-hot-toast";
 import { useAccount, useWaitForTransaction } from "wagmi";
 import BuyForm from "../Forms/BuyForm";
 import useBuy from "@/hooks/buys/useBuy";
+import fetch from "@/helpers/fetch";
+import { ethers } from "ethers";
 
 export default function BuyModal({
   isOpen,
@@ -19,55 +20,69 @@ export default function BuyModal({
   nftId,
   price,
   payToken,
+  buyPrice
 }: ModalProps) {
-
   const [loading, setLoading] = useState(false);
-  const [payT, setPayT] = useState('')
-  const [sPrice, setSPrice] = useState('')
-
-  const { write, data } = useCreate(fileUrl!);
+  const [payT, setPayT] = useState("");
+  const [sPrice, setSPrice] = useState("");
 
   const isOnSale = false;
   const isAuction = false;
 
-  const { address } = useAccount()
+  const { address } = useAccount();
 
   const { callBuy, data: sellData } = useBuy(
     colAddress!,
     nftId!,
     payT!,
-    sPrice!,
+    buyPrice!,
     address!
   );
-
 
   const router = useRouter();
 
   function closeModal() {
     setIsOpen(false);
   }
+  const addBuy = useCallback(async () => {
+    const response = await fetch("POST", "/api/activity", {
+      nftId,
+      collectionAddress: colAddress,
+      activityType: "Buy",
+      from: address,
+      fromAddress: address,
+      to: "",
+      toAddress: "",
+      time: "0",
+      price: Number(ethers.utils.formatUnits(sPrice)),
+      currency: payT,
+    });
+    console.log(response);
+  }, [nftId, colAddress, address, payT, sPrice]);
 
-  function openModal() {
-    setIsOpen(true);
-  }
-  const waitForTransaction = useWaitForTransaction({
+useWaitForTransaction({
     confirmations: 2,
-    hash: data?.hash,
+    hash: sellData?.hash,
     chainId: 5,
     onSettled(data, error) {
       if (data) {
-        setLoading(false);
-        setIsOpen(true);
-        toast.success("Bought successfuly");
-        router.push(`/user/${address}`);
+        const run = async () => {
+          setLoading(false);
+          setIsOpen(false);
+          toast.success("Bought successfuly");
+          await addBuy();
+          setTimeout(() => router.push(`/user/${address}`), 5000);
+        };
+        (async () => await run())();
       } else {
         console.log(error);
         setLoading(false);
+        setIsOpen(false);
         toast.error("error Buying");
       }
     },
   });
-  const { isSuccess, status } = waitForTransaction;
+
 
   const callMint = async () => {
     setIsOpen(false);
@@ -110,13 +125,17 @@ export default function BuyModal({
                     Buy Item
                   </Dialog.Title>
                   <div className="mt-2 flex flex-col lg:flex-row lg:justify-between items-center">
-                    <div>
-                      <PreviewCard buttonTitle="Sell Now" />
+                    <div className="mx-auto">
+                      <PreviewCard image={fileUrl} price={Number(ethers?.utils?.formatEther(buyPrice! ?? '0'))} buttonTitle="Buy Now" />
                     </div>
 
-                    <div className="h-full">
-                      <BuyForm setToken={setPayT} setP={setSPrice} modalOptions={setIsOpen} />
-                    </div>
+                    {/* <div className="h-full">
+                      <BuyForm
+                        setToken={setPayT}
+                        setP={setSPrice}
+                        modalOptions={setIsOpen}
+                      />
+                    </div> */}
                   </div>
 
                   <div className="mt-4 flex justify-center items-center">

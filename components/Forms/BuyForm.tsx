@@ -172,13 +172,13 @@ const BuyForm = ({
               className="mx-2"
               src="/eth.png"
               alt="eth"
-              width={50}
-              height={50}
+              width={20}
+              height={20}
             />
           </div>
           <div>ETH</div>
         </div>
-        {UsdtBool ? (
+        {/* {UsdtBool ? (
           <div
             onClick={() => select(1)}
             className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
@@ -299,7 +299,7 @@ const BuyForm = ({
             </div>
             <div className="whitespace-nowrap">Enable BNB</div>
           </div>
-        )}
+        )} */}
       </div>
     </form>
   );

@@ -211,4 +211,5 @@ export interface ModalProps {
   nftId?: string | number,
   price?: number,
   payToken?: string
+  buyPrice?: string
 }

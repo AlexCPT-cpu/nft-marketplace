@@ -31,7 +31,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     } else {
       console.log("no user ")
       const message = 'Sign this message to verify your account'
-      // signMessage({ message });
+      signMessage({ message });
     }
   } else {
     console.log('connect wallet')

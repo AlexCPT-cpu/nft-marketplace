@@ -1,11 +1,15 @@
 import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TableLayout from "./TableLayout";
 import TableChild from "./TableChild";
+import { Activity } from "@prisma/client";
+import fetch from "@/helpers/fetch";
+import truncateEthAddress from "truncate-eth-address";
 
 const RankingTable = () => {
   const inputElt = useRef(null);
   const [value, setValue] = useState<string>("");
+  const [activities, setActivities] = useState<Activity[]>();
 
   const item = {
     name: "Stone Graphy",
@@ -21,7 +25,14 @@ const RankingTable = () => {
     name: "Face Art",
     image: "/face.jpg",
   };
+  useEffect(() => {
+    const getActive = async () => {
+      const res = await fetch("GET", "/api/activity");
+      setActivities(res?.data);
+    };
 
+    getActive();
+  }, []);
   return (
     <div className="px-6 lg:px-16 mt-10">
       <div className="ml-auto flex justify-end">
@@ -78,7 +89,18 @@ const RankingTable = () => {
       <div>
         {" "}
         <TableLayout>
-          <TableChild
+          {activities?.map((activity: Activity) => (
+            <TableChild
+              key={activity.id}
+              event={activity.activityType!}
+              items={item}
+              price={activity.price!}
+              from={truncateEthAddress(activity.from!)}
+              to={truncateEthAddress(activity.to != '' ? activity.to! : '0x0000000000000000000000000000000000000000')}
+              time="21 minutes ago"
+            />
+          ))}
+          {/* <TableChild
             event="Offer Made"
             items={item}
             price={0.012}
@@ -107,8 +129,8 @@ const RankingTable = () => {
             from="Josephene"
             to="Matteuse"
             time="3 hours ago"
-          />
-        </TableLayout>{" "}
+          /> */}
+        </TableLayout>
       </div>
 
       <div className="my-6 text-black dark:text-gray-500 font-semibold font-lg">

@@ -8,7 +8,7 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<User | Data>
+  res: NextApiResponse<User | Data | any>
 ) {
   if (req.method === "POST") {
     try {
@@ -34,6 +34,7 @@ export default async function handler(
       if (existingUser) {
         return res.status(422).json({ error: "Address taken" });
       }
+
       const user = await prismadb.user.create({
         data: {
           address,

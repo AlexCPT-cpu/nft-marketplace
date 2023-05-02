@@ -1,13 +1,15 @@
 import { ModalProps } from "@/types/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import PreviewCard from "../Cards/PreviewCard";
 import Loader from "../Html/Loader";
 import toast from "react-hot-toast";
 import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
 import BidForm from "../Forms/BidForm";
 import usePlaceBid from "@/hooks/bids/usePlaceBid";
+import fetch from "@/helpers/fetch";
+import { ethers } from "ethers";
 
 export default function BidModal({
   isOpen,
@@ -17,12 +19,11 @@ export default function BidModal({
   fileUrl,
   previewData,
 }: ModalProps) {
-
   const [loading, setLoading] = useState(false);
-  const [price, setPrice] = useState('')
+  const [price, setPrice] = useState("");
 
   const { address } = useAccount();
-  const { chain } = useNetwork()
+  const { chain } = useNetwork();
 
   const router = useRouter();
 
@@ -30,15 +31,22 @@ export default function BidModal({
     setIsOpen(false);
   }
 
-  function openModal() {
-    setIsOpen(true);
-  }
+  const addOffer = useCallback(async () => {
+    const response = await fetch("POST", "/api/activity", {
+      nftId,
+      collectionAddress: colAddress,
+      activityType: "PlaceBid",
+      from: address,
+      fromAddress: address,
+      to: "",
+      toAddress: "",
+      time: "0",
+      price: Number(ethers.utils.formatUnits(price)),
+    });
+    console.log(response);
+  }, [nftId, colAddress, address, price]);
 
-  const { data, callPlaceBid } = usePlaceBid(
-    colAddress!,
-    nftId!,
-    price
-  )
+  const { data, callPlaceBid } = usePlaceBid(colAddress!, nftId!, price);
 
   const waitForTransaction = useWaitForTransaction({
     confirmations: 2,
@@ -46,12 +54,18 @@ export default function BidModal({
     chainId: chain?.id,
     onSuccess(data) {
       if (data) {
-        setLoading(false);
-        toast.success("NFT minted successfuly");
-        router.push(`/user/${address}`);
+        const run = async () => {
+          setLoading(false);
+          setIsOpen(false);
+          toast.success("Bought successfuly");
+          await addOffer();
+          setTimeout(() => router.push(`/user/${address}`), 5000);
+        };
+        (async () => await run())();
       } else {
-        console.log('error');
+        console.log("error");
         setLoading(false);
+        setIsOpen(false);
         toast.error("error minting NFT");
       }
     },
@@ -110,9 +124,7 @@ export default function BidModal({
                     </div>
 
                     <div className="h-full">
-                      <BidForm 
-                      modalOptions={setIsOpen}
-                      setP={setPrice} />
+                      <BidForm modalOptions={setIsOpen} setP={setPrice} />
                     </div>
                   </div>
 

@@ -12,9 +12,9 @@ import {
 const EventIcon: React.FC<{ event: string }> = ({ event }) => {
   if (event === "Offer Made") {
     return <StarIcon className="w-10 mr-3 fill-[#feb019]" />;
-  } else if (event === "Sale") {
+  } else if (event === "Sell") {
     return <ShoppingCartIcon className="w-10 mr-3 fill-[#feb019]" />;
-  } else if (event === "Bid") {
+  } else if (event === "Buy") {
     return <BuildingLibraryIcon className="w-10 mr-3 fill-[#feb019]" />;
   } else {
     return <ListBulletIcon className="w-10 mr-3 fill-[#feb019]" />;
@@ -53,7 +53,7 @@ const TableChild = ({
       </td>
 
       <td scope="row" className="px-6 py-4 whitespace-nowrap">
-        {price?.toFixed(2) ?? "- -"}&nbsp;BNB
+        {price?.toFixed(3) ?? "- -"}&nbsp;BNB
       </td>
 
       <td

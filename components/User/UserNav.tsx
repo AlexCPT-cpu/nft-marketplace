@@ -15,6 +15,14 @@ const UserNav: React.FC<{ Nfts: any[] }> = ({ Nfts }) => {
     offersReceived: false,
   });
 
+  const [values, setValues] = useState({
+    created: 0,
+    collected: 0,
+    collections: 0,
+    offersMade: 0,
+    offersReceived: 0,
+  });
+
   const navigate = (option: number) => {
     switch (option) {
       case 0:
@@ -84,7 +92,7 @@ const UserNav: React.FC<{ Nfts: any[] }> = ({ Nfts }) => {
         >
           <div className="flex flex-row ml-0 lg:ml-5">
             <Brush />
-            Created 4
+            Created {values?.created.toLocaleString()}
           </div>
           <div
             className={`
@@ -111,7 +119,7 @@ const UserNav: React.FC<{ Nfts: any[] }> = ({ Nfts }) => {
         >
           <div className="flex flex-row">
             <Cart />
-            Collected
+            Collected {values?.collected.toLocaleString()}
           </div>
           <div
             className={`
@@ -138,7 +146,7 @@ const UserNav: React.FC<{ Nfts: any[] }> = ({ Nfts }) => {
         >
           <div className="flex flex-row">
             <File />
-            Collections 4
+            Collections {values?.collections.toLocaleString()}
           </div>
           <div
             className={`
@@ -165,7 +173,7 @@ const UserNav: React.FC<{ Nfts: any[] }> = ({ Nfts }) => {
         >
           <div className="flex flex-row">
             <ArrowDownCircle />
-            Offers Received
+            Offers Received {values?.offersReceived.toLocaleString()}
           </div>
           <div
             className={`
@@ -192,7 +200,7 @@ const UserNav: React.FC<{ Nfts: any[] }> = ({ Nfts }) => {
         >
           <div className="flex flex-row">
             <ArrowUpCircle />
-            Offers Made
+            Offers Made {values?.offersMade.toLocaleString()}
           </div>
           <div
             className={`

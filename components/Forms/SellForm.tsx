@@ -84,7 +84,7 @@ const SellForm = ({
       />
       {loading && <Loader setLoading={setLoading} />}
       <div className="flex flex-row space-x-5 overflow-scroll scrollbar-hide max-w-xs md:max-w-sm">
-        <div
+        {/* <div
           onClick={() => select(0)}
           className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
           ${active.eth && "bg-blue-500/50"}`}
@@ -149,7 +149,7 @@ const SellForm = ({
             />
           </div>
           <div>BNB</div>
-        </div>
+        </div> */}
       </div>
     </form>
   );

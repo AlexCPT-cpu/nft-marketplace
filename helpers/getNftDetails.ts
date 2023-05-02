@@ -5,7 +5,7 @@ const getNftDetails = async (collectionAddress: string, nftId: string | number) 
   const getName = new Promise(async (resolve, reject) => {
     const provider = new ethers.providers.AlchemyProvider(
       "goerli",
-      "br-vL2X5K6ZxKDZ8N_U9sEnkIkba9Zw6"
+      process.env.ALCHEMY_ID
     );
     const contract = new ethers.Contract(collectionAddress, NftAbi, provider);
 
