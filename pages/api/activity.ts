@@ -50,7 +50,6 @@ export default async function handler(
           data: {
             activityType,
             collectionAddress,
-            item: [],
             price,
             from,
             fromAddress,
@@ -85,7 +84,6 @@ export default async function handler(
           data: {
             activityType,
             collectionAddress,
-            item: [],
             price,
             from,
             fromAddress,
@@ -121,7 +119,6 @@ export default async function handler(
           data: {
             activityType,
             collectionAddress,
-            item: [],
             price,
             from,
             fromAddress,
