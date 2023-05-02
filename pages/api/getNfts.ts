@@ -19,7 +19,7 @@ export default async function handler(
     const nft = await prismadb.nFT.findFirst({
       where: {
         collectionAddress,
-        nftId,
+        nftId: Number(nftId),
       },
     });
     res.status(200).json(nft);

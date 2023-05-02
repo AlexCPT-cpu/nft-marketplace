@@ -27,12 +27,13 @@ export default async function handler(
         },
       });
 
+      const collection = await prismadb.collection.findFirst({
+        where: {
+          address: collectionAddress,
+        },
+      });
+
       if (activityType === "Sell" && !findNft) {
-        const collection = await prismadb.collection.findFirst({
-          where: {
-            address: collectionAddress,
-          },
-        });
         const createdNft = await prismadb.nFT.create({
           data: {
             collectionId: collection?.id,
@@ -73,6 +74,17 @@ export default async function handler(
         });
         res.status(200).json(activity);
       } else if (activityType === "Buy") {
+        const coll = await prismadb.collection.update({
+          where: {
+            id: collection?.id,
+          },
+          data: {
+            volume: {
+              increment: price,
+            },
+          },
+        });
+
         const nft = await prismadb.nFT.findFirst({
           where: {
             collectionAddress,
@@ -103,6 +115,8 @@ export default async function handler(
               push: activity.id,
             },
             currentValue: price,
+            listedPrice: 0,
+            isSell: false
           },
         });
 

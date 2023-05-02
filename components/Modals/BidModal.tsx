@@ -18,6 +18,7 @@ export default function BidModal({
   nftId,
   fileUrl,
   previewData,
+  buyPrice,
 }: ModalProps) {
   const [loading, setLoading] = useState(false);
   const [price, setPrice] = useState("");
@@ -48,7 +49,7 @@ export default function BidModal({
 
   const { data, callPlaceBid } = usePlaceBid(colAddress!, nftId!, price);
 
-  const waitForTransaction = useWaitForTransaction({
+  useWaitForTransaction({
     confirmations: 2,
     hash: data?.hash,
     chainId: chain?.id,
@@ -57,7 +58,7 @@ export default function BidModal({
         const run = async () => {
           setLoading(false);
           setIsOpen(false);
-          toast.success("Bought successfuly");
+          toast.success("Bid Placed successfuly");
           await addOffer();
           setTimeout(() => router.push(`/user/${address}`), 5000);
         };
@@ -70,18 +71,11 @@ export default function BidModal({
       }
     },
   });
-  const { isSuccess, status } = waitForTransaction;
 
   const callMint = async () => {
     setIsOpen(false);
     setLoading(true);
     await callPlaceBid?.();
-
-    if (isSuccess && status === "success") {
-      setLoading(false);
-      toast.success("NFT minted successfuly");
-      router.push(`/user/${address}`);
-    }
   };
 
   return (
@@ -120,7 +114,13 @@ export default function BidModal({
                   </Dialog.Title>
                   <div className="mt-2 flex flex-col lg:flex-row lg:justify-between items-center">
                     <div>
-                      <PreviewCard buttonTitle="Bid Now" />
+                      <PreviewCard
+                        price={Number(
+                          ethers?.utils?.formatEther(buyPrice! ?? "0")
+                        )}
+                        image={fileUrl}
+                        buttonTitle="Bid Now"
+                      />
                     </div>
 
                     <div className="h-full">
@@ -130,8 +130,10 @@ export default function BidModal({
 
                   <div className="mt-4 flex justify-center items-center">
                     <button
+                      disabled={!callPlaceBid}
                       type="button"
                       className="inline-flex justify-center rounded-md border border-[#feb019] px-4
+                      disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none
                        py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
                     from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
                       onClick={callMint}

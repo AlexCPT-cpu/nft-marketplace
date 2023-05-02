@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import NftAbi from "@/config/NftAbi.json";
+import { factory } from "@/config/config";
 
 const getCollectionName = async (collectionAddress: string) => {
   const getName = new Promise(async (resolve, reject) => {
@@ -7,7 +8,7 @@ const getCollectionName = async (collectionAddress: string) => {
       "goerli",
       process.env.ALCHEMY_ID
     );
-    const contract = new ethers.Contract(collectionAddress, NftAbi, provider);
+    const contract = new ethers.Contract(collectionAddress ?? factory, NftAbi, provider);
 
     const collectionName = await contract?.name();
     const creator = await contract.owner();

@@ -22,6 +22,7 @@ import truncateEthAddress from "truncate-eth-address";
 import getOwner from "@/helpers/getOwner";
 import { useRouter } from "next/router";
 import isListed from "@/helpers/isListed";
+import getNftDetails from "@/helpers/getNftDetails";
 import { NFT } from "@prisma/client";
 import fetch from "@/helpers/fetch";
 
@@ -51,11 +52,13 @@ const NftCard = ({
 
   useEffect(() => {
     const getNft = async () => {
-      const res = await fetch("POST", "/api/getNfts", {
-        collectionAddress: nftAddress,
-        nftId,
-      });
-      console.log(res);
+      if (nftAddress && nftId) {
+        const res = await fetch("POST", "/api/getNfts", {
+          collectionAddress: nftAddress,
+          nftId,
+        });
+        setNftData(res?.data);
+      }
     };
 
     getNft();
@@ -102,7 +105,8 @@ const NftCard = ({
       getNFTs().then((data) => {
         data.ownedNfts.map((item: NftData) => {
           if (item.tokenId === fullData[0]?.tokenId) {
-            setIsOwner(true);
+            //setIsOwner(true);
+            console.log("tokenId comparison");
           }
         });
       });
@@ -114,6 +118,8 @@ const NftCard = ({
       const { data }: any = await getCollectionName(nftAddress!);
       const { data: listed } = await isListed(nftAddress!, nftId!);
       const { data: own }: any = await getOwner(nftAddress!, nftId!);
+      const { owner } = await getNftDetails(nftAddress!, nftId!);
+      setIsOwner(owner === address);
       //@ts-ignore
       if (listed?.seller !== "0x0000000000000000000000000000000000000000") {
         setIsSell(true);
@@ -125,7 +131,7 @@ const NftCard = ({
     };
 
     getNft();
-  }, [nftAddress, nftId]);
+  }, [nftAddress, nftId, address]);
 
   return (
     <div className="border dark:bg-[#041824] border-black dark:border-[#092940] p-4 rounded-md hover:shadow-xl">
@@ -140,7 +146,7 @@ const NftCard = ({
           />
         </div>
 
-        <div className="flex flex-col text-left whitespace-nowrap space-y-2 dark:text-gray-500">
+        <div className="flex flex-col w-full text-left whitespace-nowrap space-y-2 dark:text-gray-500">
           <div className="font-bold text-2xl">{name}</div>
           <div className="flex flex-row items-center">
             <Link className="flex flex-row items-center" href="/">
@@ -153,11 +159,16 @@ const NftCard = ({
           </div>
           {loading && <Loader setLoading={setLoading} />}
           <div className="flex flex-col my-3 py-2">
-            <div className="text-xl font-">Current Price</div>
+            <div className="text-xl font-">
+              {nftData?.isSell ? "Current Price" : "Current Value"}
+            </div>
             <div className="flex flex-row">
               <CurrencyDollarIcon className="w-6 mr-2 dark:text-white" />{" "}
               <span className="text-green-600 font-semibold text-2xl">
-                {price} BTC ≈$26.69
+                {nftData?.isSell
+                  ? nftData?.listedPrice?.toFixed(4)
+                  : nftData?.currentValue?.toFixed(4)}{" "}
+                ETH
               </span>
             </div>
           </div>
@@ -180,6 +191,7 @@ const NftCard = ({
             fileUrl={image}
             nftId={nftId}
             colAddress={nftAddress}
+            buyPrice={listedP}
           />
 
           <BuyModal
@@ -200,7 +212,7 @@ const NftCard = ({
                 className="flex flex-row border rounded-full w-fit items-center border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer group hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
               >
                 <BanknotesIcon className="w-6 group-hover:fill-white fill-yellow-400" />{" "}
-                <span className="dark:text-neutral-500 text-black whitespace-nowrap text-lg ml-3">
+                <span className="dark:text-neutral-500 text-black whitespace-nowrap text-lg ">
                   Sell NFT
                 </span>
               </div>
@@ -214,7 +226,7 @@ const NftCard = ({
                     className="flex flex-row border rounded-full w-fit border-yellow-400 items-center dark:border-yellow-400 px-8 py-3 cursor-pointer group hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
                   >
                     <BanknotesIcon className="w-6 group-hover:fill-white items-center fill-yellow-400" />{" "}
-                    <span className="dark:text-neutral-500 text-black text-lg ml-3 text-center whitespace-nowrap">
+                    <span className="dark:text-neutral-500 text-black text-lg  text-center whitespace-nowrap">
                       Buy NFT
                     </span>
                   </div>
@@ -235,7 +247,7 @@ const NftCard = ({
                     className="flex flex-row border group rounded-full w-fit items-center border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
                   >
                     <ShoppingCartIcon className="w-6 group-hover:fill-white fill-yellow-400" />{" "}
-                    <span className="dark:text-neutral-500 text-black text-lg ml-3 text-center whitespace-nowrap">
+                    <span className="dark:text-neutral-500 text-black text-lg  text-center whitespace-nowrap">
                       Cancel Sell
                     </span>
                   </div>
@@ -243,7 +255,7 @@ const NftCard = ({
               </>
             ) : (
               <>
-                {isAuction ? (
+                {isSell ? (
                   <div
                     onClick={() => {
                       setBidModal(true);
@@ -251,7 +263,7 @@ const NftCard = ({
                     className="flex flex-row border group items-center rounded-full w-fit border-yellow-400 dark:border-yellow-400 px-8 py-3 cursor-pointer hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56]"
                   >
                     <ShoppingCartIcon className="w-6 group-hover:fill-white fill-yellow-400" />{" "}
-                    <span className="dark:text-neutral-500 text-black text-lg ml-3 whitespace-nowrap">
+                    <span className="dark:text-neutral-500 text-black text-lg whitespace-nowrap">
                       Place Bid
                     </span>
                   </div>
@@ -261,11 +273,12 @@ const NftCard = ({
           </div>
         </div>
 
-        <div className="flex flex-col space-y-4 mr-0 xl:mr-52 lg:ml-11 lg:justify-center justify-start my-5 lg:mt-0 items-center">
-          <div className="flex items-center justify-start lg:justify-center mr-auto flex-row">
-            <div className="ring-1 ring-gray-300 dark:ring-gray-300 bg-slate-500/5 p-1 rounded-full">
+        <div className="flex flex-col w-full space-y-4 mr-0 lg:justify-center justify-start my-5 lg:mt-0 items-center">
+
+          <div className="flex items-center w-full justify-start lg:justify-center flex-row">
+            <div className="ring-1 ml-2 flex items-center ring-gray-300 dark:ring-gray-300 bg-slate-500/5 p-1 rounded-full">
               <Image
-                className="lg:w-56 w-10 cursor-pointer rounded-full"
+                className="lg:w-12 w-10 cursor-pointer rounded-full object-cover"
                 src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${creator}`}
                 alt="avatar"
                 width={50}
@@ -282,14 +295,14 @@ const NftCard = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-start mr-auto lg:justify-center flex-row">
-            <div className="ring-1 ring-gray-300 dark:ring-gray-300 bg-slate-500/5 p-1 rounded-full">
+          <div className="flex items-center w-full justify-start lg:justify-center flex-row">
+            <div className="ring-1 ml-2 lg:ml-0 flex items-center ring-gray-300 dark:ring-gray-300 bg-slate-500/5 p-1 rounded-full">
               <Image
-                className="lg:w-56 w-10 cursor-pointer rounded-full"
+                className="lg:w-12 w-10 cursor-pointer rounded-full object-cover"
                 src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${Own}`}
                 alt="avatar"
-                width={50}
-                height={50}
+                width={40}
+                height={40}
               />
             </div>
             <div className="ml-4 dark:text-gray-300">

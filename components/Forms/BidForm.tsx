@@ -17,7 +17,7 @@ const BidForm = ({
   setP: (value: string) => void
 }) => {
 
-  const [price, setPrice] = useState("1");
+  const [price, setPrice] = useState("");
   const [active, setActive] = useState({
     eth: true,
     busd: false,
@@ -27,60 +27,60 @@ const BidForm = ({
   const [loading, setLoading] = useState(false);
   const { chain } = useNetwork();
 
-  const { usdtApprove, busdApprove, bnbApprove } = useApproveTokens();
-  const { approveUsdt, approveBusd, approveBnb, usdtData, bnbData, busdData } =
-    useTokens();
+  // const { usdtApprove, busdApprove, bnbApprove } = useApproveTokens();
+  // const { approveUsdt, approveBusd, approveBnb, usdtData, bnbData, busdData } =
+  //   useTokens();
 
-  const waitForUsdtApprove = useWaitForTransaction({
-    confirmations: 2,
-    hash: usdtData?.hash,
-    chainId: chain?.id,
-    onSuccess(data) {
-      if (data) {
-        setLoading(false);
-        toast.success("Usdt Approval Successful");
-        modalOptions(true);
-      } else {
-        console.log("error");
-        setLoading(false);
-        toast.error("Usdt Approval Failed");
-      }
-    },
-  });
+  // const waitForUsdtApprove = useWaitForTransaction({
+  //   confirmations: 2,
+  //   hash: usdtData?.hash,
+  //   chainId: chain?.id,
+  //   onSuccess(data) {
+  //     if (data) {
+  //       setLoading(false);
+  //       toast.success("Usdt Approval Successful");
+  //       modalOptions(true);
+  //     } else {
+  //       console.log("error");
+  //       setLoading(false);
+  //       toast.error("Usdt Approval Failed");
+  //     }
+  //   },
+  // });
 
-  const waitForBnbApprove = useWaitForTransaction({
-    confirmations: 2,
-    hash: bnbData?.hash,
-    chainId: chain?.id,
-    onSuccess(data) {
-      if (data) {
-        setLoading(false);
-        toast.success("Bnb Approval Successful");
-        modalOptions(true);
-      } else {
-        console.log("error");
-        setLoading(false);
-        toast.error("Bnb Approval Failed");
-      }
-    },
-  });
+  // const waitForBnbApprove = useWaitForTransaction({
+  //   confirmations: 2,
+  //   hash: bnbData?.hash,
+  //   chainId: chain?.id,
+  //   onSuccess(data) {
+  //     if (data) {
+  //       setLoading(false);
+  //       toast.success("Bnb Approval Successful");
+  //       modalOptions(true);
+  //     } else {
+  //       console.log("error");
+  //       setLoading(false);
+  //       toast.error("Bnb Approval Failed");
+  //     }
+  //   },
+  // });
 
-  const waitForBusdApprove = useWaitForTransaction({
-    confirmations: 2,
-    hash: busdData?.hash,
-    chainId: chain?.id,
-    onSuccess(data) {
-      if (data) {
-        setLoading(false);
-        toast.success("Busd Approval Successful");
-        modalOptions(false);
-      } else {
-        console.log("error");
-        setLoading(false);
-        toast.error("Busd Approval Failed");
-      }
-    },
-  });
+  // const waitForBusdApprove = useWaitForTransaction({
+  //   confirmations: 2,
+  //   hash: busdData?.hash,
+  //   chainId: chain?.id,
+  //   onSuccess(data) {
+  //     if (data) {
+  //       setLoading(false);
+  //       toast.success("Busd Approval Successful");
+  //       modalOptions(false);
+  //     } else {
+  //       console.log("error");
+  //       setLoading(false);
+  //       toast.error("Busd Approval Failed");
+  //     }
+  //   },
+  // });
 
   const select = (index: number) => {
     switch (index) {
@@ -119,17 +119,17 @@ const BidForm = ({
     }
   };
 
-  const UsdtBool = useMemo(() => {
-    return Number(usdtApprove) > Number(ethers.utils.parseUnits(price));
-  }, [price, usdtApprove]);
+  // const UsdtBool = useMemo(() => {
+  //   return Number(usdtApprove) > Number(ethers.utils.parseUnits(price));
+  // }, [price, usdtApprove]);
 
-  const BusdBool = useMemo(() => {
-    return Number(busdApprove) > Number(ethers.utils.parseUnits(price));
-  }, [price, busdApprove]);
+  // const BusdBool = useMemo(() => {
+  //   return Number(busdApprove) > Number(ethers.utils.parseUnits(price));
+  // }, [price, busdApprove]);
 
-  const BnbBool = useMemo(() => {
-    return Number(bnbApprove) > Number(ethers.utils.parseUnits(price));
-  }, [price, bnbApprove]);
+  // const BnbBool = useMemo(() => {
+  //   return Number(bnbApprove) > Number(ethers.utils.parseUnits(price));
+  // }, [price, bnbApprove]);
 
   const approve = () => {};
 
@@ -141,12 +141,12 @@ const BidForm = ({
         onChange={(e: any) => {
           setP(
             String(
-              ethers.utils.parseUnits(e.currentTarget.value.toString(), "ether")
+              ethers.utils.parseUnits(e?.currentTarget?.value?.toString() ?? '1', "ether")
             )
           );
           setPrice(e.currentTarget.value);
         }}
-        label="Enter Price"
+        label="Enter Bid"
         type="number"
         required={true}
       />
