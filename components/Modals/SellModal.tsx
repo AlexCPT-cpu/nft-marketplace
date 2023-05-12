@@ -23,15 +23,18 @@ export default function SellModal({
   price,
   payToken,
 }: ModalProps) {
+  
   const [loading, setLoading] = useState(false);
   const [payT, setPayT] = useState("");
   const [sPrice, setSPrice] = useState("");
+  const [date, setDate] = useState<Date>()
 
   const { callCreate, data } = useCreateSell(
     colAddress!,
     nftId!,
     payT!,
-    sPrice!
+    sPrice!,
+    date!
   );
 
   const { address } = useAccount();
@@ -151,6 +154,8 @@ export default function SellModal({
                         setToken={setPayT}
                         setP={setSPrice}
                         modalOptions={setIsOpen}
+                        date={date}
+                        setDate={setDate}
                       />
                     </div>
                   </div>
@@ -158,7 +163,7 @@ export default function SellModal({
                   <div className="mt-4 flex justify-center items-center">
                     {isApproved ? (
                       <button
-                        //disabled={!callCreate}
+                        disabled={!callCreate}
                         type="button"
                         className="inline-flex justify-center rounded-md border border-[#feb019] px-4 items-center
                         disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none

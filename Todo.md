@@ -1,6 +1,13 @@
-# BidModal 
-- this requires approval of wrapped native currency and a balance => bid price.. (bnb used as WETH on goerli)
-- setup wrapped token approval ans conversion or alternate use of ETH
+## BidModal 
+- check approcal and convert of bid modal
 
-# Track Volumes
-- track volumes and resder data
+## Track Volumes
+- track volumes and reder data
+
+## Trending
+- render trending auctions/listiings
+- render offers made and received
+- create page or option to view listed NFTS by user
+- ensure wallet connected before perfofrming functions
+- use sign message for likes and track it
+- verify prisma routes work and track data correnctly

@@ -14,7 +14,7 @@ const Nft = ({ nft, collection }: { nft: any; collection: string }) => {
         nftAddress={collection}
         image={nft[0]?.media[0]?.thumbnail}
       />
-      <Properties />
+      <Properties nftId={nft[0]?.tokenId} address={collection} />
     </div>
   );
 };

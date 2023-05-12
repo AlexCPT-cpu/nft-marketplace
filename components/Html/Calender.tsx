@@ -45,7 +45,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   }, [start, title, value, setError]);
 
   return (
-    <div className="mt-4 flex mx-auto justify-center whitespace-nowrap flex-col text-center">
+    <div className="mt-0 flex mx-auto justify-center whitespace-nowrap flex-col text-center">
       <h3 className="py-2">{title}</h3>
       <input
         className="text-black dark:text-dark border border-blue-400/20 p-2 rounded-lg"

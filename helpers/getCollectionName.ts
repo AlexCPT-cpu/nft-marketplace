@@ -4,9 +4,9 @@ import { factory } from "@/config/config";
 
 const getCollectionName = async (collectionAddress: string) => {
   const getName = new Promise(async (resolve, reject) => {
-    const provider = new ethers.providers.AlchemyProvider(
+    const provider = new ethers.providers.InfuraProvider(
       "goerli",
-      process.env.ALCHEMY_ID
+      process.env.INFURA_KEY
     );
     const contract = new ethers.Contract(collectionAddress ?? factory, NftAbi, provider);
 

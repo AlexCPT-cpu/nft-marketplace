@@ -8,13 +8,22 @@ import Loader from "../Html/Loader";
 import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
+import DatePicker from "../Html/Calender";
 
 const BidForm = ({
   modalOptions,
-  setP
+  setP,
+  date,
+  setDate,
+  shouldConvert,
+  setShouldConvert
 }: {
   modalOptions: (state: boolean) => void;
-  setP: (value: string) => void
+  setP: (value: string) => void;
+  date: Date;
+  setDate: (date: Date) => void;
+  shouldConvert: boolean;
+  setShouldConvert: (data: boolean) => void;
 }) => {
 
   const [price, setPrice] = useState("");
@@ -25,6 +34,7 @@ const BidForm = ({
     usdt: false,
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>()
   const { chain } = useNetwork();
 
   // const { usdtApprove, busdApprove, bnbApprove } = useApproveTokens();
@@ -150,9 +160,11 @@ const BidForm = ({
         type="number"
         required={true}
       />
+      <DatePicker setError={setError} value={date} onChange={setDate} title='Duration' />
+      {shouldConvert && (<div className="text-red-500 leading-4 text-center mt-5 font-semibold">Not Enough WETH</div>)}
       {loading && <Loader setLoading={setLoading} />}
       <div className="flex flex-row space-x-5 overflow-scroll scrollbar-hide max-w-xs md:max-w-sm">
-        <div
+        {/* <div
           onClick={() => select(0)}
           className={`flex flex-row items-center space-x-2 border border-blue-400/20 cursor-pointer px-2 py-3 w-fit rounded-2xl
           ${active.eth && "bg-blue-500/50"}`}
@@ -167,7 +179,7 @@ const BidForm = ({
             />
           </div>
           <div>ETH</div>
-        </div>
+        </div> */}
         {/* {UsdtBool ? (
           <div
             onClick={() => select(1)}

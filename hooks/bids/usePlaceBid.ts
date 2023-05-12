@@ -1,27 +1,17 @@
 import Marketplace from '@/config/Marketplace.json'
 import { marketPlace } from "@/config/config";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
-import { useEffect, useState } from 'react';
-import blockTimestamp from '@/helpers/blockTimestamp';
 
-const usePlaceBid = (collectionAddress: string, tokenId: string | number, price: string | number) => {
 
-  const [timestamp, setTimestamp] = useState(0);
+const usePlaceBid = (collectionAddress: string, tokenId: string | number, price: string | number, date: Date) => {
 
-  useEffect(() => {
-    const x = async () => {
-      return await blockTimestamp();
-    };
-
-    x().then((time) => setTimestamp(time));
-  }, [price, collectionAddress, tokenId]);
-
+  const timestamp = (Math.floor(new Date(date!).getTime() / 1000) + 150)
     const { config: bidConfig } = usePrepareContractWrite({
         // @ts-ignore
         address: marketPlace,
         abi: Marketplace,
         functionName: "enterBidForToken",
-        args: [collectionAddress, tokenId, price, timestamp + 9200],
+        args: [collectionAddress, tokenId, price, timestamp],
       });
     
       const { data, write: callPlaceBid } = useContractWrite({

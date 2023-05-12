@@ -23,7 +23,6 @@ import getOwner from "@/helpers/getOwner";
 import { useRouter } from "next/router";
 import isListed from "@/helpers/isListed";
 import getNftDetails from "@/helpers/getNftDetails";
-import { NFT } from "@prisma/client";
 import fetch from "@/helpers/fetch";
 
 const NftCard = ({
@@ -48,7 +47,7 @@ const NftCard = ({
   const [isSell, setIsSell] = useState(false);
   const [listedP, setListedP] = useState("0");
 
-  const [nftData, setNftData] = useState<NFT>();
+  const [nftData, setNftData] = useState<any>();
 
   useEffect(() => {
     const getNft = async () => {
@@ -274,7 +273,6 @@ const NftCard = ({
         </div>
 
         <div className="flex flex-col w-full space-y-4 mr-0 lg:justify-center justify-start my-5 lg:mt-0 items-center">
-
           <div className="flex items-center w-full justify-start lg:justify-center flex-row">
             <div className="ring-1 ml-2 flex items-center ring-gray-300 dark:ring-gray-300 bg-slate-500/5 p-1 rounded-full">
               <Image

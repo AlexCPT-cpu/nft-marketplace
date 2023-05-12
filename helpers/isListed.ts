@@ -4,9 +4,9 @@ import { marketPlace } from "@/config/config";
 
 const isListed = async (collectionAddress: string, nftId: string | number) => {
   const getData = new Promise(async (resolve, reject) => {
-    const provider = new ethers.providers.AlchemyProvider(
+    const provider = new ethers.providers.InfuraProvider(
       "goerli",
-      process.env.ALCHEMY_ID
+      process.env.INFURA_KEY
     );
     const contract = new ethers.Contract(marketPlace, Marketplace, provider);
 

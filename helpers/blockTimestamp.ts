@@ -1,9 +1,9 @@
 import { ethers } from "ethers";
 
 const blockTimestamp = async () => {
-  const provider = new ethers.providers.AlchemyProvider(
+  const provider = new ethers.providers.InfuraProvider(
     "goerli",
-    process.env.ALCHEMY_ID
+    process.env.INFURA_KEY
   );
   const currentBlock = await provider.getBlockNumber();
 

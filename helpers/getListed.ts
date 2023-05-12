@@ -4,9 +4,9 @@ import { marketPlace } from "@/config/config";
 
 const getListings = async (collectionAddress: string, from: number, size: number) => {
   const getList = new Promise(async (resolve) => {
-    const provider = new ethers.providers.AlchemyProvider(
+    const provider = new ethers.providers.InfuraProvider(
       "goerli",
-      process.env.ALCHEMY_ID
+      process.env.INFURA_KEY
     );
     const contract = new ethers.Contract(marketPlace, Marketplace, provider);
 

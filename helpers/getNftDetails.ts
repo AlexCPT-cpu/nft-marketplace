@@ -3,9 +3,9 @@ import NftAbi from "@/config/NftAbi.json";
 
 const getNftDetails = async (collectionAddress: string, nftId: string | number) => {
   const getName = new Promise(async (resolve, reject) => {
-    const provider = new ethers.providers.AlchemyProvider(
+    const provider = new ethers.providers.InfuraProvider(
       "goerli",
-      process.env.ALCHEMY_ID
+      process.env.INFURA_KEY
     );
     const contract = new ethers.Contract(collectionAddress, NftAbi, provider);
 

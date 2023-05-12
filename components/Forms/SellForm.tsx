@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import FormInput from "./FormInput";
-import Image from "next/image";
-import useApproveTokens from "@/hooks/useApproveTokens";
-import useTokens from "@/hooks/useTokens";
 import { ethers } from "ethers";
 import Loader from "../Html/Loader";
 import { BUSD, USDT, BNB } from "@/config/config";
+import DatePicker from "../Html/Calender";
 
 const SellForm = ({
   modalOptions,
   setP,
   setToken,
+  date,
+  setDate
 }: {
   modalOptions: (state: boolean) => void;
   setP: (state: string) => void;
   setToken: (state: string) => void;
+  date: Date;
+  setDate: (date: Date) => void
 }) => {
   const [price, setPrice] = useState("");
   const [active, setActive] = useState({
@@ -24,6 +26,7 @@ const SellForm = ({
     usdt: false,
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>()
 
   const select = (index: number) => {
     switch (index) {
@@ -82,6 +85,9 @@ const SellForm = ({
         type="number"
         required={true}
       />
+
+        <DatePicker value={date!} onChange={setDate} title='Duration' setError={setError} />
+      
       {loading && <Loader setLoading={setLoading} />}
       <div className="flex flex-row space-x-5 overflow-scroll scrollbar-hide max-w-xs md:max-w-sm">
         {/* <div
