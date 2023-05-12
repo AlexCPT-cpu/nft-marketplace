@@ -1,5 +1,5 @@
 ## BidModal 
-- check approcal and convert of bid modal
+- check approval and convert of bid modal
 
 ## Track Volumes
 - track volumes and reder data
