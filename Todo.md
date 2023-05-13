@@ -1,9 +1,10 @@
 ## Offers Tab In NFT Card 
 - track and update accepted offers to the database
 
-## Propertied
+## Properties
 - Render property card correctly
 - Render History card correctly from DB
+- Make Nft/Nav responsive like table 
 
 ## Trending
 - render trending auctions/listiings
