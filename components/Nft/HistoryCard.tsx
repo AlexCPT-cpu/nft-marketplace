@@ -1,8 +1,47 @@
+import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
+import truncateEthAddress from 'truncate-eth-address'
 
 const HistoryCard = () => {
   return (
-    <div>HistoryCard</div>
+    <div className="flex w-full overflow-x-auto items-center border-b border-b-black dark:border-b-white pb-1 justify-between dark:text-[#b5b5b5]">
+    <div className="flex flex-row space-x-2 lg:space-x-8 items-center">
+      <div>
+        <Image
+          className="lg:w-10 w-9 ml-1 cursor-pointer rounded-full ring-1 p-1 ring-black dark:ring-white"
+          src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${"0xgray"}`}
+          width={50}
+          height={50}
+          alt="data-image"
+        />
+      </div>
+      <div className="">
+        <div className="whitespace-nowrap">
+          Bid placed by{" "}
+          <Link
+            href="/"
+            target="_blank"
+            className="font-bold hover:underline text-black dark:text-gray-300"
+          >
+            {truncateEthAddress(
+              "0xC89f7cceadD2E57CDedd0c36F3537f633f31fAfB"
+            )}
+          </Link>
+        </div>
+        <div className="text-neutral-600 text-sm">
+          26 Feb 2022 02:47:19 PM
+        </div>
+      </div>
+    </div>
+
+    <div className="flex flex-col">
+      <div className="text-lg lg:text-xl font-semibold whitespace-nowrap">
+        5.5 ETH
+      </div>
+      <div className="whitespace-nowrap text-sm lg:text-base">3.12 USD</div>
+    </div>
+  </div>
   )
 }
 

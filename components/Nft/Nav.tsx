@@ -19,21 +19,21 @@ const Nav = ({
 }) => {
   if (active.one) {
     return (
-      <div>
+      <div className="w-full">
         <PropertyMap />
       </div>
     );
   } else if (active.two) {
-    return <div>
+    return <div className="w-full">
         <TradeHistory address={address} nftId={nftId} />
     </div>;
   } else if (active.three) {
-    return <div>
+    return <div className="w-full">
         <Offers address={address} nftId={nftId}  />
     </div>;
   }
   return (
-    <div>
+    <div className="w-full">
       <PropertyMap />
     </div>
   );

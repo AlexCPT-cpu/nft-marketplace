@@ -78,7 +78,7 @@ const Properties = ({ address, nftId }: { address: string, nftId: string | numbe
         </div>
       </div>
 
-      <div className="flex mx-auto justify-center items-center mb-8">
+      <div className="flex mb-8 w-full">
         <Nav nftId={nftId} address={address} active={active} />
       </div>
     </div>

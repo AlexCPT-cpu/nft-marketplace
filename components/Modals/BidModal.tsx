@@ -256,7 +256,7 @@ export default function BidModal({
                       disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none
                        py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
                     from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
-                            onClick={() => wethApprove?.()}
+                            onClick={() =>  {wethApprove?.(); setLoading(true)}}
                           >
                             Approve WETH
                           </button>

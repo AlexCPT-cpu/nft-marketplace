@@ -5,7 +5,7 @@ import { Fragment, useCallback, useState } from "react";
 import PreviewCard from "../Cards/PreviewCard";
 import Loader from "../Html/Loader";
 import toast from "react-hot-toast";
-import { useAccount, useWaitForTransaction } from "wagmi";
+import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
 import BuyForm from "../Forms/BuyForm";
 import useBuy from "@/hooks/buys/useBuy";
 import fetch from "@/helpers/fetch";
@@ -30,6 +30,8 @@ export default function BuyModal({
   const isAuction = false;
 
   const { address } = useAccount();
+
+  const { chain } = useNetwork()
 
   const { callBuy, data: sellData } = useBuy(
     colAddress!,
@@ -63,7 +65,7 @@ export default function BuyModal({
 useWaitForTransaction({
     confirmations: 2,
     hash: sellData?.hash,
-    chainId: 5,
+    chainId: chain?.id,
     onSettled(data, error) {
       if (data) {
         const run = async () => {
@@ -140,9 +142,11 @@ useWaitForTransaction({
 
                   <div className="mt-4 flex justify-center items-center">
                     <button
+                    disabled={!callBuy}
                       type="button"
                       className="inline-flex justify-center rounded-md border border-[#feb019] px-4
                        py-2 text-sm font-medium text-[#feb019]focus:outline-none hover:bg-gradient-to-r
+                       disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none
                     from-[#feb019] via-[#e39601] to-[#f59292] focus-visible:ring-2"
                       onClick={callMint}
                     >

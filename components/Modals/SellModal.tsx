@@ -154,7 +154,7 @@ export default function SellModal({
                         setToken={setPayT}
                         setP={setSPrice}
                         modalOptions={setIsOpen}
-                        date={date}
+                        date={date!}
                         setDate={setDate}
                       />
                     </div>
