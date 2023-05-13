@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prismadb from "@/lib/prismadb";
-import type { Activity } from "@prisma/client";
+import type { Activity, User, NFT } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
