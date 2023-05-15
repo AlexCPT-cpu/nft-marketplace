@@ -11,7 +11,7 @@ export default async function handler(
   if (req.method === "POST") {
     const activities = await prismadb.activity.findFirst({
       where: {
-        nftId,
+        tokenId: nftId,
         collectionAddress: address,
       },
     });

@@ -116,4 +116,5 @@ model Activity {
   toAddress         String?
   time              String?
   nftId             String?
+  tokenId           String?
 }

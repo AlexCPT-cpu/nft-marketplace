@@ -9,6 +9,9 @@ import {
 import { ClockIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import getCollectionName from "@/helpers/getCollectionName";
+import getBids from "@/helpers/getBids";
+import { useAccount } from "wagmi";
+import fetch from "@/helpers/fetch";
 
 const UserNftCard = ({
   image,
@@ -21,16 +24,22 @@ const UserNftCard = ({
 }: NftProps) => {
   const [nftTitle, setNftTitle] = useState<any>("");
 
+  const { address } = useAccount() 
+
   useEffect(() => {
     const getNft = async () => {
       const { data: title } = await getCollectionName(nftAddress!);
+      const { bids } = await getBids(nftAddress!, address!)
+      const response = await fetch('GET', '/api/collection')
+      console.log(response)
       //@ts-ignore
       setNftTitle(title?.collectionName);
+      console.log(bids)
     };
     if (nftAddress) {
       getNft();
     }
-  }, [nftAddress]);
+  }, [nftAddress, address]);
 
   return (
       <div className="border dark:bg-[#041824] transition delay-200 border-yellow-400 dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">

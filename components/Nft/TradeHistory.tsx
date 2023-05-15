@@ -4,6 +4,7 @@ import { Activity } from "@prisma/client";
 import truncateEthAddress from "truncate-eth-address";
 import TableLayout from "../Activity/TableLayout";
 import TableChild from "../Activity/TableChild";
+import HistoryCard from "./HistoryCard";
 
 const TradeHistory = ({
   address,
@@ -20,7 +21,7 @@ const TradeHistory = ({
         address,
         nftId,
       });
-      setActivity(res?.data);
+      setActivity([res?.data]);
     };
 
     getActive();
@@ -28,23 +29,8 @@ const TradeHistory = ({
 
   return (
     <div className="overflow-auto px-10">
-      {/* <TableLayout>
-        {activity?.map((item: Activity) => (
-          <TableChild
-            key={item.id}
-            event={item.activityType!}
-            items={item}
-            price={item.price!}
-            from={truncateEthAddress(item.from!)}
-            to={truncateEthAddress(
-              item.to != ""
-                ? item.to!
-                : "0x0000000000000000000000000000000000000000"
-            )}
-            time="21 minutes ago"
-          />
-        ))}
-      </TableLayout> */}
+      {activity?.map((active: Activity) => (<HistoryCard activity={active} key={active.id} />))}
+      
     </div>
   );
 };

@@ -63,6 +63,8 @@ const NftCard = ({
     getNft();
   }, [nftAddress, nftId]);
 
+  console.log(nftAddress, nftId)
+
   const [Creator, setCreator] = useState("");
   const [Own, setOwn] = useState("");
   const router = useRouter();

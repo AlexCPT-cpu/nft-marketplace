@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Alchemy, Network } from "alchemy-sdk";
+import prisma from "@/lib/prismadb";
 
 
 export default async function handler(
@@ -28,6 +29,9 @@ export default async function handler(
       console.log(ex);
       res.status(500).end();
     }
+  } else  if (req.method === "GET") {
+    const collection = await prisma.collection.findMany()
+    res.status(200).json(collection);
   } else {
     res.status(500).end();
   }
