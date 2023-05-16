@@ -1,11 +1,10 @@
 import useBid from "@/hooks/bids/useBid";
-import useCancelBid from "@/hooks/bids/useCancelBid";
 import useCompleteBid from "@/hooks/bids/useCompleteBid";
-import { BanknotesIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { BanknotesIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import truncateEthAddress from "truncate-eth-address";
 import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
@@ -18,14 +17,15 @@ interface OfferProps {
   address?: string;
   value: string | number;
 }
-const Offers = ({
-  address,
-  nftId,
+const OffersReceived = ({
+Data,
+address
 }: {
-  address: string;
-  nftId: string | number;
+Data: any,
+address: string
 }) => {
-  const OfferCard: React.FC<{ offer: any[]; colAddress: string }> = ({
+ 
+  const OfferCard: React.FC<{ offer: any; colAddress: string }> = ({
     offer,
     colAddress,
   }) => {
@@ -40,13 +40,8 @@ const Offers = ({
     });
 
     const router = useRouter();
-    const [isBidder, setIsBidder] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const { callCancelBid, data: cancelData } = useCancelBid(
-      colAddress,
-      parseInt(offer[0]._hex)
-    );
     const { callCompleteBid, data: completeData } = useCompleteBid(
       colAddress,
       parseInt(offer[0]._hex),
@@ -105,34 +100,6 @@ const Offers = ({
       },
     });
 
-    useWaitForTransaction({
-      confirmations: 2,
-      hash: cancelData?.hash,
-      chainId: chain?.id,
-      onSettled(data, error) {
-        if (data) {
-          const run = async () => {
-            setLoading(false);
-            toast.success("Cancelled Bid Successfuly");
-            //await recordCancel();
-            setTimeout(() => router.reload(), 2000);
-          };
-          (async () => await run())();
-        } else {
-          console.log(error);
-          setLoading(false);
-          toast.error("error Cancelling Bid");
-        }
-      },
-    });
-
-    useEffect(() => {
-      if (address) {
-        if (offer[2] === address) setIsBidder(true);
-        else setIsBidder(false);
-      }
-    }, [address, offer]);
-
     var countDown = offer[3] * 1000;
 
     var interval = setInterval(() => {
@@ -173,7 +140,7 @@ const Offers = ({
           <div className="flex flex-row space-x-4 lg:space-x-8 items-center">
             <div>
               <Image
-                className="lg:w-10 w-9 mx-5 lg:mx-0 ml-1 cursor-pointer rounded-full ring-1 p-1 ring-black dark:ring-white"
+                className="lg:w-10 w-9 mx-5 lg:mx-0 cursor-pointer rounded-full ring-1 p-1 ring-black dark:ring-white"
                 src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${"0xgray"}`}
                 width={50}
                 height={50}
@@ -200,38 +167,20 @@ const Offers = ({
             </div>
           </div>
           <>
-            {isBidder ? (
-              <button
-                onClick={() => {
-                  callCancelBid?.();
-                  setLoading(true);
-                }}
-                disabled={!callCancelBid}
-                className="flex flex-row border group rounded-full w-fit items-center border-yellow-400 
-                disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none
-                dark:border-yellow-400 px-3 py-1 cursor-pointer hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56] mx-2 lg:mx-0"
-              >
-                <ShoppingCartIcon className="w-4 mr-1 group-hover:fill-white fill-yellow-400" />{" "}
-                <span className="dark:text-neutral-500 text-black text-sm  text-center whitespace-nowrap">
-                  Cancel Bid
-                </span>
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  callCompleteBid?.();
-                  setLoading(true);
-                }}
-                disabled={!callCompleteBid}
-                className="flex flex-row border rounded-full w-fit border-yellow-400 items-center dark:border-yellow-400
+            <button
+              onClick={() => {
+                callCompleteBid?.();
+                setLoading(true);
+              }}
+              disabled={!callCompleteBid}
+              className="flex flex-row border rounded-full w-fit border-yellow-400 items-center dark:border-yellow-400
                 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:hover:bg-none disabled:border-none px-3 py-1 cursor-pointer group hover:bg-gradient-to-r transition delay-100 from-[#feb019] to-[#ef7e56] mx-2 lg:mx-0"
-              >
-                <BanknotesIcon className="w-4 group-hover:fill-white mr-1 items-center fill-yellow-400" />{" "}
-                <span className="dark:text-neutral-500 text-black text-sm  text-center whitespace-nowrap">
-                  Accept Offer
-                </span>
-              </button>
-            )}
+            >
+              <BanknotesIcon className="w-4 group-hover:fill-white mr-1 items-center fill-yellow-400" />{" "}
+              <span className="dark:text-neutral-500 text-black text-sm  text-center whitespace-nowrap">
+                Accept Offer
+              </span>
+            </button>
           </>
 
           <div className="flex flex-col">
@@ -248,16 +197,33 @@ const Offers = ({
     );
   };
 
-  const { bids } = useBid(address, nftId);
+  const collection = Data.contract;
+
+  const OfferData: React.FC<{ data: any }> = ({ data }) => {
+
+    return (
+      <div>
+        {data[2] === address ? (
+          <div>
+            <OfferCard colAddress={collection} offer={data} />
+          </div>
+        ) : (
+          <div></div>
+        )}
+      </div>
+    );
+  };
 
   return (
-    <div className="w-full">
-      {/*@ts-ignore */}
-      {bids?.map((bid: any, index: number) => (
-        <OfferCard colAddress={address} key={index} offer={bid} />
+    <div>
+      {Data?.data?.map((data: any, index: number) => (
+        <div key={index} className="w-full">
+          {/*@ts-ignore */}
+          <OfferData data={data} />
+        </div>
       ))}
     </div>
   );
 };
 
-export default Offers;
+export default OffersReceived;

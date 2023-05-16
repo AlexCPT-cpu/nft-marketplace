@@ -17,6 +17,7 @@ const FormInput: React.FC<InputProps> = ({
           value={value}
           type={type}
           id={id}
+          name={id}
           required={required}
           className="
           block

@@ -6,7 +6,7 @@ import File from "@/components/Svg/File";
 import { useState } from "react";
 import UserNftGrid from "../Grid/UserNftGrid";
 
-const UserNav: React.FC<{ Nfts: any[] }> = ({ Nfts }) => {
+const UserNav: React.FC<{ Nfts: any[], address: string }> = ({ Nfts, address }) => {
   const [active, setActive] = useState({
     created: true,
     collected: false,
@@ -221,7 +221,7 @@ const UserNav: React.FC<{ Nfts: any[] }> = ({ Nfts }) => {
         </div>
       </div>
 
-      <UserNftGrid userNfts={Nfts} active={active} />
+      <UserNftGrid address={address} userNfts={Nfts} active={active} />
     </>
   );
 };

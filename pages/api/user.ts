@@ -8,11 +8,10 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const { address } = req.body;
-    console.log(address);
     try {
       const user = await prismadb.user.findUnique({
         where: {
-          address,
+          address: address
         },
       });
       res.status(200).json(user);

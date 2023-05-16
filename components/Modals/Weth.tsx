@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import FormInput from "../Forms/FormInput";
 import { useBalance, useAccount, useNetwork } from "wagmi";
+import Eth from "../Svg/Eth";
 
 const Weth = ({
   price,
@@ -36,13 +37,7 @@ const Weth = ({
         />
         <div className="font-semibold flex flex-row items-center">
           WETH
-          <Image
-            className="mx-2"
-            src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSJub25lIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjMDAwIj48cGF0aCBkPSJtNy40NzEwNiAxMC4xMzgyIDQuNTMxNTQtNC41MzE1NSA0LjUzMzYgNC41MzM0NSAyLjYzNjctMi42MzY2NS03LjE3MDMtNy4xNzAxMTQtNy4xNjgwMSA3LjE2Nzk3NCAyLjYzNjU2IDIuNjM2Njl6bS03LjEzNTEyMiAxLjg2MTggMi42MzY3NTItMi42MzcxNyAyLjYzNjU2IDIuNjM2NTctMi42MzY3NSAyLjYzNjd6bTcuMTM1MTIyIDEuODYyIDQuNTMxNTQgNC41MzEzIDQuNTMzNS00LjUzMzQgMi42MzgxIDIuNjM1My0uMDAxMy4wMDE0LTcuMTcwMyA3LjE3LTcuMTY4MDEtNy4xNjgtLjAwMzc0LS4wMDM3IDIuNjQwNDktMi42MzMxem0xMC45MjQ4NC0xLjg2MDkgMi42MzY3LTIuNjM2NzcgMi42MzY2IDIuNjM2NTctMi42MzY3IDIuNjM2N3oiLz48cGF0aCBkPSJtMTQuNjc2NiAxMS45OTg2aC4wMDExbC0yLjY3NTMtMi42NzU1My0xLjk3NzUgMS45NzY5My0uMjI3MTMuMjI3Mi0uNDY4NTQuNDY4Ny0uMDAzNzMuMDAzNi4wMDM3My4wMDM4IDIuNjczMTcgMi42NzM1IDIuNjc1NS0yLjY3NTQuMDAxMy0uMDAxNS0uMDAyNS0uMDAxMyIvPjwvZz48L3N2Zz4="
-            alt="Icon"
-            width={50}
-            height={50}
-          />
+          <Eth />
         </div>
       </div>
       <div className="flex flex-col">

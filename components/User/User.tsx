@@ -44,7 +44,7 @@ const User = ({ userAddr }: { userAddr: string }) => {
         twitter={user.twitterUsername ?? ''}
         instagram={user.instaUsername ?? ''}
       />
-      <UserNav Nfts={userNfts!} />
+      <UserNav Nfts={userNfts!} address={userAddr!} />
     </div>
   );
 };

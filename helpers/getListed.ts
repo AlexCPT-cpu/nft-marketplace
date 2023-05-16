@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import Marketplace from "@/config/Marketplace.json";
 import { marketPlace } from "@/config/config";
 
-const getListings = async (collectionAddress: string, from: number, size: number) => {
+const getListings = async (collectionAddress: string) => {
   const getList = new Promise(async (resolve) => {
     const provider = new ethers.providers.InfuraProvider(
       "goerli",
@@ -10,7 +10,9 @@ const getListings = async (collectionAddress: string, from: number, size: number
     );
     const contract = new ethers.Contract(marketPlace, Marketplace, provider);
 
-    const list = await contract.getTokenListings(collectionAddress, from, size) 
+    const size = await contract.numTokenListings(collectionAddress)
+
+    const list = await contract.getTokenListings(collectionAddress, 0, size) 
     resolve(list);
   });
   const listings = await getList;
