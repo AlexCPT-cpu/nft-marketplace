@@ -1,11 +1,13 @@
+import fetch from "@/helpers/fetch";
 import useBid from "@/hooks/bids/useBid";
 import useCancelBid from "@/hooks/bids/useCancelBid";
 import useCompleteBid from "@/hooks/bids/useCompleteBid";
 import { BanknotesIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ethers } from "ethers";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import truncateEthAddress from "truncate-eth-address";
 import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
@@ -54,35 +56,35 @@ const Offers = ({
       offer[1]._hex
     );
 
-    // const completeOffer = useCallback(async () => {
-    //   const response = await fetch("POST", "/api/activity", {
-    //     nftId,
-    //     collectionAddress: colAddress,
-    //     activityType: "PlaceBid",
-    //     from: address,
-    //     fromAddress: address,
-    //     to: "",
-    //     toAddress: "",
-    //     time: "0",
-    //     price: Number(ethers.utils.formatUnits(price)),
-    //   });
-    //   console.log(response);
-    // }, [nftId, colAddress, address, price]);
+    const completeOffer = useCallback(async () => {
+      const response = await fetch("POST", "/api/activity", {
+        nftId: parseInt(offer[0]._hex),
+        collectionAddress: colAddress,
+        activityType: "AcceptBid",
+        from: address,
+        fromAddress: address,
+        to: "",
+        toAddress: "",
+        time: "0",
+        price: Number(ethers.utils.formatUnits(offer[1]._hex)),
+      });
+      console.log(response);
+    }, [colAddress, address, offer]);
 
-    // const cancelOffer = useCallback(async () => {
-    //   const response = await fetch("POST", "/api/activity", {
-    //     nftId,
-    //     collectionAddress: colAddress,
-    //     activityType: "PlaceBid",
-    //     from: address,
-    //     fromAddress: address,
-    //     to: "",
-    //     toAddress: "",
-    //     time: "0",
-    //     price: Number(ethers.utils.formatUnits(price)),
-    //   });
-    //   console.log(response);
-    // }, [nftId, colAddress, address, price]);
+    const cancelOffer = useCallback(async () => {
+      const response = await fetch("POST", "/api/activity", {
+        nftId: parseInt(offer[0]._hex),
+        collectionAddress: colAddress,
+        activityType: "CancelBid",
+        from: address,
+        fromAddress: address,
+        to: "",
+        toAddress: "",
+        time: "0",
+        price: Number(ethers.utils.formatUnits(offer[1]._hex)),
+      });
+      console.log(response);
+    }, [colAddress, address, offer]);
 
     useWaitForTransaction({
       confirmations: 2,
@@ -93,7 +95,7 @@ const Offers = ({
           const run = async () => {
             setLoading(false);
             toast.success("Accepted Bid Successfuly");
-            //await recordAccept();
+            await completeOffer();
             setTimeout(() => router.push(`/user/${address}`), 2000);
           };
           (async () => await run())();
@@ -114,7 +116,7 @@ const Offers = ({
           const run = async () => {
             setLoading(false);
             toast.success("Cancelled Bid Successfuly");
-            //await recordCancel();
+            await cancelOffer();
             setTimeout(() => router.reload(), 2000);
           };
           (async () => await run())();

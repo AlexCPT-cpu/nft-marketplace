@@ -121,7 +121,151 @@ export default async function handler(
         });
 
         res.status(200).json(activity);
-      } else {
+      } else if (activityType === "PlaceBid") {
+        const coll = await prismadb.collection.update({
+          where: {
+            id: collection?.id,
+          },
+          data: {
+            volume: {
+              increment: price,
+            },
+          },
+        });
+
+        const nft = await prismadb.nFT.findFirst({
+          where: {
+            collectionAddress,
+            nftId,
+          },
+        });
+
+        const activity = await prismadb.activity.create({
+          data: {
+            activityType,
+            collectionAddress,
+            price,
+            from,
+            fromAddress,
+            to,
+            toAddress,
+            time,
+            nftId: nft?.id,
+          },
+        });
+
+        const updated = await prismadb.nFT.update({
+          where: {
+            id: nft?.id,
+          },
+          data: {
+            Activity: {
+              push: activity.id,
+            },
+            currentValue: price,
+            listedPrice: 0,
+            isSell: false
+          },
+        });
+
+        res.status(200).json(activity);
+      } else if (activityType === "CancelBid") {
+        const coll = await prismadb.collection.update({
+          where: {
+            id: collection?.id,
+          },
+          data: {
+            volume: {
+              increment: price,
+            },
+          },
+        });
+
+        const nft = await prismadb.nFT.findFirst({
+          where: {
+            collectionAddress,
+            nftId,
+          },
+        });
+
+        const activity = await prismadb.activity.create({
+          data: {
+            activityType,
+            collectionAddress,
+            price,
+            from,
+            fromAddress,
+            to,
+            toAddress,
+            time,
+            nftId: nft?.id,
+          },
+        });
+
+        const updated = await prismadb.nFT.update({
+          where: {
+            id: nft?.id,
+          },
+          data: {
+            Activity: {
+              push: activity.id,
+            },
+            currentValue: price,
+            listedPrice: 0,
+            isSell: false
+          },
+        });
+
+        res.status(200).json(activity);
+      } else if (activityType === "AcceptBid") {
+        const coll = await prismadb.collection.update({
+          where: {
+            id: collection?.id,
+          },
+          data: {
+            volume: {
+              increment: price,
+            },
+          },
+        });
+
+        const nft = await prismadb.nFT.findFirst({
+          where: {
+            collectionAddress,
+            nftId,
+          },
+        });
+
+        const activity = await prismadb.activity.create({
+          data: {
+            activityType,
+            collectionAddress,
+            price,
+            from,
+            fromAddress,
+            to,
+            toAddress,
+            time,
+            nftId: nft?.id,
+          },
+        });
+
+        const updated = await prismadb.nFT.update({
+          where: {
+            id: nft?.id,
+          },
+          data: {
+            Activity: {
+              push: activity.id,
+            },
+            currentValue: price,
+            listedPrice: 0,
+            isSell: false
+          },
+        });
+
+        res.status(200).json(activity);
+      }else {
         const nft = await prismadb.nFT.findFirst({
           where: {
             collectionAddress,

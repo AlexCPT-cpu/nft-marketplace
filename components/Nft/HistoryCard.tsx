@@ -28,9 +28,15 @@ const HistoryCard: React.FC<{ activity: Activity }> = ({ activity }) => {
                     "Bought by "
                   ) : (
                     <>
-                      {activity.activityType === "PlaceBid"
-                        ? "Bid Placed by "
-                        : "Bid Accepted by"}
+                      {activity.activityType === "PlaceBid" ? (
+                        "Bid Placed by "
+                      ) : (
+                        <>
+                          {activity.activityType === "AcceptBid"
+                            ? "Bid Accepted by"
+                            : "Bid Cancelled by"}
+                        </>
+                      )}
                     </>
                   )}
                 </>

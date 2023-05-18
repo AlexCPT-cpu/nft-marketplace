@@ -46,7 +46,7 @@ const OffersMade = ({ Data }: { Data: any }) => {
       const response = await fetch("POST", "/api/activity", {
         nftId: parseInt(offer[0]._hex),
         collectionAddress: colAddress,
-        activityType: "AcceptBid",
+        activityType: "CancelBid",
         from: address,
         fromAddress: address,
         to: "",
