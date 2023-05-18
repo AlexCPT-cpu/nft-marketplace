@@ -11,7 +11,9 @@ const ProfileCard = () => {
   const [site, setSite] = useState("");
   const [bio, setBio] = useState("");
   const [image, setImage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+
+  console.log(image)
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
