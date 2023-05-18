@@ -6,12 +6,12 @@
 - add listed collection in user wallet to user page
 
 ## Trending
-- render trending auctions/listiings
-- create page or option to view listed NFTS by user
-- ensure wallet connected before perfofrming functions
 - use sign message for likes and track it | fix signed messages
 - verify prisma routes work and track data correnctly
 
 ## Home
 - fix error on home 
 - fix like and follow and referrer on user
+
+## Placeholder
+- use layout loader effect on loading states
