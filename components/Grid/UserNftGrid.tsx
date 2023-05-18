@@ -7,6 +7,7 @@ import OffersReceived from "../User/OffersReceived";
 import getBids from "@/helpers/getBids";
 import fetch from "@/helpers/fetch";
 import getListings from "@/helpers/getListed";
+import CollectionCard from "../Cards/CollectionCard";
 
 const UserNftGrid: React.FC<UserNftGrid> = ({ active, userNfts, address }) => {
   const [currentNfts, setCurrentNfts] = useState<any>([]);
@@ -46,6 +47,24 @@ const UserNftGrid: React.FC<UserNftGrid> = ({ active, userNfts, address }) => {
     return response;
   }, []);
 
+  const getCollections = useCallback(async () => {
+    const collections = await fetch("GET", "/api/collection");
+    const response = await fetch("POST", "/api/nfts", {
+      address,
+    });
+    // const selected = response.data.filter((owned: any) =>
+    //   collections.data.ownedNfts.some((item: any) => owned?.contract?.address === item?.address)
+    // );
+
+    const matchingCollections = collections.data.filter((collection: any) =>
+      response.data.ownedNfts.some(
+        (nft: any) => nft.contract.address === collection.address
+      )
+    );
+
+    return matchingCollections;
+  }, [address]);
+
   useEffect(() => {
     if (active?.created === true) {
       if (userNfts) {
@@ -56,42 +75,42 @@ const UserNftGrid: React.FC<UserNftGrid> = ({ active, userNfts, address }) => {
         setCurrentNfts(userNfts[0]);
       }
     } else if (active?.collections === true) {
-      if (userNfts) {
-        setCurrentNfts(navNfts);
-      }
+      getCollections().then((collections) => {
+        setCurrentNfts(collections);
+      });
     } else if (active?.offersMade === true) {
       getNFTs().then((bids) => setCurrentNfts(bids));
     } else if (active?.offersReceived === true) {
       getList().then((list) => setCurrentNfts(list));
     }
-  }, [active, userNfts, navNfts, address, getNFTs, getList]);
+  }, [active, userNfts, navNfts, address, getNFTs, getList, getCollections]);
 
-  const NavItem = ({ nft }: { nft: NftData }) => {
+  const NavItem = ({ nft }: { nft: NftData | any }) => {
     if (active?.created === true)
-      return (
-        <UserNftCard
-        image={nft?.media[0]?.thumbnail}
-        name={nft?.title}
-        nftAddress={nft?.contract?.address}
-        nftId={nft?.tokenId}
-        />
-      );
-    else if (active?.collected === true)
-      return (
-        <UserNftCard
-        image={nft?.media[0]?.thumbnail}
-        name={nft?.title}
-        nftAddress={nft?.contract?.address}
-        nftId={nft?.tokenId}
-        />
-      );
-    else if (active?.collections === true)
       return (
         <UserNftCard
           image={nft?.media[0]?.thumbnail}
           name={nft?.title}
           nftAddress={nft?.contract?.address}
           nftId={nft?.tokenId}
+        />
+      );
+    else if (active?.collected === true)
+      return (
+        <UserNftCard
+          image={nft?.media[0]?.thumbnail}
+          name={nft?.title}
+          nftAddress={nft?.contract?.address}
+          nftId={nft?.tokenId}
+        />
+      );
+    else if (active?.collections === true)
+      return (
+        <CollectionCard
+        address={nft.address}
+         name={nft.name}
+         sold={nft.sold}
+         key={nft?.id}
         />
       );
     else if (active?.offersMade === true)

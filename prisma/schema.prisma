@@ -59,6 +59,7 @@ model NFT {
   userId            String?
   OffersReceived    String[]
   OffersMade        String[]
+  likeIds           String[]
 }
 
 model Collection {

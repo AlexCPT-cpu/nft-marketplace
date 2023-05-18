@@ -1,6 +1,8 @@
+import fetch from "@/helpers/fetch";
 import useBid from "@/hooks/bids/useBid";
 import useCancelBid from "@/hooks/bids/useCancelBid";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ethers } from "ethers";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -18,12 +20,12 @@ interface OfferProps {
   value: string | number;
 }
 const OffersMade = ({ Data }: { Data: any }) => {
-
   const OfferCard: React.FC<{ offer: any; colAddress: string }> = ({
     offer,
     colAddress,
   }) => {
     const { chain } = useNetwork();
+    const { address } = useAccount();
 
     const [count, setCount] = useState({
       days: 0,
@@ -40,35 +42,20 @@ const OffersMade = ({ Data }: { Data: any }) => {
       parseInt(offer[0]._hex)
     );
 
-    // const completeOffer = useCallback(async () => {
-    //   const response = await fetch("POST", "/api/activity", {
-    //     nftId,
-    //     collectionAddress: colAddress,
-    //     activityType: "PlaceBid",
-    //     from: address,
-    //     fromAddress: address,
-    //     to: "",
-    //     toAddress: "",
-    //     time: "0",
-    //     price: Number(ethers.utils.formatUnits(price)),
-    //   });
-    //   console.log(response);
-    // }, [nftId, colAddress, address, price]);
-
-    // const cancelOffer = useCallback(async () => {
-    //   const response = await fetch("POST", "/api/activity", {
-    //     nftId,
-    //     collectionAddress: colAddress,
-    //     activityType: "PlaceBid",
-    //     from: address,
-    //     fromAddress: address,
-    //     to: "",
-    //     toAddress: "",
-    //     time: "0",
-    //     price: Number(ethers.utils.formatUnits(price)),
-    //   });
-    //   console.log(response);
-    // }, [nftId, colAddress, address, price]);
+    const recordCancel = useCallback(async () => {
+      const response = await fetch("POST", "/api/activity", {
+        nftId: parseInt(offer[0]._hex),
+        collectionAddress: colAddress,
+        activityType: "AcceptBid",
+        from: address,
+        fromAddress: address,
+        to: "",
+        toAddress: "",
+        time: "0",
+        price: Number(ethers.utils.formatUnits(offer[1]._hex)),
+      });
+      console.log(response);
+    }, [colAddress, address, offer]);
 
     useWaitForTransaction({
       confirmations: 2,
@@ -79,7 +66,7 @@ const OffersMade = ({ Data }: { Data: any }) => {
           const run = async () => {
             setLoading(false);
             toast.success("Cancelled Bid Successfuly");
-            //await recordCancel();
+            await recordCancel();
             setTimeout(() => router.reload(), 2000);
           };
           (async () => await run())();
@@ -192,7 +179,7 @@ const OffersMade = ({ Data }: { Data: any }) => {
   const collection = Data.contract;
 
   const OfferData: React.FC<{ data: any }> = ({ data }) => {
-   const { bids: bid } = useBid(collection, parseInt(data[0]._hex));
+    const { bids: bid } = useBid(collection, parseInt(data[0]._hex));
 
     //@ts-ignore
 

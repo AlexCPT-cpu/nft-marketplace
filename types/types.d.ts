@@ -12,7 +12,7 @@ export interface NftProps {
   likes?: number;
   price?: number;
   nftAddress?: string;
-  nftId?: string;
+  nftId?: string | number;
   fullData?: any
   buttonTitle?: string;
   nftAddress?: string;

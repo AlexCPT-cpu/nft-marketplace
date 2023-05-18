@@ -38,7 +38,7 @@ const CollectionCard = ({
   return (
 
     <div className="border border-yellow-400 dark:bg-[#041824] dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
-      <div className="flex flex-col space-y-0">
+      <div className="flex flex-col items-center space-y-0">
         <div className="relative">
           <Image
             className="object-cover w-full rounded-md mb-5 h-32"
@@ -67,7 +67,7 @@ const CollectionCard = ({
 
         <div className="space-y-4">
           <div className="flex justify-between">
-            <div className="mt-3">
+            <div className="">
               <p className="text-black dark:text-neutral-400 font-bold">{Owners}</p>
               <p className="text-black dark:text-gray-600 text-sm">Owners</p>
             </div>
@@ -85,7 +85,6 @@ const CollectionCard = ({
             {description}
           </div>
         </div>
-        <div></div>
       </div>
     </div>
   );

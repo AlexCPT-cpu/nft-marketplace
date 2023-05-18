@@ -40,20 +40,23 @@ const TopCollections = () => {
         COLLECTIONS
       </div>
       <div className="flex justify-between mt-5">
-        <div className="text-2xl lg:text-3xl font-semibold">Top Collections</div>
+        <div className="text-2xl lg:text-3xl font-semibold">
+          Top Collections
+        </div>
         <div className="text-lg lg:text-xl relative transition border-2 border-transparent rounded-md p-2 hover:border-[#feb019]">
-        <Link href='/collectors'>VIEW ALL</Link> 
+          <Link href="/collectors">VIEW ALL</Link>
         </div>
       </div>
 
       <div className="grid md:grid-cols-2 md:pl-7 grid-cols-1 lg:grid-cols-4 mx-auto items-center justify-center pl-3 lg:pl-1 gap-8 my-5">
-        {collections?.map(collection => (
-           <CollectionCard
-           address={collection.address}
+        {collections?.map((collection) => (
+          <CollectionCard
+            address={collection.address}
             name={collection.name}
             sold={collection.sold}
             key={collection?.id}
-             />
+            description={collection.description}
+          />
         ))}
       </div>
     </div>

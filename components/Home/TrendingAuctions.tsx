@@ -1,11 +1,30 @@
+import fetch from "@/helpers/fetch";
+import getListings from "@/helpers/getListed";
 import Link from "next/link";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import NftCard from "../Cards/NftCard";
+import ListingCard from "./ListingCard";
 
 const TrendingAuctions = () => {
+  const [listedNfts, setListedNfts] = useState<any>();
+
+  const getList = useCallback(async () => {
+    const { data } = await fetch("GET", "/api/collection");
+    const listCall = await data.map(async (item: any) => {
+      const { listings } = await getListings(item.address);
+      //@ts-ignore
+      return { contract: item.address, data: listings };
+    });
+    const response = await Promise.all(listCall);
+    return response;
+  }, []);
+
+  useEffect(() => {
+    getList().then((collection) => setListedNfts(collection));
+  }, [getList]);
+
   return (
     <div className="lg:px-16 px-8 mt-7 mb-10 text-black dark:text-gray-400">
-
       <div className="flex flex-row text-xl items-center text-center">
         <svg
           width="38"
@@ -26,24 +45,24 @@ const TrendingAuctions = () => {
             className="fill-black dark:fill-gray-500"
           ></path>
         </svg>
-        
-
         HOT BIDS
       </div>
       <div className="flex justify-between mt-5">
         <div className="text-2xl lg:text-3xl font-semibold">
-        Trending Auctions
+          Trending Auctions
         </div>
         <div className="text-lg lg:text-xl relative transition border-2 p-2 border-transparent rounded-md hover:border-[#feb019]">
-        <Link href='/discover'>VIEW ALL</Link> 
+          <Link href="/discover">VIEW ALL</Link>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 md:pl-7 grid-cols-1 lg:grid-cols-4 mx-auto items-center justify-center pl-3 lg:pl-1 gap-8 my-5">
-        <NftCard />
-        <NftCard />
-        <NftCard />
-        <NftCard />
+      <div className="">
+        {listedNfts?.map((nft: any, index: number) => {
+          const collectionAddress = nft.contract;
+          return (
+            <ListingCard contract={collectionAddress} Data={nft} key={index} />
+          );
+        })}
       </div>
     </div>
   );

@@ -5,6 +5,8 @@ import ImageUpload from "../Html/ImageUpload";
 import Link from "next/link";
 import Loader from "../Html/Loader";
 import fetch from "@/helpers/fetch";
+import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 
 const CreateColCard = () => {
   const [product, setProduct] = useState("");
@@ -18,6 +20,8 @@ const CreateColCard = () => {
   const [instagram, setInstagram] = useState("");
   const [twitter, setTwitter] = useState("");
   const [website, setWebsite] = useState("");
+
+  const router = useRouter()
 
   const Submit = useCallback(async () => {
     setLoading(true);
@@ -33,10 +37,15 @@ const CreateColCard = () => {
         website,
       });
       console.log(response);
+      toast.success('Collection Added Successfully')
     } catch (error) {
       console.log(error);
+      toast.error('Error Adding Collection')
+    } finally {
+      setLoading(false)
+      router.push('/')
     }
-  }, [address, desc, twitter, facebook, instagram, website, product]);
+  }, [address, desc, twitter, facebook, instagram, website, product, router]);
 
   return (
     <div className="flex flex-col lg:flex-row lg:justify-between space-x-0 lg:space-x-10">
