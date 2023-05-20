@@ -13,30 +13,28 @@ const CollectionCard = ({
   sold,
   items,
   description,
-  address
+  address,
 }: CollectionProps) => {
-
-  const [nftL, setNftL] = useState(0)
-  const [Owners, setOwners] = useState(0)
+  const [nftL, setNftL] = useState(0);
+  const [Owners, setOwners] = useState(0);
 
   useEffect(() => {
     const getData = async () => {
-      if(address) {
-        const response = await fetch("POST", '/api/collection', {
-          address
-        })
-        const res = await fetch("POST", '/api/getOwners', {
-          address
-        })
-        setNftL(response?.data?.nfts?.length)
-        setOwners(res.data.owners.length)
+      if (address) {
+        const response = await fetch("POST", "/api/collection", {
+          address,
+        });
+        const res = await fetch("POST", "/api/getOwners", {
+          address,
+        });
+        setNftL(response?.data?.nfts?.length);
+        setOwners(res.data.owners.length);
       }
-    }
-    getData()
-  }, [address])
+    };
+    getData();
+  }, [address]);
 
   return (
-
     <div className="border border-yellow-400 dark:bg-[#041824] dark:border-yellow-400 p-4 rounded-md max-w-[300px] hover:shadow-xl">
       <div className="flex flex-col items-center space-y-0">
         <div className="relative">
@@ -47,7 +45,7 @@ const CollectionCard = ({
             height={200}
             alt="card image"
           />
-          <Link href={`/collection/${address ?? '1'}`}>
+          <Link href={`/collection/${address ?? "1"}`}>
             <Image
               className="object-cover bg-slate-800/30 absolute ring-1 ring-gray-300 w-16 top-12 cursor-pointer left-5 rounded-full mb-5"
               src={`https://api.dicebear.com/5.x/avataaars/svg?seed=${name}`}
@@ -62,21 +60,28 @@ const CollectionCard = ({
         </div>
 
         <div className="text-black dark:text-neutral-400 text-lg font-semibold text-left">
-          <Link href={`/collection/${address ?? '1'}`}>{name}</Link>
+          <Link href={`/collection/${address ?? "1"}`}>{name}</Link>
         </div>
 
         <div className="space-y-4">
           <div className="flex justify-between">
             <div className="">
-              <p className="text-black dark:text-neutral-400 font-bold">{Owners}</p>
+              <p className="text-black dark:text-neutral-400 font-bold">
+                {Owners}
+              </p>
               <p className="text-black dark:text-gray-600 text-sm">Owners</p>
             </div>
             <div>
-              <p className="text-black dark:text-neutral-400 font-bold">{nftL}</p>
+              <p className="text-black dark:text-neutral-400 font-bold">
+                {nftL}
+              </p>
               <p className="text-black dark:text-gray-600 text-sm">Items</p>
             </div>
             <div>
-              <p className="text-black dark:text-neutral-400 font-bold flex flex-row"><CurrencyDollarIcon className="w-5" />&nbsp;{(sold!)/1000}K</p>
+              <p className="text-black dark:text-neutral-400 font-bold flex flex-row">
+                <CurrencyDollarIcon className="w-5" />
+                &nbsp;{sold! / 1000}K
+              </p>
               <p className="text-black dark:text-gray-600 text-sm">Sold</p>
             </div>
           </div>

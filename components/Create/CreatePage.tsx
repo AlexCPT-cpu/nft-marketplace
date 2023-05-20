@@ -9,34 +9,17 @@ import { useAccount } from "wagmi";
 import { useRouter } from "next/router";
 
 const CreatePage = () => {
-
-  const router = useRouter()
+  const router = useRouter();
   const [name, setName] = useState("");
-  const [facebook, setFaceBook] = useState("");
+  // const [facebook, setFaceBook] = useState("");
+  const [instagram, setInstagram] = useState("");
   const [userName, setUsername] = useState("");
   const [twitter, setTwitter] = useState("");
-  const [instagram, setInstagram] = useState("");
   const [bio, setBio] = useState("");
   const [image, setImage] = useState("");
   const [background, setBackground] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [invited, setInvited] = useState("");
-
-  const toBase64 = (file: File) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-
-      fileReader.readAsDataURL(file);
-
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
 
   const { address } = useAccount();
 
@@ -44,28 +27,29 @@ const CreatePage = () => {
     setIsLoading(true);
     e.preventDefault();
     try {
-    const response = await fetch("POST", "/api/createUser", {
-      address,
-      name,
-      facebook,
-      userName,
-      twitter,
-      instagram,
-      bio,
-      image,
-      background,
-      invited,
-    });
-    setIsLoading(false);
-    toast.success("User Created Successfully", {
-      position: "bottom-center",
-    });
-    console.log(response);
-    router.push(`/user/${address}`)
-  } catch (ex) {
-    console.log(ex)
-    setIsLoading(false);
-  }
+      const response = await fetch("POST", "/api/createUser", {
+        address,
+        name,
+        userName,
+        twitter,
+        instagram,
+        bio,
+        image,
+        background,
+        invited,
+      });
+      setIsLoading(false);
+      toast.success("User Created Successfully", {
+        position: "bottom-center",
+      });
+      console.log(response);
+      router.push(`/user/${address}`);
+    } catch (ex) {
+      console.log(ex);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -76,7 +60,7 @@ const CreatePage = () => {
     <div className="flex flex-col lg:flex-row lg:justify-between space-x-0 lg:space-x-10">
       <div className="border-[1px] flex flex-col mt-10 border-gray-200 dark:text-neutral-500 dark:bg-[#041824] dark:border-[#092940] p-4 rounded-md w-full">
         <h1 className="text-left font-semibold text-xl border-b border-b-sky-500/30 w-full pb-2">
-          Profile Edit
+          Profile Create
         </h1>
         {isLoading && <Loader setLoading={setIsLoading} />}
         <form onSubmit={submit}>
@@ -137,14 +121,14 @@ const CreatePage = () => {
           />
 
           <Input
-            id="Facebook"
-            value={facebook}
+            id="Referral"
+            value={invited}
             onChange={(e: any) => {
-              setFaceBook(e.currentTarget.value);
+              setInvited(e.currentTarget.value);
             }}
-            label="Enter Facebook Username"
+            label="Enter Referral Username or Address"
             type="text"
-            title="Facebook Username"
+            title="Referral Username or Address"
           />
 
           <button
@@ -156,26 +140,31 @@ const CreatePage = () => {
         </form>
       </div>
 
-      <div className="min-w-[300px] dark:text-neutral-500 space-y-3 max-h-[250px] flex flex-col mt-10 mb-5">
-        <div className="text-xl font-bold">Profile Image</div>
+      <div className="min-w-[300px] dark:text-neutral-500 space-y-3 h-full flex flex-col mt-10">
         <div>
-          <ImageUpload
-            value={image}
-            disabled={isLoading}
-            onChange={(image: any) => setImage(image)}
-            label="Change Profile Picture Here"
-          />
+          <div className="text-xl font-bold">Profile Image</div>
+          <div>
+            <ImageUpload
+              value={image}
+              disabled={isLoading}
+              onChange={(image: any) => setImage(image)}
+              label="Change Profile Picture Here"
+            />
+          </div>
         </div>
-        <div className="text-xl font-bold">Background Image</div>
-        <div>
-          <ImageUpload
-            value={background}
-            disabled={isLoading}
-            onChange={(image: any) => setBackground(image)}
-            label="Change Profile Picture Here"
-          />
+
+        <div className="">
+          <div className="text-xl font-bold">Background Image</div>
+          <div>
+            <ImageUpload
+              value={background}
+              disabled={isLoading}
+              onChange={(image: any) => setBackground(image)}
+              label="Change Profile Picture Here"
+            />
+          </div>
+          <div className="">Change Profile Picture Here</div>
         </div>
-        <div>Change Profile Picture Here</div>
       </div>
     </div>
   );

@@ -46,7 +46,7 @@ const OffersReceived = ({ Data, address }: { Data: any; address: string }) => {
 
     const recordAccept = useCallback(async () => {
       const response = await fetch("POST", "/api/activity", {
-        nftId: parseInt(offer[0]._hex),
+        tokenId: parseInt(offer[0]._hex),
         collectionAddress: colAddress,
         activityType: "AcceptBid",
         from: address,

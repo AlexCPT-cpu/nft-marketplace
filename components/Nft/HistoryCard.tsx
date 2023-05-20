@@ -5,6 +5,7 @@ import React from "react";
 import truncateEthAddress from "truncate-eth-address";
 
 const HistoryCard: React.FC<{ activity: Activity }> = ({ activity }) => {
+
   return (
     <div className="flex w-full overflow-x-auto items-center border-b border-b-black dark:border-b-white pb-1 justify-between dark:text-[#b5b5b5]">
       <div className="flex flex-row space-x-2 lg:space-x-8 items-center">

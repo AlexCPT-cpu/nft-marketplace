@@ -44,19 +44,19 @@ export default function SellModal({
 
   const addSell = useCallback(async () => {
     const response = await fetch("POST", "/api/activity", {
-      nftId,
+      tokenId: nftId,
       collectionAddress: colAddress,
       activityType: "Sell",
       from: address,
       fromAddress: address,
       to: "",
       toAddress: "",
-      time: "0",
+      time: date?.toString(),
       price: Number(ethers.utils.formatUnits(sPrice)),
       currency: payT,
     });
     console.log(response);
-  }, [nftId, colAddress, address, payT, sPrice]);
+  }, [nftId, colAddress, address, payT, sPrice, date]);
 
   function closeModal() {
     setIsOpen(false);

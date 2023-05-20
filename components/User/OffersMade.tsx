@@ -44,7 +44,7 @@ const OffersMade = ({ Data }: { Data: any }) => {
 
     const recordCancel = useCallback(async () => {
       const response = await fetch("POST", "/api/activity", {
-        nftId: parseInt(offer[0]._hex),
+        tokenId: parseInt(offer[0]._hex),
         collectionAddress: colAddress,
         activityType: "CancelBid",
         from: address,

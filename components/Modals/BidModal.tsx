@@ -42,7 +42,7 @@ export default function BidModal({
 
   const addOffer = useCallback(async () => {
     const response = await fetch("POST", "/api/activity", {
-      nftId,
+      tokenId: nftId,
       collectionAddress: colAddress,
       activityType: "PlaceBid",
       from: address,

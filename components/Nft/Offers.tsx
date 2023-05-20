@@ -58,7 +58,7 @@ const Offers = ({
 
     const completeOffer = useCallback(async () => {
       const response = await fetch("POST", "/api/activity", {
-        nftId: parseInt(offer[0]._hex),
+        tokenId: parseInt(offer[0]._hex),
         collectionAddress: colAddress,
         activityType: "AcceptBid",
         from: address,
@@ -73,7 +73,7 @@ const Offers = ({
 
     const cancelOffer = useCallback(async () => {
       const response = await fetch("POST", "/api/activity", {
-        nftId: parseInt(offer[0]._hex),
+        tokenId: parseInt(offer[0]._hex),
         collectionAddress: colAddress,
         activityType: "CancelBid",
         from: address,

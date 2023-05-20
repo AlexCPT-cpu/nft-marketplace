@@ -10,7 +10,9 @@ interface DropzoneProps {
 }
 
 const ImageUpload: React.FC<DropzoneProps | any> = ({ onChange, base }) => {
-  const [base64, setBase64] = useState<null | string | File | string | any>(null);
+  const [base64, setBase64] = useState<null | string | File | string | any>(
+    null
+  );
   const [image, setImage] = useState("");
 
   const toBase64 = (file: File) => {
@@ -39,8 +41,8 @@ const ImageUpload: React.FC<DropzoneProps | any> = ({ onChange, base }) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const base64 = await toBase64(file as File);
-    onChange(base64 as string)
-    setImage(URL.createObjectURL(file));
+      onChange(base64 as string);
+      setImage(URL.createObjectURL(file));
       setBase64(base64 as string);
     }
   };

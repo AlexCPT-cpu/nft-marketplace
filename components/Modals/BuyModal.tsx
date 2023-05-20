@@ -48,7 +48,7 @@ export default function BuyModal({
   }
   const addBuy = useCallback(async () => {
     const response = await fetch("POST", "/api/activity", {
-      nftId,
+      tokenId: nftId,
       collectionAddress: colAddress,
       activityType: "Buy",
       from: address,
@@ -56,11 +56,10 @@ export default function BuyModal({
       to: "",
       toAddress: "",
       time: "0",
-      price: Number(ethers.utils.formatUnits(sPrice)),
-      currency: payT,
+      price: Number(ethers.utils.formatUnits(buyPrice?.toString()!)),
     });
     console.log(response);
-  }, [nftId, colAddress, address, payT, sPrice]);
+  }, [nftId, colAddress, address, buyPrice]);
 
 useWaitForTransaction({
     confirmations: 2,
@@ -73,7 +72,7 @@ useWaitForTransaction({
           setIsOpen(false);
           toast.success("Bought successfuly");
           await addBuy();
-          setTimeout(() => router.push(`/user/${address}`), 5000);
+          setTimeout(() => router.push(`/user/${address}`), 3000);
         };
         (async () => await run())();
       } else {

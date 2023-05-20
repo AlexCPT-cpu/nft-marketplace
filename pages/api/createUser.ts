@@ -42,7 +42,7 @@ export default async function handler(
           description: bio,
           instaUsername: instagram ?? "",
           twitterUsername: twitter ?? "",
-          facebookUsername: facebook ?? "",
+          facebookUsername: "",
           username: userName,
           image: image ?? "",
           background: background ?? "",

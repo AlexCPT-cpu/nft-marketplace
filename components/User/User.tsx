@@ -33,7 +33,7 @@ const User = ({ userAddr }: { userAddr: string }) => {
   return (
     <div className="flex space-y-14 flex-col mt-36 mx-auto justify-center items-center w-full px-8 lg:px-16">
       <UserCard
-        followers={user.followerIds}
+        followers={user.followerIds.length}
         follows={user.followIds.length}
         name={user.name!}
         desc={user.description!}

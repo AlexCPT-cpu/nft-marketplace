@@ -108,7 +108,7 @@ const ListingCard: React.FC<{ contract: string; Data: any }> = ({
             key={index}
           />
         ) : (
-          <></>
+          null
         );
       })}
     </div>

@@ -1,21 +1,21 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import NftCard from "../Cards/NftCard";
 import fetch from "@/helpers/fetch";
+import type { NFT } from "@prisma/client";
 
 const NftGrid = () => {
+  const [data, setData] = useState<NFT[]>([]);
 
-  const [data, setData] = useState<any[]>([])
-
-  useEffect(() => {
-    const get = async () => {
-      const response = await fetch("GET", "/api/getNfts");
-      setData(response?.data);
-    };
-
-    get();
+  const get = useCallback(async () => {
+    const response = await fetch("GET", "/api/getNfts");
+    return response?.data;
   }, []);
 
+  useEffect(() => {
+    get().then((data) => setData(data));
+  }, [get]);
+  console.log(data);
   return (
     <div className="mx-auto mt-32 text-center justify-center items-center">
       <div className="flex flex-col md:flex-row justify-between px-3 lg:px-10 mb-6">
@@ -39,8 +39,12 @@ const NftGrid = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 md:pl-12 lg:grid-cols-4 mx-auto items-center justify-center pl-10 gap-8">
         {data?.map((nft) => (
           <NftCard
-          image={nft.image} 
-          key={nft.id} />
+            likes={nft.likes!}
+            price={nft.currentValue!}
+            nftAddress={nft.collectionAddress!}
+            nftId={nft.nftId!}
+            key={nft.id}
+          />
         ))}
       </div>
     </div>

@@ -49,6 +49,7 @@ const NftCard = ({
 
   const [nftData, setNftData] = useState<any>();
 
+
   useEffect(() => {
     const getNft = async () => {
       if (nftAddress && nftId) {
@@ -63,7 +64,6 @@ const NftCard = ({
     getNft();
   }, [nftAddress, nftId]);
 
-  console.log(nftAddress, nftId)
 
   const [Creator, setCreator] = useState("");
   const [Own, setOwn] = useState("");

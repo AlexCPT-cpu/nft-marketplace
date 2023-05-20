@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { CollectionCardProps } from "@/types/types";
 import { AiOutlineInstagram } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
@@ -21,11 +21,16 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
   floor,
   volume,
 }) => {
-  const { collAddress } = MarketContext();
 
   const [title, setTitle] = useState("");
   const [owner, setOwner] = useState("");
   const [Owners, setOwners] = useState(0);
+  const [collection, setCollection] = useState<any>()
+
+  const getCollectionData = useCallback(async () => {
+    const res = await fetch('POST', '/api/collect', {address})
+    return res?.data
+  }, [address])
 
   useEffect(() => {
     const getNft = async () => {
@@ -40,7 +45,8 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
     };
 
     getNft();
-  }, [address]);
+    getCollectionData().then(data => setCollection(data))
+  }, [address, getCollectionData]);
 
   return (
     <div className="border-[1px] flex items-center flex-col lg:flex-row lg:justify-between border-gray-200 dark:bg-[#041824] dark:border-[#092940] p-4 rounded-md w-full">
@@ -98,7 +104,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
             {(items / 1000).toFixed(1)}K<p className="font-bold">Items</p>
           </div>
           <div className="dark:text-neutral-500">
-            {floor.toFixed(2)} BNB
+            {collection?.floorPrice?.toFixed(2)} BNB
             <p className="font-bold">Floor Price</p>
           </div>
         </div>
@@ -109,7 +115,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
             <p className="font-bold">Owners</p>
           </div>
           <div className="dark:text-neutral-500">
-            {volume}
+            {collection?.volume?.toFixed(2)}
             <p className="font-bold">Volume Traded</p>
           </div>
         </div>

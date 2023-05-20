@@ -48,14 +48,14 @@ const UserNftCard = ({
           <div className="absolute top-2 right-3">
             <div className="px-2 flex flex-row space-x-2 bg-white rounded-full text-black cursor-pointer">
               <HeartIcon className="w-5 mr-2 fill-red-500" />
-              {likes}
+              {likes ?? 0}
             </div>
           </div>
           <div className="absolute bottom-2 left-3">
-            <div className="px-2 flex flex-row space-x-2 bg-white rounded-full text-black cursor-pointer">
+            {/* <div className="px-2 flex flex-row space-x-2 bg-white rounded-full text-black cursor-pointer">
               <ClockIcon className="w-5 stroke-sky-300 mr-2" />
               {timer}
-            </div>
+            </div> */}
           </div>
         </div>
 
