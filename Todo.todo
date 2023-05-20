@@ -1,17 +1,13 @@
-## Offers Tab In NFT Card 
+## Offers Tab In NFT Card && Buy and Sell 
 - track and update accepted and bid offers to the database
-
-## Properties
-- Render property card correctly
-- add listed collection in user wallet to user page
+- track and record buy auction and sell and render volume, ranking and analytics data 
 
 ## Trending
 - use sign message for likes and track it | fix signed messages
 - verify prisma routes work and track data correnctly
 
 ## Home
-- fix error on home 
-- fix like and follow and referrer on user
+- fix like and follow and referrer on user abd NFT && Cards
 
 ## Placeholder
 - use layout loader effect on loading states
