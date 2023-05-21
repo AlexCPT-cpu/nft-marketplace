@@ -166,14 +166,14 @@ const CreateColCard = () => {
             Upload Logo<sup className="text-red-500 ml-1">*</sup>
           </div>
           <div>
-            <ImageUpload onChange={(image) => setImage(image)} />
+            <ImageUpload onChange={(image: any) => setImage(image)} />
           </div>
 
           <div className="text-lg py-3">
             Upload Background Image<sup className="text-red-500 ml-1">*</sup>
           </div>
           <div>
-            <ImageUpload onChange={(image) => setImage(image)} />
+            <ImageUpload onChange={(image: any) => setImage(image)} />
           </div>
 
           <button
