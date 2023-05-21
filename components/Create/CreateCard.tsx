@@ -71,7 +71,7 @@ const CreateCard = () => {
             Upload Item<sup className="text-red-500 ml-1">*</sup>
           </div>
           <div>
-            <ImageUpload onChange={(image) => setImage(image)} />
+            <ImageUpload onChange={(image: any) => setImage(image)} />
           </div>
           <Input
             id="Product"
