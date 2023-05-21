@@ -8,7 +8,8 @@ import fetch from "@/helpers/fetch";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/router";
 
-const CreatePage = () => {
+const CreatePage: React.FC<{ referralId: string }> = ({ referralId }) => {
+//http://localhost:3000/createprofile?referral=natsuo
   const router = useRouter();
   const [name, setName] = useState("");
   // const [facebook, setFaceBook] = useState("");
@@ -19,7 +20,7 @@ const CreatePage = () => {
   const [image, setImage] = useState("");
   const [background, setBackground] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [invited, setInvited] = useState("");
+  const [invited, setInvited] = useState(referralId);
 
   const { address } = useAccount();
 

@@ -2,7 +2,7 @@ import React from 'react'
 import CreatePage from './CreatePage'
 
 
-const CreateUser = () => {
+const CreateUser: React.FC<{referralId: string}> = ({ referralId }) => {
   return (
     <div>
         <div className='text-3xl font-bold'>
@@ -11,7 +11,7 @@ const CreateUser = () => {
         </div>
 
         <div>
-            <CreatePage />
+            <CreatePage referralId={referralId} />
         </div>
     </div>
   )

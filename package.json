@@ -15,7 +15,7 @@
     "@heroicons/react": "^2.0.16",
     "@hookform/resolvers": "^3.0.1",
     "@openzeppelin/contracts": "^4.8.2",
-    "@prisma/client": "^4.13.0",
+    "@prisma/client": "^4.14.1",
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@types/node": "18.15.0",
     "@types/react": "18.0.28",
@@ -31,6 +31,7 @@
     "ethers": "^5.7.2",
     "hardhat": "^2.14.0",
     "ipfs-http-client": "^60.0.0",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.188.0",
     "minimist": "^1.2.8",
     "next": "13.2.4",
@@ -51,10 +52,11 @@
     "wagmi": "^0.12.10"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.194",
     "@types/react-spinkit": "^3.0.7",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
-    "prisma": "^4.13.0",
+    "prisma": "^4.14.1",
     "tailwindcss": "^3.2.7"
   }
 }

@@ -15,7 +15,7 @@ const NftGrid = () => {
   useEffect(() => {
     get().then((data) => setData(data));
   }, [get]);
-  console.log(data);
+
   return (
     <div className="mx-auto mt-32 text-center justify-center items-center">
       <div className="flex flex-col md:flex-row justify-between px-3 lg:px-10 mb-6">
@@ -44,6 +44,7 @@ const NftGrid = () => {
             nftAddress={nft.collectionAddress!}
             nftId={nft.nftId!}
             key={nft.id}
+            data={nft}
           />
         ))}
       </div>
